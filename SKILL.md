@@ -1,15 +1,15 @@
 ---
 name: llm-wiki
-version: 3.6.4
-author: sdyckjq-lab
+version: 3.7.0-audit.1
+author: Jonoka (fork of sdyckjq-lab; audit design from lewislulu)
 license: MIT
 description: |
   个人知识库构建系统（基于 Karpathy llm-wiki 方法论）。让 AI 持续构建和维护你的知识库，
   支持多种素材源（网页、推特、公众号、小红书、知乎、YouTube、PDF、本地文件），
-  自动整理为结构化的 wiki。
-  触发条件：用户明确提到"知识库"、"wiki"、"llm-wiki"，或要求对已初始化的知识库执行
-  消化、查询、健康检查等操作。不要在用户只是要求"总结这篇文章"时触发——必须是明确的
-  知识库相关意图。
+  自动整理为结构化的 wiki；并支持 audit 定点人类反馈闭环（open → 处理 → resolved）。
+  触发条件：用户明确提到"知识库"、"wiki"、"llm-wiki"、"批注/audit/纠错"，或要求对已初始化的
+  知识库执行消化、查询、健康检查、处理反馈等操作。不要在用户只是要求"总结这篇文章"时触发
+  ——必须是明确的知识库相关意图。
 metadata:
   hermes:
     tags:
@@ -17,11 +17,15 @@ metadata:
       - wiki
       - research
       - note-taking
+      - audit
 ---
 
 # llm-wiki — 个人知识库构建系统
 
 > 把碎片化的信息变成持续积累、互相链接的知识库。你只需要提供素材，AI 做所有的整理工作。
+>
+> **本 fork（Jonoka）Phase 1**：在 sdyckjq-lab 底座上增加 lewislulu 风格的 **audit 文件协议**
+> （`audit/` + `audit-file.py` + `audit-review.py`）。完整说明见 `references/audit-guide.md`。
 
 ## 这个 skill 做什么
 
@@ -30,6 +34,7 @@ llm-wiki 帮你构建一个**持续增长的个人知识库**。它不是传统�
 - 你给素材（链接、文件、文本），AI 提取核心知识并整理成互相链接的 wiki 页面
 - 知识库随着每次使用变得越来越丰富，而不是每次重新开始
 - 所有内容都是本地 markdown 文件，用 Obsidian 或任何编辑器都能查看
+- **人类定点纠错**：把反馈写入 `audit/`，再说「处理批注」，AI 按锚点改正文并归档
 
 ## 核心理念
 
@@ -134,8 +139,15 @@ bash ${SKILL_DIR}/scripts/adapter-state.sh classify-run <source_id> <exit_code> 
 | "画个知识图谱"、"看看关联图"、"graph"、"知识库地图" | → **graph** |
 | "删除素材"、"remove"、"delete source"、"移除" | → **delete** |
 | "结晶化"、"crystallize"、"把这个记进知识库"、"总结这段对话" | → **crystallize** |
+| "处理批注"、"处理反馈"、"audit"、"消化纠错"、"开放的 audit" | → **audit** |
+| "记一条反馈"、"标错"、"写 audit"、"批注这段"、"这段有问题" | → **audit-file** |
 
 **重要**：如果用户直接给了一个 URL 或文件，但没有明确说要做什么，默认走 **ingest** 工作流。如果知识库还不存在，先自动走 **init** 再走 **ingest**。
+
+**纠错分流**：
+- 用户明确要求**立刻改正文** → 可直接改 wiki 页，并**建议**同时写一条 `resolved` audit 留痕
+- 用户只是**标问题 / 记反馈** → 走 **audit-file**，只写 `audit/*.md`，不改正文
+- 已有 `audit/*.md` open 文件 → 用户说处理时必须走 **audit**，禁止忽略
 
 ---
 
@@ -148,12 +160,16 @@ bash ${SKILL_DIR}/scripts/adapter-state.sh classify-run <source_id> <exit_code> 
    - 如果不包含 → 回退到读取 `~/.llm-wiki-path`
 2. 如果两者都没有：
    - `ingest` / `batch-ingest` → 先运行 `init`
-   - `query` / `lint` / `status` / `digest` / `graph` / `delete` → 提示用户先初始化知识库
+   - `query` / `lint` / `status` / `digest` / `graph` / `delete` / `audit` / `audit-file` / `crystallize` → 提示用户先初始化知识库
 3. 读取知识库根目录下的 `.wiki-schema.md`
 4. 从 `.wiki-schema.md` 的"语言"字段判断 `WIKI_LANG`
    - `语言：中文` → `WIKI_LANG=zh`
    - `语言：English` → `WIKI_LANG=en`
    - 字段缺失 → 默认 `WIKI_LANG=zh`
+5. 若即将使用 audit 相关工作流，且缺少 `audit/`：
+   ```bash
+   bash ${SKILL_DIR}/scripts/wiki-compat.sh ensure-audit-dirs "<wiki_root>"
+   ```
 
 ## 输出语言规则
 
@@ -173,6 +189,7 @@ bash ${SKILL_DIR}/scripts/adapter-state.sh classify-run <source_id> <exit_code> 
 - 对比 → Comparison
 - 深度报告 → Deep Dive Report
 - 知识图谱 → Knowledge Graph
+- 批注 / 反馈 → Audit
 
 ---
 
@@ -235,6 +252,7 @@ bash ${SKILL_DIR}/scripts/adapter-state.sh classify-run <source_id> <exit_code> 
    - 给我一个本地文件路径（PDF、Markdown 等）
    - 直接粘贴文本内容
    - 批量消化：给我一个文件夹路径
+   - 发现 wiki 写错时：说「对 [[某页]] 这段有问题：…」记一条 audit，再说「处理批注」
 
    推荐：用 Obsidian 打开这个文件夹，可以实时看到知识库的构建效果。
    ```
@@ -653,10 +671,11 @@ bash ${SKILL_DIR}/scripts/adapter-state.sh classify-run <source_id> <exit_code> 
    bash ${SKILL_DIR}/scripts/lint-runner.sh <wiki_root>
    ```
 
-   脚本负责三项**机械检查**（只需要精确匹配，不需要判断）：
+   脚本负责**机械检查**（只需要精确匹配，不需要判断）：
    - 孤立页面（`entities/` 下没有被其他页面引用的实体）
    - 断链（`[[X]]` 链接指向的 `X.md` 不存在，支持 `[[X|别名]]` 语法）
    - index 一致性（index.md 里有记录但文件缺失的条目）
+   - open audit 形状（frontmatter / severity / status）与 `target` 文件是否存在
 
    退出码：`0` = 运行完成，`1` = 脚本自身错误（路径不存在、index.md 缺失）。
    如果 exit 1，向用户报告错误，不要继续。
@@ -705,6 +724,9 @@ bash ${SKILL_DIR}/scripts/adapter-state.sh classify-run <source_id> <exit_code> 
    - INFERRED：{N}
    - AMBIGUOUS：{N}
    - UNVERIFIED：{N}
+
+   Open audit：
+   - 数量：{N}（有则建议「处理批注」）
    ```
    （英文版按「输出语言规则」生成，结构相同。）
 
@@ -729,12 +751,14 @@ bash ${SKILL_DIR}/scripts/adapter-state.sh classify-run <source_id> <exit_code> 
    - `wiki/sources/` 下的页面数
    - `wiki/comparisons/` 和 `wiki/synthesis/` 下的页面数
    - `purpose.md 是否存在`
+   - open audit：`audit/*.md`（排除 `.gitkeep`）；resolved：`audit/resolved/*.md`
 4. 读取 `log.md` 最后 5 条记录
 5. 读取 `index.md` 获取主题概览
 6. 运行 `bash ${SKILL_DIR}/scripts/adapter-state.sh summary-human` 获取外挂状态
 7. 运行 `node ${SKILL_DIR}/scripts/source-signal-coverage.js <wiki_root>` 获取来源信号覆盖数据，从返回 JSON 的 `summary` 中读取：
    - `ok`（已参与）、`missing_sources`（缺少 sources）、`empty_sources`（sources 为空）、`invalid_sources`（格式无效）、`not_applicable`（当前不参与）
-8. **输出报告**（按 `WIKI_LANG` 切换语言）：
+8. 可选：`python ${SKILL_DIR}/scripts/audit-review.py <wiki_root> --open` 列出 open 摘要
+9. **输出报告**（按 `WIKI_LANG` 切换语言）：
 
    **zh**：
    ```
@@ -751,6 +775,10 @@ bash ${SKILL_DIR}/scripts/adapter-state.sh classify-run <source_id> <exit_code> 
      - 素材摘要：{N}
      - 对比分析：{N}
      - 综合分析：{N}
+
+   Audit 反馈：
+   - open：{N}
+   - resolved：{N}
 
    图谱来源信号覆盖：
    - 已参与：{ok}
@@ -773,6 +801,7 @@ bash ${SKILL_DIR}/scripts/adapter-state.sh classify-run <source_id> <exit_code> 
    建议：
    - 你可能想深入了解 {某主题}，已有 {N} 篇相关素材
    - {某实体} 被 {N} 篇素材提到，值得整理成独立页面
+   - 若 open audit > 0：建议说「处理批注」
    ```
    （英文版按「输出语言规则」生成，结构相同。）
 
@@ -1131,3 +1160,123 @@ bash ${SKILL_DIR}/scripts/adapter-state.sh classify-run <source_id> <exit_code> 
 **输出示例**：
 已创建 wiki/synthesis/sessions/AI-agent-设计决策-20260413.md
 已更新 log.md
+
+---
+
+## 工作流 11：audit-file（写入一条反馈，不改正文）
+
+### 触发关键词
+
+"记一条反馈"、"标错"、"写 audit"、"批注这段"、"这段有问题"、"记一下这个错误"
+
+### 前置检查
+
+执行**通用前置检查**。确保：
+
+```bash
+bash ${SKILL_DIR}/scripts/wiki-compat.sh ensure-audit-dirs "<wiki_root>"
+```
+
+### 步骤
+
+1. **确认目标页**：解析用户提到的页面 → 规范为相对根路径，如 `wiki/entities/某概念.md`  
+   - 若多候选，列出让用户确认  
+2. **确认选中原文** `anchor_text`：尽量用用户引用的原句；没有则请用户贴出  
+3. **可选** `anchor_before` / `anchor_after`（各约 80 字）与 `target_lines`  
+4. **severity**：error / warn / suggest / info（默认 warn；事实错误用 error）  
+5. **写入**（优先脚本）：
+
+   ```bash
+   python ${SKILL_DIR}/scripts/audit-file.py "<wiki_root>" \
+     --target "wiki/entities/某概念.md" \
+     --anchor-text "原文片段" \
+     --comment "用户反馈正文" \
+     --severity warn \
+     --author "<用户或 agent>" \
+     --source agent
+   ```
+
+   - 成功输出：`SUCCESS:audit/....md`  
+   - 失败：不要手写残缺 frontmatter；先修 target/路径再重试  
+6. **不要**在本工作流改正文（除非用户明确说「直接改」→ 改完后仍建议写 resolved audit）  
+7. **向用户报告**（zh 示例）：
+
+   ```
+   已记录 open audit：
+   - 文件：audit/20260720-....md
+   - 目标：wiki/entities/某概念.md
+   - 级别：warn
+
+   处理时请说：「处理批注」或「audit」。
+   ```
+
+---
+
+## 工作流 12：audit（处理 open 反馈并归档）
+
+### 触发关键词
+
+"处理批注"、"处理反馈"、"audit"、"消化纠错"、"开放的 audit"、"处理 audit"
+
+### 前置检查
+
+执行**通用前置检查**。详细协议见 `${SKILL_DIR}/references/audit-guide.md`。
+
+### 步骤
+
+1. **列出 open 反馈**：
+
+   ```bash
+   python ${SKILL_DIR}/scripts/audit-review.py "<wiki_root>" --open
+   ```
+
+   若 0 条：告知用户，并说明可用 audit-file 记反馈。结束。
+
+2. **处理顺序**：error → warn → suggest → info；同级按 created 时间。
+
+3. **对每条 open audit**：
+   1. 读取 frontmatter + `# Comment`  
+   2. 打开 `target`（相对 wiki 根；若不存在先报告 shape 问题）  
+   3. **锚点定位**（行号可能漂移）：  
+      - 先看 `target_lines` 是否仍含 `anchor_text`  
+      - 否则全文搜 `anchor_text`（唯一命中则用）  
+      - 多命中用 `anchor_before + anchor_text + anchor_after`  
+      - 找不到 → **stale**：问用户 re-anchor / reject / archive，**禁止静默丢弃**  
+   4. **决策**：  
+      - **accept**：最小编辑改正文  
+      - **partial**：改一部分，Resolution 写清未改原因  
+      - **reject**：不改正文，Resolution 写清理由（范围外/与更权威来源冲突等）  
+      - **defer**：留在 `audit/`，并在 `purpose.md`「关键问题」里记一条（引用 audit id）  
+   5. **置信度**：error/warn 改正文后，相关 claim 可降为 `AMBIGUOUS` 或修正错误的 `EXTRACTED`  
+   6. **默认不改 `raw/`**，除非用户明确要求  
+   7. 在 audit 文件追加或填写 `# Resolution`，例如：
+
+      ```markdown
+      # Resolution
+
+      2026-07-20 · accepted.
+      将错误数字改为 1800，依据用户说明。
+      Updated: wiki/entities/某概念.md
+      ```
+
+   8. frontmatter：`status: resolved`  
+   9. **移动**文件到 `audit/resolved/`（同名；**永不 delete**）  
+   10. **log.md** 追加：`## {日期} audit | resolved {id} — {一句话}`  
+
+4. **向用户汇总**（zh 示例）：
+
+   ```
+   Audit 处理完成
+
+   已处理：
+   - [id1] accepted — 修正 wiki/entities/Foo.md
+   - [id2] rejected — 超出 purpose 范围
+
+   仍开放 / 延期：
+   - [id3] deferred — 已写入 purpose.md
+
+   Stale（需你决定）：
+   - [id4] 锚点找不到
+   ```
+
+5. **可选**：处理后若改了大量链接，建议用户再跑一次 lint。

@@ -213,5 +213,70 @@ else
 fi
 echo ""
 
-echo "=== 机械检查完成。矛盾检测、交叉引用、置信度抽查由 AI 继续执行 ==="
+# 检查 7：audit 形状与 target 是否存在
+# open：audit/*.md；不强制已有 audit/ 目录（旧库兼容）
+echo "--- audit 反馈（open 形状 / target 存在） ---"
+_AUDIT_DIR="$WIKI_ROOT/audit"
+_AUDIT_OPEN=0
+_AUDIT_ISSUES=0
+if [ ! -d "$_AUDIT_DIR" ]; then
+  echo "  （无 audit/ 目录，跳过；需要时 mkdir -p audit/resolved）"
+else
+  for f in "$_AUDIT_DIR"/*.md; do
+    [ -f "$f" ] || continue
+    case "$(basename "$f")" in
+      .gitkeep) continue ;;
+    esac
+    _AUDIT_OPEN=$((_AUDIT_OPEN + 1))
+    _BASENAME=$(basename "$f")
+    # frontmatter：首行 --- 且后续还有 ---
+    _FM_COUNT=$(grep -c '^---' "$f" 2>/dev/null || true)
+    if [ "${_FM_COUNT:-0}" -lt 2 ]; then
+      echo "  缺 frontmatter: audit/$_BASENAME"
+      _AUDIT_ISSUES=$((_AUDIT_ISSUES + 1))
+      continue
+    fi
+    _TARGET=$(grep -m1 '^target:' "$f" | sed 's/^target:[[:space:]]*//' | tr -d '\r' | sed 's/^["'\'']//;s/["'\'']$//')
+    _SEVERITY=$(grep -m1 '^severity:' "$f" | sed 's/^severity:[[:space:]]*//' | tr -d ' \r')
+    _STATUS=$(grep -m1 '^status:' "$f" | sed 's/^status:[[:space:]]*//' | tr -d ' \r')
+    _ID=$(grep -m1 '^id:' "$f" | sed 's/^id:[[:space:]]*//' | tr -d ' \r')
+    _HAS_ANCHOR=$(grep -c '^anchor_text:' "$f" 2>/dev/null || true)
+    [ -z "$_ID" ] && { echo "  缺字段 id: audit/$_BASENAME"; _AUDIT_ISSUES=$((_AUDIT_ISSUES + 1)); }
+    [ -z "$_TARGET" ] && { echo "  缺字段 target: audit/$_BASENAME"; _AUDIT_ISSUES=$((_AUDIT_ISSUES + 1)); }
+    [ -z "$_SEVERITY" ] && { echo "  缺字段 severity: audit/$_BASENAME"; _AUDIT_ISSUES=$((_AUDIT_ISSUES + 1)); }
+    [ -z "$_STATUS" ] && { echo "  缺字段 status: audit/$_BASENAME"; _AUDIT_ISSUES=$((_AUDIT_ISSUES + 1)); }
+    if [ "${_HAS_ANCHOR:-0}" -lt 1 ]; then
+      echo "  缺 anchor_text: audit/$_BASENAME"
+      _AUDIT_ISSUES=$((_AUDIT_ISSUES + 1))
+    fi
+    case "$_SEVERITY" in
+      ""|info|suggest|warn|error) ;;
+      *)
+        echo "  非法 severity=$_SEVERITY: audit/$_BASENAME"
+        _AUDIT_ISSUES=$((_AUDIT_ISSUES + 1))
+        ;;
+    esac
+    if [ -n "$_STATUS" ] && [ "$_STATUS" != "open" ]; then
+      echo "  open 区 status 应为 open（当前=$_STATUS）: audit/$_BASENAME"
+      _AUDIT_ISSUES=$((_AUDIT_ISSUES + 1))
+    fi
+    if [ -n "$_TARGET" ]; then
+      if [ ! -f "$WIKI_ROOT/$_TARGET" ] && [ ! -f "$WIKI_ROOT/wiki/$_TARGET" ]; then
+        echo "  target 不存在: audit/$_BASENAME → $_TARGET"
+        _AUDIT_ISSUES=$((_AUDIT_ISSUES + 1))
+      fi
+    fi
+  done
+  if [ "$_AUDIT_OPEN" -eq 0 ]; then
+    echo "  （无 open audit）"
+  else
+    echo "  open 数量：$_AUDIT_OPEN"
+    if [ "$_AUDIT_ISSUES" -eq 0 ]; then
+      echo "  （open audit 形状与 target 均正常）"
+    fi
+  fi
+fi
+echo ""
+
+echo "=== 机械检查完成。矛盾检测、交叉引用、置信度抽查、audit 处理由 AI 继续执行 ==="
 exit 0

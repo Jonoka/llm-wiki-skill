@@ -28,8 +28,11 @@
 │   ├── sources/            # 素材摘要页（每个素材一篇摘要）
 │   ├── comparisons/        # 对比分析页
 │   └── synthesis/          # 综合分析页
+├── audit/                  # 人类定点反馈（open）
+│   └── resolved/           # 已处理反馈（含 Resolution，不删除）
 ├── index.md                # 内容索引（目录）
 ├── log.md                  # 操作日志（时间线）
+├── purpose.md              # 研究方向
 └── .wiki-schema.md         # 本文件（配置规范）
 ```
 
@@ -161,8 +164,22 @@ prompt engineering = 提示工程 = 提示词工程
    - 缺失概念页（被 `[[某概念]]` 链接但实际不存在）
    - 缺少交叉引用（相关页面之间没有互相链接）
    - index 一致性（index.md 记录与实际文件是否对应）
+   - open audit 形状与 `target` 是否存在（见 `audit/`）
 3. 输出中文报告，对每个问题给出修复建议
 4. 如果发现问题，询问用户是否自动修复
+5. 若存在 open audit，在报告末尾提醒用户可说「处理批注」走 audit 工作流
+
+## Audit（人类定点反馈）规则
+
+> 协议设计借鉴 lewislulu/llm-wiki-skill；完整说明见 skill 内 `references/audit-guide.md`。
+
+1. **写入**：发现问题用 `scripts/audit-file.py` 或手写 `audit/*.md`（不要只写在聊天里）
+2. **target 路径**：相对知识库根，如 `wiki/entities/某概念.md`（不要只写页面名）
+3. **处理**：用户说「处理批注 / audit」时，按 severity（error → warn → suggest → info）处理 open 文件
+4. **决策**：accept / partial / reject / defer；写 `# Resolution`，`status: resolved`，移到 `audit/resolved/`
+5. **日志**：`log.md` 追加 `## {日期} audit | resolved {id} — 一句话`
+6. **锚点**：行号可能漂移，以 `anchor_before` + `anchor_text` + `anchor_after` 定位；找不到则标 stale，勿静默丢弃
+7. **默认不改 raw/**：只改正文 wiki 页，除非用户明确要求改素材
 
 ## 关系类型词汇表（可选，用于手动标注知识图谱）
 

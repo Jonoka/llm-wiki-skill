@@ -36,6 +36,7 @@ usage() {
   bash scripts/wiki-compat.sh inspect <wiki_root>
   bash scripts/wiki-compat.sh validate <wiki_root>
   bash scripts/wiki-compat.sh ensure-source-dir <wiki_root> <source_id>
+  bash scripts/wiki-compat.sh ensure-audit-dirs <wiki_root>
 EOF
 }
 
@@ -216,6 +217,7 @@ print_inspect() {
   optional_dirs="$(missing_optional_raw_dirs "$wiki_root")"
   purpose_file="$(file_presence "$wiki_root" "purpose.md")"
   cache_file="$(file_presence "$wiki_root" ".wiki-cache.json")"
+  audit_dir="$(file_presence "$wiki_root" "audit")"
 
   if [ "$schema_version" = "1.0" ] || [ "$optional_dirs" != "-" ] || [ "$purpose_file" = "missing" ] || [ "$cache_file" = "missing" ]; then
     legacy_mode="yes"
@@ -231,6 +233,15 @@ print_inspect() {
   printf 'missing_optional_raw_dirs=%s\n' "$optional_dirs"
   printf 'purpose_file=%s\n' "$purpose_file"
   printf 'cache_file=%s\n' "$cache_file"
+  printf 'audit_dir=%s\n' "$audit_dir"
+}
+
+ensure_audit_dirs() {
+  local wiki_root="$1"
+
+  require_wiki_root "$wiki_root"
+  mkdir -p "$wiki_root/audit/resolved"
+  printf '%s\n' "$wiki_root/audit"
 }
 
 ensure_source_dir() {
@@ -259,6 +270,10 @@ case "$command_name" in
   ensure-source-dir)
     [ "$#" -eq 3 ] || { usage; exit 1; }
     ensure_source_dir "$2" "$3"
+    ;;
+  ensure-audit-dirs)
+    [ "$#" -eq 2 ] || { usage; exit 1; }
+    ensure_audit_dirs "$2"
     ;;
   *)
     usage

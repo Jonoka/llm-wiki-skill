@@ -28,6 +28,7 @@ require_python_cmd
 import json
 import os
 import sys
+from pathlib import Path
 
 # 防御性：即使上游 shared-config.sh 未设置 PYTHONIOENCODING，
 # 此处也强制 stdout 为 UTF-8，避免 Agent 接到 gbk 字节
@@ -36,6 +37,20 @@ if hasattr(sys.stdout, "reconfigure"):
 
 wiki_path = os.path.realpath(sys.argv[1])
 message = f"[llm-wiki] 检测到知识库: {wiki_path}/index.md，回答问题时优先查阅 wiki 内容获取上下文"
+
+audit_dir = Path(wiki_path) / "audit"
+open_audits = 0
+if audit_dir.is_dir():
+    open_audits = sum(
+        1
+        for p in audit_dir.glob("*.md")
+        if p.name != ".gitkeep" and p.is_file()
+    )
+if open_audits > 0:
+    message += (
+        f"。有 {open_audits} 条 open audit 待处理（audit/*.md）；"
+        "用户说「处理批注/audit」时走 audit 工作流，勿忽略"
+    )
 
 print(json.dumps({
     "hookSpecificOutput": {

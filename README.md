@@ -10,6 +10,10 @@
 
 把碎片化的信息变成持续积累、互相链接的知识库
 
+> **Jonoka fork**：在 [sdyckjq-lab/llm-wiki-skill](https://github.com/sdyckjq-lab/llm-wiki-skill) 底座上增加
+> [lewislulu](https://github.com/lewislulu/llm-wiki-skill) 风格的 **audit 定点反馈**（Phase 1：文件协议 + agent 工作流）。  
+> 详见 [FORK-NOTES.md](FORK-NOTES.md) 与 [references/audit-guide.md](references/audit-guide.md)。
+
 [![version](https://img.shields.io/badge/v3.6.86-图谱架构收口-E8D5B5?style=flat-square&labelColor=3a3026&color=E8D5B5)](https://github.com/sdyckjq-lab/llm-wiki-skill/releases)
 [![license](https://img.shields.io/badge/MIT-license-5a6e5c?style=flat-square&labelColor=3a3026)](LICENSE)
 [![platforms](https://img.shields.io/badge/Claude·Codex·OpenClaw·Hermes-多平台-7a96a6?style=flat-square&labelColor=3a3026)]

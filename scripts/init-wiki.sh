@@ -36,10 +36,16 @@ echo ""
 # 创建目录结构（包含小红书和知乎）
 mkdir -p "$WIKI_ROOT"/raw/{articles,tweets,wechat,xiaohongshu,zhihu,pdfs,notes,assets}
 mkdir -p "$WIKI_ROOT"/wiki/{entities,topics,sources,comparisons,synthesis,synthesis/sessions,queries}
+# 人类定点反馈（audit）— Phase 1：文件协议 + agent 处理
+mkdir -p "$WIKI_ROOT"/audit/resolved
 
 cat > "$WIKI_ROOT/.gitignore" <<'EOF'
 .wiki-tmp/
 EOF
+
+# 占位，方便 Obsidian / git 识别空目录
+: > "$WIKI_ROOT/audit/.gitkeep"
+: > "$WIKI_ROOT/audit/resolved/.gitkeep"
 
 echo "[完成] 目录结构已创建"
 
@@ -86,6 +92,7 @@ echo "   │   ├── pdfs/         PDF"
 echo "   │   ├── notes/        笔记"
 echo "   │   └── assets/       图片等附件"
 echo "   ├── wiki/       （知识库）"
+echo "   ├── audit/      （人类反馈 / open + resolved）"
 echo "   ├── index.md    （索引）"
 echo "   ├── log.md      （日志）"
 echo "   ├── purpose.md  （研究方向）"
@@ -93,3 +100,4 @@ echo "   ├── .wiki-cache.json （缓存）"
 echo "   └── .wiki-schema.md （配置）"
 echo ""
 echo "下一步：给 agent 一个链接或文件，开始构建知识库！"
+echo "纠错：在页面上发现问题可写 audit，再说「处理批注」。"

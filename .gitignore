@@ -20,6 +20,7 @@ yarn-error.log*
 coverage/
 .cache/
 .tmp/
+.tmp-audit-smoke/
 deps/baoyu-url-to-markdown/scripts/bun.lock
 .claude/
 .context/
