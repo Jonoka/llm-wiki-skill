@@ -27,11 +27,13 @@ MANAGED_ITEMS=(
   "AGENTS.md"
   "HERMES.md"
   "CHANGELOG.md"
+  "FORK-NOTES.md"
   "install.sh"
   "setup.sh"
   "install.ps1"
   "scripts"
   "templates"
+  "references"
   "deps"
   "platforms"
 )
