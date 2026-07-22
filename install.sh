@@ -230,7 +230,9 @@ detect_available_platforms() {
     found+=("claude")
   fi
 
-  if [ -d "$HOME/.codex" ] || [ -d "$HOME/.codex/skills" ] || [ -d "$HOME/.Codex" ] || [ -d "$HOME/.Codex/skills" ]; then
+  if [ -n "${CODEX_HOME:-}" ] && { [ -d "$CODEX_HOME" ] || [ -d "$CODEX_HOME/skills" ]; }; then
+    found+=("codex")
+  elif [ -d "$HOME/.codex" ] || [ -d "$HOME/.codex/skills" ] || [ -d "$HOME/.Codex" ] || [ -d "$HOME/.Codex/skills" ]; then
     found+=("codex")
   fi
 

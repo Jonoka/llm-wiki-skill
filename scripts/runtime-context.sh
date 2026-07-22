@@ -7,7 +7,10 @@ resolve_platform_skill_root() {
       printf '%s\n' "$HOME/.claude/skills"
       ;;
     codex)
-      if [ -d "$HOME/.codex/skills" ] || [ ! -d "$HOME/.Codex/skills" ]; then
+      # Prefer CODEX_HOME when user relocated Codex home (e.g. D:\CodexHome).
+      if [ -n "${CODEX_HOME:-}" ]; then
+        printf '%s\n' "${CODEX_HOME%/}/skills"
+      elif [ -d "$HOME/.codex/skills" ] || [ ! -d "$HOME/.Codex/skills" ]; then
         printf '%s\n' "$HOME/.codex/skills"
       else
         printf '%s\n' "$HOME/.Codex/skills"
