@@ -179,13 +179,23 @@ done
 echo ""
 
 # 检查 6：source-signal 覆盖情况
+# 注意：不要用 node 读 /dev/stdin + bash here-string（<<<）。
+# Windows / Git Bash / MSYS 下常会落到 D:\dev\stdin 并 ENOENT。
 echo "--- source-signal 覆盖情况 ---"
 _COVERAGE_SCRIPT="$(cd "$(dirname "$0")" && pwd)/source-signal-coverage.js"
 if [ -f "$_COVERAGE_SCRIPT" ] && command -v node >/dev/null 2>&1; then
   _COVERAGE_JSON=$(node "$_COVERAGE_SCRIPT" "$WIKI_ROOT" 2>/dev/null)
   if [ $? -eq 0 ] && [ -n "$_COVERAGE_JSON" ]; then
+    _TMP_COVERAGE=$(mktemp 2>/dev/null || mktemp -t llm-wiki-coverage)
+    # 部分环境 mktemp 失败时退到 wiki 临时目录
+    if [ -z "$_TMP_COVERAGE" ] || [ ! -w "$(dirname "$_TMP_COVERAGE")" ] 2>/dev/null; then
+      mkdir -p "$WIKI_ROOT/.wiki-tmp"
+      _TMP_COVERAGE="$WIKI_ROOT/.wiki-tmp/coverage-$$.json"
+    fi
+    printf '%s' "$_COVERAGE_JSON" > "$_TMP_COVERAGE"
     node -e '
-      const data = JSON.parse(require("fs").readFileSync("/dev/stdin", "utf8"));
+      const fs = require("fs");
+      const data = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
       const s = data.summary;
       console.log("  已参与：" + s.ok);
       console.log("  缺少 sources 字段：" + s.missing_sources);
@@ -204,7 +214,8 @@ if [ -f "$_COVERAGE_SCRIPT" ] && command -v node >/dev/null 2>&1; then
           for (const p of paths) console.log("  - " + p);
         }
       }
-    ' <<< "$_COVERAGE_JSON"
+    ' "$_TMP_COVERAGE"
+    rm -f "$_TMP_COVERAGE"
   else
     echo "  （coverage 脚本执行失败，跳过覆盖检查）"
   fi
