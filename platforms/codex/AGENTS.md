@@ -1,23 +1,65 @@
-# Codex 入口
+# Codex 入口（Jonoka）
 
 <!-- llm-wiki context: 如有知识库，优先查阅 wiki/index.md -->
 
-这是 Codex 的薄入口文件。共享说明看 [../../README.md](../../README.md)，核心能力看 [../../SKILL.md](../../SKILL.md)。
+薄入口。产品与范围：[PRODUCT.md](../../PRODUCT.md)。共享说明：[README.md](../../README.md)。行为：[SKILL.md](../../SKILL.md)。差异安装：[FORK-NOTES.md](../../FORK-NOTES.md)。
 
-## Codex 应该怎么装
+**主平台：Codex。** 其它平台 best-effort。
 
-执行：
+## 安装
+
+若使用自定义 Codex home（常见于改过 `CODEX_HOME` 的环境）：
+
+```bash
+export CODEX_HOME="D:/CodexHome"   # 改成你的实际路径
+```
+
+### 精简档（核心主线）
 
 ```bash
 bash install.sh --platform codex
+# 或
+bash install.sh --platform codex --target-dir "$CODEX_HOME/skills/llm-wiki"
 ```
 
-如果你还需要网页 / X / 微信公众号 / YouTube / 知乎自动提取，再执行：
+能力：本地 Markdown/文本/HTML/PDF、纯文本粘贴。  
+**不含**官方 URL 提取器。
+
+### 完整档（+ 可选提取器）
 
 ```bash
 bash install.sh --platform codex --with-optional-adapters
 ```
 
-默认安装位置：`~/.codex/skills/llm-wiki`
+启用网页、X/Twitter、微信公众号、YouTube、知乎等自动提取（依赖 node/bun、uv 等，见安装输出）。  
+小红书等可能仍仅支持粘贴。
 
-如果用户环境仍然在用旧的 `~/.Codex/skills`，安装器会自动兼容。
+### 安装结果目录
+
+| 条件 | 路径 |
+|------|------|
+| 已设置 `CODEX_HOME` | `$CODEX_HOME/skills/llm-wiki` |
+| 未设置 | `~/.codex/skills/llm-wiki`（兼容旧 `~/.Codex/skills`） |
+
+Windows：用 Git Bash 或仓库根目录 `install.ps1`。
+
+### 升级
+
+```bash
+bash install.sh --upgrade --platform codex
+```
+
+请从 **本 fork 工作树** 升级，以免上游覆盖 Jonoka 的 audit / CODEX_HOME / lint 补丁。详见 FORK-NOTES。
+
+## 日常三口令
+
+```text
+消化：<路径或 URL>
+知识库状态
+处理批注
+```
+
+初始化：`帮我初始化一个知识库`。  
+纠错：`对 wiki/entities/某页.md 这段有问题：…` 再 `处理批注`。
+
+**注意**：未装完整档时，URL 可能靠 agent 自行抓取；那不表示 adapter 已安装。完整档验收见 [references/acceptance-matrix.md](../../references/acceptance-matrix.md) U5–U6。

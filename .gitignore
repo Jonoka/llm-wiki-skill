@@ -21,6 +21,7 @@ coverage/
 .cache/
 .tmp/
 .tmp-audit-smoke/
+.tmp-lint*.txt
 deps/baoyu-url-to-markdown/scripts/bun.lock
 .claude/
 .context/

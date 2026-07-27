@@ -11,8 +11,24 @@
 把碎片化的信息变成持续积累、互相链接的知识库
 
 > **Jonoka fork**：在 [sdyckjq-lab/llm-wiki-skill](https://github.com/sdyckjq-lab/llm-wiki-skill) 底座上增加
-> [lewislulu](https://github.com/lewislulu/llm-wiki-skill) 风格的 **audit 定点反馈**（Phase 1：文件协议 + agent 工作流）。  
-> 详见 [FORK-NOTES.md](FORK-NOTES.md) 与 [references/audit-guide.md](references/audit-guide.md)。
+> [lewislulu](https://github.com/lewislulu/llm-wiki-skill) 风格的 **audit 定点反馈**；**主平台 Codex**，支持精简 / 完整（`--with-optional-adapters`）两档安装。  
+> 产品定义：[PRODUCT.md](PRODUCT.md) · 差异与安装：[FORK-NOTES.md](FORK-NOTES.md) · 验收：[references/acceptance-matrix.md](references/acceptance-matrix.md) · Audit：[references/audit-guide.md](references/audit-guide.md)
+
+### Jonoka · Codex 安装（推荐先看）
+
+```bash
+# 若 Codex home 不在默认 ~/.codex（例如 D:/CodexHome）：
+export CODEX_HOME="D:/CodexHome"
+
+# 精简档：本地文件 / 粘贴 / PDF（核心主线）
+bash install.sh --platform codex
+
+# 完整档：再加上网页 / X / 公众号 / YouTube / 知乎等官方提取器
+bash install.sh --platform codex --with-optional-adapters
+```
+
+也可：`--target-dir "$CODEX_HOME/skills/llm-wiki"`。Windows 请用 Git Bash 或 `install.ps1`。  
+装好后日常三句：`消化：…` · `知识库状态` · `处理批注`。
 
 [![version](https://img.shields.io/badge/v3.6.86-图谱架构收口-E8D5B5?style=flat-square&labelColor=3a3026&color=E8D5B5)](https://github.com/sdyckjq-lab/llm-wiki-skill/releases)
 [![license](https://img.shields.io/badge/MIT-license-5a6e5c?style=flat-square&labelColor=3a3026)](LICENSE)
@@ -47,28 +63,31 @@
 
 ## 30 秒上手
 
-把仓库链接扔给你正在用的 agent，让它自己完成安装。
+**Jonoka 用户（Codex）**：优先用上文「Jonoka · Codex 安装」；需要外链自动提取时加上 `--with-optional-adapters`。
+
+把仓库链接扔给 agent 时，也可让它执行（按平台选一）：
 
 ```bash
-# Claude Code
-bash install.sh --platform claude
-
-# Codex
+# Codex（Jonoka 主平台）— 精简
 bash install.sh --platform codex
+# Codex — 完整提取档
+bash install.sh --platform codex --with-optional-adapters
 
-# OpenClaw
+# Claude Code / OpenClaw / Hermes（best-effort）
+bash install.sh --platform claude
 bash install.sh --platform openclaw
-
-# Hermes
 bash install.sh --platform hermes
 ```
 
 然后说：
 
-> "帮我初始化一个知识库"
-> "帮我消化这篇：<链接>"
+> "帮我初始化一个知识库"  
+> "消化：<链接或文件路径>"  
+> "知识库状态" / "处理批注"
 
 核心区别：知识被**编译一次，持续维护**，而不是每次查询都从原始文档重新推导。
+
+**两档安装**：默认只有核心主线（本地/粘贴/PDF）。网页、X、公众号、YouTube、知乎等自动提取须显式 `--with-optional-adapters`。Agent 自己上网抓正文 ≠ 已安装官方 adapter。
 
 ---
 

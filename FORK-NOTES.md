@@ -1,52 +1,118 @@
 # Jonoka fork notes
 
-本仓库 fork 自 [sdyckjq-lab/llm-wiki-skill](https://github.com/sdyckjq-lab/llm-wiki-skill)。
+Fork 自 [sdyckjq-lab/llm-wiki-skill](https://github.com/sdyckjq-lab/llm-wiki-skill)。
 
-## Phase 1 — Audit 文件协议（已完成）
+**先读：[PRODUCT.md](PRODUCT.md)**（目标、非目标、两档安装、v0.1 标准）。  
+**验收：[references/acceptance-matrix.md](references/acceptance-matrix.md)**。
 
-在 **sdyckjq 知识库布局**上叠加 [lewislulu/llm-wiki-skill](https://github.com/lewislulu/llm-wiki-skill) 风格的人类定点反馈（audit），**不**引入 Obsidian 插件 / Web 预览（留给 Phase 2）。
+---
 
-### 新增 / 修改
+## 相对上游的差异（自管）
 
-| 路径 | 说明 |
+| 区域 | 内容 |
 |------|------|
-| `scripts/audit-file.py` | 写入 open audit |
-| `scripts/audit-review.py` | 按 target 列出 open/resolved |
-| `scripts/init-wiki.sh` | 创建 `audit/` + `audit/resolved/` |
-| `scripts/lint-runner.sh` | 机械检查 open audit 形状与 target |
-| `scripts/wiki-compat.sh` | `ensure-audit-dirs`；inspect 报告 `audit_dir` |
-| `scripts/hook-session-start.sh` | 会话注入 open audit 数量提示 |
-| `templates/audit-template.md` | 手写模板 |
-| `templates/schema-template.md` | 目录说明 + Audit 规则 |
-| `references/audit-guide.md` | 协议全文 |
-| `SKILL.md` | 工作流 11 audit-file、12 audit；路由与 status/lint 扩展 |
+| Audit Phase 1 | `audit/` 协议、`audit-file.py` / `audit-review.py`、SKILL 工作流 11–12、`references/audit-guide.md` |
+| 安装 | `CODEX_HOME` → `$CODEX_HOME/skills`（`scripts/runtime-context.sh`） |
+| 安装清单 | `references/`、`FORK-NOTES.md` 进入 `MANAGED_ITEMS` |
+| Lint | Windows 下 coverage 不读 `/dev/stdin`（临时文件 + `process.argv`） |
+| 文档 | `PRODUCT.md`、本文件、`references/acceptance-matrix.md`、README/Codex 入口的 Jonoka 段 |
 
-### 知识库侧目录
+日志约定：仍用上游单文件 **`log.md`**（不用 lewislulu 按日 `log/`）。  
+`target` 路径：相对知识库根，如 `wiki/entities/Foo.md`。
 
-```text
-<wiki-root>/
-├── audit/*.md           # open
-└── audit/resolved/*.md  # 已处理（含 Resolution，不删除）
+---
+
+## 主平台：Codex
+
+### 精简安装（核心主线）
+
+```bash
+export CODEX_HOME="D:/CodexHome"   # 若已改过 home；未改可省略
+cd /path/to/llm-wiki-skill
+
+bash install.sh --platform codex
+# 等价显式：
+# bash install.sh --platform codex --target-dir "$CODEX_HOME/skills/llm-wiki"
 ```
 
-`target` 使用相对知识库根路径，例如 `wiki/entities/Foo.md`。  
-日志仍写 sdyckjq 的单文件 `log.md`（不采用 lewislulu 的按日 `log/`）。
+能力：本地文件、粘贴文本、PDF 等核心主线。  
+**不含**官方网页/X/公众号/YouTube/知乎提取器。
 
-### 旧知识库
+### 完整安装（核心 + 可选提取器）
+
+```bash
+export CODEX_HOME="D:/CodexHome"
+cd /path/to/llm-wiki-skill
+
+bash install.sh --platform codex --with-optional-adapters
+```
+
+可能需要：`node` 或 `bun`、`uv`（公众号）、部分站点 Chrome 调试端口等。  
+装完用「知识库状态」看外挂摘要；缺依赖时允许单包 warn，但应能区分 not_installed / available。
+
+### Windows
+
+- 推荐：Git Bash 执行 `install.sh`，或仓库根 `install.ps1`（处理编码）。  
+- 系统自带 `C:\Windows\System32\bash.exe`（WSL 启动器）可能不可用；用 `Git\bin\bash.exe`。  
+- 勿把「仅 WSL 路径」写死进文档。
+
+### 升级
+
+```bash
+export CODEX_HOME="D:/CodexHome"
+bash install.sh --upgrade --platform codex
+# 或 --target-dir "$CODEX_HOME/skills/llm-wiki"
+```
+
+**注意（U9）**：`--upgrade` 若从 **上游 remote** 拉代码，可能覆盖 Jonoka 补丁。  
+推荐升级源为 **本 fork 仓库工作树**，或 upgrade 后从 fork 再 `install.sh --platform codex` 盖一次。  
+正式策略待 U9 验收后写入此处。
+
+### 默认路径对照
+
+| 条件 | 技能目录 |
+|------|----------|
+| 设置了 `CODEX_HOME` | `$CODEX_HOME/skills/llm-wiki` |
+| 未设置 | `~/.codex/skills/llm-wiki`（兼容 `~/.Codex`） |
+
+---
+
+## 日常用法（Codex）
+
+```text
+消化：<文件路径或 URL>
+知识库状态
+处理批注
+```
+
+- 工作区打开知识库根目录更稳。  
+- 路径文件：`~/.llm-wiki-path`（init 时可能写入）。  
+- **Agent 自抓 URL** 成功 ≠ 完整档 adapter 已装（见 PRODUCT / U6）。
+
+Audit 协议全文：[references/audit-guide.md](references/audit-guide.md)。
+
+---
+
+## 旧知识库补 audit 目录
 
 ```bash
 bash scripts/wiki-compat.sh ensure-audit-dirs "<wiki_root>"
-# 或任意一次成功的 audit-file.py 会自动 mkdir
 ```
 
-### 致谢
+---
 
-- Karpathy llm-wiki gist  
-- sdyckjq-lab/llm-wiki-skill（底座）  
-- lewislulu/llm-wiki-skill（audit 协议与锚点思路）  
+## Phase 与范围
 
-### Phase 2（未做）
+| 阶段 | 状态 |
+|------|------|
+| Phase 1 audit 文件协议 | 已完成并本机验收（U4） |
+| 产品文档骨架 | 进行中（本文 + PRODUCT + 矩阵） |
+| 完整档 adapters 实装验收（U5–U7） | 未做 |
+| Phase 2 Obsidian/Web 批注 | 未做（v0.2+） |
+| workbench 深度 | **范围外**（上游） |
 
-- Obsidian audit 插件路径适配  
-- Web 预览选中批注  
-- `audit-shared` TypeScript 库  
+---
+
+## 致谢
+
+Karpathy llm-wiki gist · sdyckjq-lab/llm-wiki-skill · lewislulu/llm-wiki-skill · 上游 optional adapter 作者们。

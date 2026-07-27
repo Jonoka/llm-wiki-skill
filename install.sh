@@ -28,6 +28,7 @@ MANAGED_ITEMS=(
   "HERMES.md"
   "CHANGELOG.md"
   "FORK-NOTES.md"
+  "PRODUCT.md"
   "install.sh"
   "setup.sh"
   "install.ps1"
