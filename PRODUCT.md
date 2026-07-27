@@ -54,7 +54,7 @@
 
 ## v0.1 成功标准（可勾选）
 
-- [ ] [PRODUCT.md](PRODUCT.md) / [FORK-NOTES.md](FORK-NOTES.md) / 验收矩阵与本文一致且已入库  
+- [x] [PRODUCT.md](PRODUCT.md) / [FORK-NOTES.md](FORK-NOTES.md) / 验收矩阵与本文一致且已入库（2026-07-28）  
 - [ ] Codex 精简安装文档含 `CODEX_HOME` 与 Windows 注意点  
 - [ ] 完整档 `--with-optional-adapters` 写进主安装叙事  
 - [ ] 验收：**U1–U4**（init / 本地 ingest / status·lint / audit）通过  
