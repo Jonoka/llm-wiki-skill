@@ -56,3 +56,8 @@ deps/baoyu-url-to-markdown/scripts/bun.lock
 /PLAN.md
 /TODOS.md
 /test-report.md
+
+.tmp-u6-*/
+.tmp-u6-*.py
+.tmp-u5-install.txt
+

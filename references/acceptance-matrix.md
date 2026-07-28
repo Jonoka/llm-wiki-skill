@@ -32,7 +32,7 @@
 | **U3** | status + lint 干净（断链/孤立/index/audit） | 精简 | P0 | pass | 2026-07-23/24；Windows lint stdin 已修 |
 | **U4** | audit-file 一条 +「处理批注」accept 归档 | 精简 | P0 | pass | 2026-07-27 RAG.md suggest |
 | **U5** | 完整安装 `--with-optional-adapters` 成功 | 完整 | P0 | pass | 2026-07-28：`CODEX_HOME=D:/CodexHome`，`install.sh --platform codex --target-dir .../llm-wiki --with-optional-adapters` exit 0；sibling `baoyu-url-to-markdown`（bun deps）、`youtube-transcript`、全局 `wechat-article-to-markdown`（uv）就位；`adapter-state.sh summary-human`（在 llm-wiki 包根、installed_skill）显示网页/X/知乎/YouTube/公众号为可用；小红书仍 manual_only；未开 Chrome 9222（可临时拉起，不阻塞 U5） |
-| **U6** | URL ingest 且 **adapter 路径可用**（非仅 agent 自抓） | 完整 | P0 | todo | 须看 adapter-state / companion |
+| **U6** | URL ingest 且 **adapter 路径可用**（非仅 agent 自抓） | 完整 | P0 | pass | 2026-07-28：`web_article` available；`bun main.ts` 调 `baoyu-url-to-markdown` 抓取 https://www.sharktime.com/Blog_en_202604_LLM_Wiki.html → md ~23k 字 + html 快照；`classify-run` 有效正文；写入 raw/sources 并增量更新实体/主题；cache HIT。证据：`docs/u6-evidence.json`。**不是** Codex agent 自抓。 |
 | **U7** | 提取失败时标准回退（粘贴 / 说明 not_installed） | 精简或完整 | P0 | todo | 文档+行为；部分口头有，未钉死 |
 | **U8** | 安装到 `$CODEX_HOME/skills/llm-wiki` | 精简 | P0 | pass | 2026-07；runtime-context 已尊重 CODEX_HOME |
 | **U9** | `install.sh --upgrade` 不丢 Jonoka 补丁 | 任一 | P1 | todo | 未演练 |
@@ -121,8 +121,8 @@ bash install.sh --platform codex --with-optional-adapters
 
 | 集合 | 进度 |
 |------|------|
-| P0 U1–U5, U8 | 已 pass |
-| P0 U6–U7 | todo（下一阶段：adapter 路径 URL ingest + 回退话术） |
+| P0 U1–U6, U8 | 已 pass |
+| P0 U7 | todo（提取失败标准回退） |
 | P1 U9–U11 | todo |
 | P2 U12–U16 | 延后 |
 
@@ -136,4 +136,14 @@ bash install.sh --platform codex --with-optional-adapters
   （`installed_skill` 下 optional root = 父目录 `skills/`，勿把 `--skill-root` 误指成 `llm-wiki` 自身却又期望 sibling 在更外层时搞反；默认从包根跑即可。）
 - `--skill-root` 若传入，语义是 **skills 根**（含 baoyu 的那一层），不是 `llm-wiki` 子目录。
 
-最后更新：2026-07-28（U5 pass）。
+### U6 实装备忘（2026-07-28）
+
+1. `adapter-state.sh check web_article` → `available`  
+2. 运行（Windows 需真实 `bun.exe` 路径，npm 的 bun shim 在纯 bash 下可能坏）：  
+   `bun main.ts <url> -o out.md --timeout 120000`  
+   于 ` $CODEX_HOME/skills/baoyu-url-to-markdown/scripts`  
+3. 成功标志：exit 0、markdown 有正文、可选 `*-captured.html`  
+4. 写入知识库 raw + source；frontmatter 标注 `extract_path: baoyu-url-to-markdown`  
+5. 与「agent 自己 fetch」区分：必须能指出 companion 命令与输出文件  
+
+最后更新：2026-07-28（U6 pass）。

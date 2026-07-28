@@ -1,0 +1,16 @@
+{
+  "id": "U6",
+  "date": "2026-07-28",
+  "url": "https://www.sharktime.com/Blog_en_202604_LLM_Wiki.html",
+  "source_id": "web_article",
+  "adapter": "baoyu-url-to-markdown",
+  "adapter_bin": "D:/CodexHome/skills/baoyu-url-to-markdown/scripts/main.ts",
+  "runtime": "C:/Users/Administrator/AppData/Roaming/npm/node_modules/bun/bin/bun.exe",
+  "exit_code": 0,
+  "output_md": "D:/grok-projects/llm-wiki-skill/.tmp-u6-baoyu/karpathy-llm-wiki-95-percent.md",
+  "output_chars": 22868,
+  "wiki_raw": "raw/articles/2026-07-28-sharktime-llm-wiki-vs-rag.md",
+  "wiki_source": "wiki/sources/2026-07-28-sharktime-llm-wiki-vs-rag.md",
+  "not_agent_only_fetch": true,
+  "classify_run": "available / 自动提取已拿到有效正文"
+}
