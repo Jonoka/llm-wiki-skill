@@ -61,3 +61,7 @@ deps/baoyu-url-to-markdown/scripts/bun.lock
 .tmp-u6-*.py
 .tmp-u5-install.txt
 
+
+.tmp-u7*
+.tmp-u6-lint.txt
+
