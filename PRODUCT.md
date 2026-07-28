@@ -58,8 +58,8 @@
 - [ ] Codex 精简安装文档含 `CODEX_HOME` 与 Windows 注意点  
 - [ ] 完整档 `--with-optional-adapters` 写进主安装叙事  
 - [ ] 验收：**U1–U4**（init / 本地 ingest / status·lint / audit）通过  
-- [ ] 验收：**U5–U7**（完整安装 / adapter URL / 失败回退）有结论（通过或记录阻塞）  
-- [ ] 验收：**U8**（`CODEX_HOME` 路径）通过  
+- [x] 验收：**U5–U7**（完整安装 / adapter URL / 失败回退）通过（2026-07-28）  
+- [x] 验收：**U8**（`CODEX_HOME` 路径）通过  
 - [ ] **U9**（upgrade 不丢 fork 补丁）有结论  
 - [ ] 工作流 U10+ 在矩阵中标为抽检 / v0.2，不默认为「没做就不完整」  
 - [ ] `workbench` 深度开发标为范围外  

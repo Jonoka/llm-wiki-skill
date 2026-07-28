@@ -120,7 +120,7 @@ bash scripts/wiki-compat.sh ensure-audit-dirs "<wiki_root>"
 | 产品文档骨架 | 进行中（本文 + PRODUCT + 矩阵） |
 | 完整档 adapters 实装（U5） | **已通过**（2026-07-28，见 acceptance-matrix） |
 | adapter URL ingest（U6） | **已通过**（2026-07-28 baoyu → SharkTime 文） |
-| 提取失败回退（U7） | 未做 |
+| 提取失败回退（U7） | **已通过**（2026-07-28；见 adapter-fallback-guide） |
 | Phase 2 Obsidian/Web 批注 | 未做（v0.2+） |
 | workbench 深度 | **范围外**（上游） |
 

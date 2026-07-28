@@ -120,6 +120,8 @@ bash ${SKILL_DIR}/scripts/adapter-state.sh classify-run <source_id> <exit_code> 
 
 用返回的 `detail`、`recovery_action`、`install_hint`、`fallback_hint` 生成提示。核心主线不因外挂失败而中断。
 
+短话术与禁止项见 `${SKILL_DIR}/references/adapter-fallback-guide.md`（U7）。**禁止**在 `not_installed` / `runtime_failed` / `empty_result` 时假装已写入 raw 正文。
+
 ---
 
 ## 工作流路由

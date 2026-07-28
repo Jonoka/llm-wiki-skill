@@ -33,7 +33,7 @@
 | **U4** | audit-file 一条 +「处理批注」accept 归档 | 精简 | P0 | pass | 2026-07-27 RAG.md suggest |
 | **U5** | 完整安装 `--with-optional-adapters` 成功 | 完整 | P0 | pass | 2026-07-28：`CODEX_HOME=D:/CodexHome`，`install.sh --platform codex --target-dir .../llm-wiki --with-optional-adapters` exit 0；sibling `baoyu-url-to-markdown`（bun deps）、`youtube-transcript`、全局 `wechat-article-to-markdown`（uv）就位；`adapter-state.sh summary-human`（在 llm-wiki 包根、installed_skill）显示网页/X/知乎/YouTube/公众号为可用；小红书仍 manual_only；未开 Chrome 9222（可临时拉起，不阻塞 U5） |
 | **U6** | URL ingest 且 **adapter 路径可用**（非仅 agent 自抓） | 完整 | P0 | pass | 2026-07-28：`web_article` available；`bun main.ts` 调 `baoyu-url-to-markdown` 抓取 https://www.sharktime.com/Blog_en_202604_LLM_Wiki.html → md ~23k 字 + html 快照；`classify-run` 有效正文；写入 raw/sources 并增量更新实体/主题；cache HIT。证据：`docs/u6-evidence.json`。**不是** Codex agent 自抓。 |
-| **U7** | 提取失败时标准回退（粘贴 / 说明 not_installed） | 精简或完整 | P0 | todo | 文档+行为；部分口头有，未钉死 |
+| **U7** | 提取失败时标准回退（粘贴 / 说明 not_installed） | 精简或完整 | P0 | pass | 2026-07-28：脚本层验证 not_installed / runtime_failed / empty_result / unsupported / 核心 available；字段含 install_hint+fallback_hint；SKILL 已有五态与回退规则；新增 `references/adapter-fallback-guide.md` + `docs/u7-evidence.json`。E2E 聊天服从度靠 SKILL 约束，不作单独 UI 测。 |
 | **U8** | 安装到 `$CODEX_HOME/skills/llm-wiki` | 精简 | P0 | pass | 2026-07；runtime-context 已尊重 CODEX_HOME |
 | **U9** | `install.sh --upgrade` 不丢 Jonoka 补丁 | 任一 | P1 | todo | 未演练 |
 | **U10** | query 基于 wiki 作答并引用页面 | 精简 | P1 | todo | 未系统测 |
@@ -121,8 +121,8 @@ bash install.sh --platform codex --with-optional-adapters
 
 | 集合 | 进度 |
 |------|------|
-| P0 U1–U6, U8 | 已 pass |
-| P0 U7 | todo（提取失败标准回退） |
+| P0 U1–U8 | **全部 pass** |
+| P1 U9–U11 | todo |
 | P1 U9–U11 | todo |
 | P2 U12–U16 | 延后 |
 
@@ -146,4 +146,18 @@ bash install.sh --platform codex --with-optional-adapters
 4. 写入知识库 raw + source；frontmatter 标注 `extract_path: baoyu-url-to-markdown`  
 5. 与「agent 自己 fetch」区分：必须能指出 companion 命令与输出文件  
 
-最后更新：2026-07-28（U6 pass）。
+### U7 实装备忘（2026-07-28）
+
+| 场景 | 命令要点 | 期望 state |
+|------|----------|------------|
+| 完整档网页 | `check web_article` | available |
+| 模拟未装 | `--skill-root <空skills> --layout-mode installed_skill check web_article` | not_installed + 含 `--with-optional-adapters` 的 install_hint |
+| 运行失败 | `classify-run web_article 1 /no/file` | runtime_failed |
+| 空正文 | `classify-run web_article 0 empty.md` | empty_result |
+| 小红书 | `check xiaohongshu_post` | unsupported |
+| 粘贴/本地 | `check plain_text` / `local_document` | available（不依赖外挂） |
+
+指南：`references/adapter-fallback-guide.md`  
+证据：`docs/u7-evidence.json`
+
+最后更新：2026-07-28（U7 pass；**P0 闭环**）。

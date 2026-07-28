@@ -1,0 +1,54 @@
+{
+  "id": "U7",
+  "date": "2026-07-28",
+  "platform": "codex",
+  "skill_root_tested": "D:/CodexHome/skills/llm-wiki",
+  "cases": [
+    {
+      "name": "web_article_available_full_install",
+      "command": "adapter-state.sh check web_article",
+      "expected_state": "available",
+      "observed_state": "available",
+      "pass": true
+    },
+    {
+      "name": "web_article_not_installed_empty_skills_root",
+      "command": "adapter-state.sh --skill-root .tmp-u7-empty-skills --layout-mode installed_skill check web_article",
+      "expected_state": "not_installed",
+      "observed_state": "not_installed",
+      "has_install_hint_with_optional_adapters": true,
+      "has_fallback_hint_paste_or_file": true,
+      "pass": true
+    },
+    {
+      "name": "classify_run_runtime_failed",
+      "command": "adapter-state.sh classify-run web_article 1 /nonexistent/out.md",
+      "expected_state": "runtime_failed",
+      "observed_state": "runtime_failed",
+      "recovery_mentions_retry_or_manual": true,
+      "pass": true
+    },
+    {
+      "name": "classify_run_empty_result",
+      "command": "adapter-state.sh classify-run web_article 0 .tmp-u7-empty.md",
+      "expected_state": "empty_result",
+      "observed_state": "empty_result",
+      "pass": true
+    },
+    {
+      "name": "classify_run_success",
+      "command": "adapter-state.sh classify-run web_article 0 <baoyu-output.md>",
+      "expected_state": "available",
+      "observed_state": "available",
+      "pass": true
+    },
+    {
+      "name": "skill_md_documents_five_states_and_no_halt_core",
+      "observed": "SKILL.md 外挂状态模型 + ingest 前置/统一回退规则",
+      "pass": true
+    }
+  ],
+  "guide": "references/adapter-fallback-guide.md",
+  "result": "pass",
+  "notes": "U7 validates protocol + scripts. End-to-end Codex chat compliance is guided by SKILL + adapter-fallback-guide; not a separate UI test."
+}
