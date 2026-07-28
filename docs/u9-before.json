@@ -1,0 +1,122 @@
+{
+  "SKILL.md": {
+    "exists": true,
+    "sha256": "8ea3b2d12586c03a",
+    "size": 55533,
+    "markers": {
+      "CODEX_HOME": false,
+      "audit-file": true,
+      "process.argv": false,
+      "adapter-fallback": true,
+      "Jonoka": true
+    }
+  },
+  "PRODUCT.md": {
+    "exists": true,
+    "sha256": "b6883473af0b985a",
+    "size": 4805,
+    "markers": {
+      "CODEX_HOME": true,
+      "audit-file": false,
+      "process.argv": false,
+      "adapter-fallback": true,
+      "Jonoka": true
+    }
+  },
+  "FORK-NOTES.md": {
+    "exists": true,
+    "sha256": "447d9be19610ff75",
+    "size": 4415,
+    "markers": {
+      "CODEX_HOME": true,
+      "audit-file": true,
+      "process.argv": true,
+      "adapter-fallback": true,
+      "Jonoka": true
+    }
+  },
+  "scripts/runtime-context.sh": {
+    "exists": true,
+    "sha256": "2c27a6ed2f3146dc",
+    "size": 1851,
+    "markers": {
+      "CODEX_HOME": true,
+      "audit-file": false,
+      "process.argv": false,
+      "adapter-fallback": false,
+      "Jonoka": false
+    }
+  },
+  "scripts/lint-runner.sh": {
+    "exists": true,
+    "sha256": "f60764a3fc466c15",
+    "size": 11536,
+    "markers": {
+      "CODEX_HOME": false,
+      "audit-file": false,
+      "process.argv": true,
+      "adapter-fallback": false,
+      "Jonoka": false
+    }
+  },
+  "scripts/audit-file.py": {
+    "exists": true,
+    "sha256": "0f1c8ec7d56c6f07",
+    "size": 5149,
+    "markers": {
+      "CODEX_HOME": false,
+      "audit-file": true,
+      "process.argv": false,
+      "adapter-fallback": false,
+      "Jonoka": false
+    }
+  },
+  "scripts/audit-review.py": {
+    "exists": true,
+    "sha256": "dde1d7bc6d46b01a",
+    "size": 10181,
+    "markers": {
+      "CODEX_HOME": false,
+      "audit-file": false,
+      "process.argv": false,
+      "adapter-fallback": false,
+      "Jonoka": false
+    }
+  },
+  "references/audit-guide.md": {
+    "exists": true,
+    "sha256": "600ebc374577b1b0",
+    "size": 4884,
+    "markers": {
+      "CODEX_HOME": false,
+      "audit-file": true,
+      "process.argv": false,
+      "adapter-fallback": false,
+      "Jonoka": true
+    }
+  },
+  "references/adapter-fallback-guide.md": {
+    "exists": true,
+    "sha256": "0d66ecde1ae253d2",
+    "size": 2904,
+    "markers": {
+      "CODEX_HOME": true,
+      "audit-file": false,
+      "process.argv": false,
+      "adapter-fallback": true,
+      "Jonoka": false
+    }
+  },
+  "references/acceptance-matrix.md": {
+    "exists": true,
+    "sha256": "753a5d06b9937dcf",
+    "size": 7818,
+    "markers": {
+      "CODEX_HOME": true,
+      "audit-file": true,
+      "process.argv": false,
+      "adapter-fallback": true,
+      "Jonoka": true
+    }
+  }
+}

@@ -46,10 +46,12 @@ Windows：用 Git Bash 或仓库根目录 `install.ps1`。
 ### 升级
 
 ```bash
-bash install.sh --upgrade --platform codex
+export CODEX_HOME="D:/CodexHome"   # 若使用自定义 home
+cd /path/to/Jonoka/llm-wiki-skill  # 必须是本 fork
+bash install.sh --upgrade --platform codex --target-dir "$CODEX_HOME/skills/llm-wiki"
 ```
 
-请从 **本 fork 工作树** 升级，以免上游覆盖 Jonoka 的 audit / CODEX_HOME / lint 补丁。详见 FORK-NOTES。
+**U9**：从本 fork 升级会保留 Jonoka 补丁；从纯上游 clone 升级会覆盖丢失。详见 [FORK-NOTES.md](../../FORK-NOTES.md)。
 
 ## 日常三口令
 

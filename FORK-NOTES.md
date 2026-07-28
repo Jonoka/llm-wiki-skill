@@ -67,17 +67,23 @@ U5 已在 2026-07-28 于 `D:\CodexHome` 实装通过。
 - 系统自带 `C:\Windows\System32\bash.exe`（WSL 启动器）可能不可用；用 `Git\bin\bash.exe`。  
 - 勿把「仅 WSL 路径」写死进文档。
 
-### 升级
+### 升级（U9 已验收）
 
 ```bash
 export CODEX_HOME="D:/CodexHome"
-bash install.sh --upgrade --platform codex
-# 或 --target-dir "$CODEX_HOME/skills/llm-wiki"
+cd /path/to/Jonoka/llm-wiki-skill    # 必须是本 fork 工作树
+bash install.sh --upgrade --platform codex --target-dir "$CODEX_HOME/skills/llm-wiki"
+# 需要完整提取档时再加：--with-optional-adapters
 ```
 
-**注意（U9）**：`--upgrade` 若从 **上游 remote** 拉代码，可能覆盖 Jonoka 补丁。  
-推荐升级源为 **本 fork 仓库工作树**，或 upgrade 后从 fork 再 `install.sh --platform codex` 盖一次。  
-正式策略待 U9 验收后写入此处。
+**策略（2026-07-28 U9 pass）：**
+
+| 做法 | 结果 |
+|------|------|
+| 在 **Jonoka fork** 目录执行 `--upgrade` | `git pull` 拉本 fork + `install_bundle` 重装 → **保留** audit / CODEX_HOME / lint / 文档补丁 |
+| 在 **纯上游 sdyckjq clone** 执行 `--upgrade` | `git pull` 上游 + 重装 → **会丢掉** Jonoka 补丁 |
+
+因此：**只从本 fork 升级**；若曾误用上游树，再从 fork 跑一次 `install.sh --platform codex`（或带 adapters）覆盖安装即可。
 
 ### 默认路径对照
 
@@ -121,6 +127,7 @@ bash scripts/wiki-compat.sh ensure-audit-dirs "<wiki_root>"
 | 完整档 adapters 实装（U5） | **已通过**（2026-07-28，见 acceptance-matrix） |
 | adapter URL ingest（U6） | **已通过**（2026-07-28 baoyu → SharkTime 文） |
 | 提取失败回退（U7） | **已通过**（2026-07-28；见 adapter-fallback-guide） |
+| upgrade 不丢补丁（U9） | **已通过**（须从 Jonoka fork 升级；见上节） |
 | Phase 2 Obsidian/Web 批注 | 未做（v0.2+） |
 | workbench 深度 | **范围外**（上游） |
 

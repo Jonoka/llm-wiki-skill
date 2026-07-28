@@ -1,0 +1,39 @@
+{
+  "id": "U9",
+  "date": "2026-07-28",
+  "upgrade_command": "bash install.sh --upgrade --platform codex --target-dir D:/CodexHome/skills/llm-wiki",
+  "worked_tree": "D:/grok-projects/llm-wiki-skill",
+  "git_remote_origin": "https://github.com/Jonoka/llm-wiki-skill.git",
+  "git_pull": "Already up to date (Jonoka origin)",
+  "upgrade_exit": 0,
+  "files_compared": 10,
+  "files_changed_after_upgrade": [
+    "PRODUCT.md"
+  ],
+  "files_missing_after_upgrade": [],
+  "hashes_identical": false,
+  "critical_markers": {
+    "runtime CODEX_HOME": true,
+    "lint process.argv": true,
+    "audit-file exists": true,
+    "audit-review exists": true,
+    "PRODUCT exists": true,
+    "SKILL mentions audit-review": true,
+    "fallback guide": true,
+    "acceptance matrix": true
+  },
+  "resolve_platform_skill_root_codex": "D:/CodexHome/skills",
+  "resolve_uses_CODEX_HOME": true,
+  "result": "pass",
+  "policy": {
+    "pass_condition_observed": "Upgrade from Jonoka fork checkout reinstalls Jonoka files; git pull against Jonoka origin does not strip patches.",
+    "risk": "If SCRIPT_DIR is an upstream-only clone (sdyckjq-lab), git pull + install_bundle overwrites installed skill with upstream and Jonoka patches are lost.",
+    "recommendation": "Always run --upgrade from this fork (Jonoka/llm-wiki-skill), or after any upstream merge reinstall from the fork. Do not point upgrade SCRIPT_DIR at pure upstream without re-applying fork commits."
+  },
+  "hashes_identical_strict": false,
+  "files_changed_after_upgrade_notes": {
+    "PRODUCT.md": "Refreshed from fork working tree (release checkbox / current PRODUCT). Still Jonoka content; not upstream overwrite."
+  },
+  "jonoka_patches_preserved": true,
+  "pass_criteria": "Critical Jonoka files present with markers; CODEX_HOME resolve works; no missing audit/runtime/lint patches; changes only expected reinstall from fork source."
+}
