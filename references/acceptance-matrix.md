@@ -31,7 +31,7 @@
 | **U2** | 消化本地 Markdown / 已有 raw 文件 | 精简 | P0 | pass | 2026-07-22 Karpathy gist（含人工种子 + Codex 复核） |
 | **U3** | status + lint 干净（断链/孤立/index/audit） | 精简 | P0 | pass | 2026-07-23/24；Windows lint stdin 已修 |
 | **U4** | audit-file 一条 +「处理批注」accept 归档 | 精简 | P0 | pass | 2026-07-27 RAG.md suggest |
-| **U5** | 完整安装 `--with-optional-adapters` 成功 | 完整 | P0 | todo | 未在 CODEX_HOME 实装验收 |
+| **U5** | 完整安装 `--with-optional-adapters` 成功 | 完整 | P0 | pass | 2026-07-28：`CODEX_HOME=D:/CodexHome`，`install.sh --platform codex --target-dir .../llm-wiki --with-optional-adapters` exit 0；sibling `baoyu-url-to-markdown`（bun deps）、`youtube-transcript`、全局 `wechat-article-to-markdown`（uv）就位；`adapter-state.sh summary-human`（在 llm-wiki 包根、installed_skill）显示网页/X/知乎/YouTube/公众号为可用；小红书仍 manual_only；未开 Chrome 9222（可临时拉起，不阻塞 U5） |
 | **U6** | URL ingest 且 **adapter 路径可用**（非仅 agent 自抓） | 完整 | P0 | todo | 须看 adapter-state / companion |
 | **U7** | 提取失败时标准回退（粘贴 / 说明 not_installed） | 精简或完整 | P0 | todo | 文档+行为；部分口头有，未钉死 |
 | **U8** | 安装到 `$CODEX_HOME/skills/llm-wiki` | 精简 | P0 | pass | 2026-07；runtime-context 已尊重 CODEX_HOME |
@@ -121,9 +121,19 @@ bash install.sh --platform codex --with-optional-adapters
 
 | 集合 | 进度 |
 |------|------|
-| P0 U1–U4, U8 | 已 pass |
-| P0 U5–U7 | todo（下一阶段实装重点） |
+| P0 U1–U5, U8 | 已 pass |
+| P0 U6–U7 | todo（下一阶段：adapter 路径 URL ingest + 回退话术） |
 | P1 U9–U11 | todo |
 | P2 U12–U16 | 延后 |
 
-最后更新：2026-07-28（文档落盘；实装状态以上表为准）。
+### U5 实装备忘（2026-07-28）
+
+- 命令：`export CODEX_HOME=D:/CodexHome` 后  
+  `bash install.sh --platform codex --target-dir "$CODEX_HOME/skills/llm-wiki" --with-optional-adapters`
+- 依赖本机已有：node/npm、bun、uv、Git Bash PATH 需包含它们。
+- 校验：在 **`llm-wiki` 安装目录**执行  
+  `bash scripts/adapter-state.sh summary-human`  
+  （`installed_skill` 下 optional root = 父目录 `skills/`，勿把 `--skill-root` 误指成 `llm-wiki` 自身却又期望 sibling 在更外层时搞反；默认从包根跑即可。）
+- `--skill-root` 若传入，语义是 **skills 根**（含 baoyu 的那一层），不是 `llm-wiki` 子目录。
+
+最后更新：2026-07-28（U5 pass）。

@@ -50,6 +50,17 @@ bash install.sh --platform codex --with-optional-adapters
 可能需要：`node` 或 `bun`、`uv`（公众号）、部分站点 Chrome 调试端口等。  
 装完用「知识库状态」看外挂摘要；缺依赖时允许单包 warn，但应能区分 not_installed / available。
 
+本机 CLI 自检（应在 **已安装的 llm-wiki 目录**下）：
+
+```bash
+export CODEX_HOME="D:/CodexHome"
+cd "$CODEX_HOME/skills/llm-wiki"
+bash scripts/adapter-state.sh summary-human
+```
+
+期望：网页 / X / 知乎 / YouTube / 公众号为「可用」或等价；小红书为手动。  
+U5 已在 2026-07-28 于 `D:\CodexHome` 实装通过。
+
 ### Windows
 
 - 推荐：Git Bash 执行 `install.sh`，或仓库根 `install.ps1`（处理编码）。  
@@ -107,7 +118,8 @@ bash scripts/wiki-compat.sh ensure-audit-dirs "<wiki_root>"
 |------|------|
 | Phase 1 audit 文件协议 | 已完成并本机验收（U4） |
 | 产品文档骨架 | 进行中（本文 + PRODUCT + 矩阵） |
-| 完整档 adapters 实装验收（U5–U7） | 未做 |
+| 完整档 adapters 实装（U5） | **已通过**（2026-07-28，见 acceptance-matrix） |
+| adapter URL ingest / 回退（U6–U7） | 未做 |
 | Phase 2 Obsidian/Web 批注 | 未做（v0.2+） |
 | workbench 深度 | **范围外**（上游） |
 
