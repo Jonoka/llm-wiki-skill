@@ -128,6 +128,7 @@ bash scripts/wiki-compat.sh ensure-audit-dirs "<wiki_root>"
 | adapter URL ingest（U6） | **已通过**（2026-07-28 baoyu → SharkTime 文） |
 | 提取失败回退（U7） | **已通过**（2026-07-28；见 adapter-fallback-guide） |
 | upgrade 不丢补丁（U9） | **已通过**（须从 Jonoka fork 升级；见上节） |
+| 发布标签 | `v0.1.0-jonoka` · 补丁 **`v0.1.1-jonoka`**（含 U9 文档与证据） |
 | Phase 2 Obsidian/Web 批注 | 未做（v0.2+） |
 | workbench 深度 | **范围外**（上游） |
 
