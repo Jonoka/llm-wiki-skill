@@ -326,10 +326,13 @@ else
   jq '.edges' "$ANALYSIS_JSON" > "$TMPDIR/edges.sorted.json"
 fi
 
+# Use --slurpfile / file args instead of --argjson "$(cat …)".
+# Windows/MSYS hits "Argument list too long" when large JSON is passed on argv.
 INITIAL_VIEW=$(jq \
-  --argjson nodes "$(cat "$TMPDIR/nodes.sorted.json")" \
+  --slurpfile nodes "$TMPDIR/nodes.sorted.json" \
   '
   . as $edges
+  | $nodes[0] as $nodes
   | (
       reduce $edges[] as $e (
         {};
@@ -352,6 +355,9 @@ INITIAL_VIEW=$(jq \
 NODE_COUNT=$(jq 'length' "$TMPDIR/nodes.sorted.json")
 EDGE_COUNT=$(jq 'length' "$TMPDIR/edges.sorted.json")
 INSIGHTS_DEGRADED=$(jq '.insights.meta.degraded == true' "$ANALYSIS_JSON")
+jq '.insights' "$ANALYSIS_JSON" > "$TMPDIR/insights.json"
+jq '.learning' "$ANALYSIS_JSON" > "$TMPDIR/learning.json"
+printf '%s' "$INITIAL_VIEW" > "$TMPDIR/initial_view.json"
 
 mkdir -p "$(dirname "$OUTPUT")"
 OUTPUT_TMP="$TMPDIR/graph-data.final.json"
@@ -361,11 +367,11 @@ jq -n \
   --arg wiki_title "$WIKI_TITLE" \
   --argjson total_nodes "$NODE_COUNT" \
   --argjson total_edges "$EDGE_COUNT" \
-  --argjson initial_view "$INITIAL_VIEW" \
-  --argjson nodes "$(cat "$TMPDIR/nodes.sorted.json")" \
-  --argjson edges "$(cat "$TMPDIR/edges.sorted.json")" \
-  --argjson insights "$(jq '.insights' "$ANALYSIS_JSON")" \
-  --argjson learning "$(jq '.learning' "$ANALYSIS_JSON")" \
+  --slurpfile initial_view "$TMPDIR/initial_view.json" \
+  --slurpfile nodes "$TMPDIR/nodes.sorted.json" \
+  --slurpfile edges "$TMPDIR/edges.sorted.json" \
+  --slurpfile insights "$TMPDIR/insights.json" \
+  --slurpfile learning "$TMPDIR/learning.json" \
   --argjson degraded "$DEGRADE" \
   --argjson insights_degraded "$INSIGHTS_DEGRADED" \
   '{
@@ -374,14 +380,14 @@ jq -n \
       wiki_title: $wiki_title,
       total_nodes: $total_nodes,
       total_edges: $total_edges,
-      initial_view: $initial_view,
+      initial_view: $initial_view[0],
       degraded: ($degraded == 1),
       insights_degraded: $insights_degraded
     },
-    nodes: $nodes,
-    edges: $edges,
-    insights: $insights,
-    learning: $learning
+    nodes: $nodes[0],
+    edges: $edges[0],
+    insights: $insights[0],
+    learning: $learning[0]
   }' > "$OUTPUT_TMP"
 
 mv "$OUTPUT_TMP" "$OUTPUT"

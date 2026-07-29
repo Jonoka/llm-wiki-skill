@@ -130,6 +130,8 @@ bash scripts/wiki-compat.sh ensure-audit-dirs "<wiki_root>"
 | upgrade 不丢补丁（U9） | **已通过**（须从 Jonoka fork 升级；见上节） |
 | 发布标签 | `v0.1.0-jonoka` · 补丁 **`v0.1.1-jonoka`**（含 U9 文档与证据） |
 | query / delete（U10–U11） | **已通过**（2026-07-29；见 u10-u11-evidence） |
+| P2 U12–U16 | **已通过**（2026-07-29；见 u12-u16-evidence） |
+| graph Windows | `build-graph-data.sh` 用 jq `--slurpfile`，避免 ARG_MAX |
 | Phase 2 Obsidian/Web 批注 | 未做（v0.2+） |
 | workbench 深度 | **范围外**（上游） |
 

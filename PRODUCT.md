@@ -62,6 +62,7 @@
 - [x] 验收：**U8**（`CODEX_HOME` 路径）通过  
 - [x] **U9**（upgrade 不丢 fork 补丁）通过：须从 Jonoka fork 工作树执行（2026-07-28）  
 - [x] **U10 / U11**（query 引用持久化 / delete 级联+cache）通过（2026-07-29）  
+- [x] **U12–U16**（batch / digest / graph / crystallize / 多库）通过（2026-07-29；graph HTML 依赖 monorepo engine dist 说明见矩阵）  
 - [ ] 工作流 U10+ 在矩阵中标为抽检 / v0.2，不默认为「没做就不完整」  
 - [ ] `workbench` 深度开发标为范围外  
 - [x] 可 `git push` + tag 作为发布点：`v0.1.0-jonoka`（2026-07-28）、补丁 `v0.1.1-jonoka`（2026-07-29，含 U9）  

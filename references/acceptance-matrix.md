@@ -38,11 +38,11 @@
 | **U9** | `install.sh --upgrade` 不丢 Jonoka 补丁 | 任一 | P1 | pass | 2026-07-28：从 **Jonoka fork** 工作树执行 `--upgrade --platform codex --target-dir $CODEX_HOME/skills/llm-wiki`；`git pull`→Already up to date；10 个关键文件无缺失；audit/runtime CODEX_HOME/lint argv/PRODUCT/指南均在；`resolve_platform_skill_root codex`→`D:/CodexHome/skills`。仅 `PRODUCT.md` 哈希因 fork 源刷新变化（仍为 Jonoka 内容）。**风险**：若在 **纯上游** clone 上 upgrade，`git pull`+重装会丢掉 fork 补丁。证据：`docs/u9-evidence.json`。 |
 | **U10** | query 基于 wiki 作答并引用页面 | 精简 | P1 | pass | 2026-07-29：基于 index/wiki 检索作答，引用 `[[LLM Wiki]]`/`[[RAG]]` 等；持久化 `wiki/queries/2026-07-29-llm-wiki-vs-rag.md`；更新 index/log。证据：`docs/u10-u11-evidence.json`。 |
 | **U11** | delete 素材级联 + cache invalidate | 精简 | P1 | pass | 2026-07-29：fixture raw+source → cache HIT → `delete-helper scan-refs` 命中实体与摘要 → 删 raw/source、去 LLM Wiki/index 引用 → `cache.sh invalidate`→INVALIDATED；残留检查全清。证据同上。 |
-| **U12** | batch-ingest 文件夹 | 精简 | P2 | todo | |
-| **U13** | digest 深度报告 / 对比 / 时间线 | 精简 | P2 | todo | |
-| **U14** | graph Mermaid + HTML（jq/node） | 精简 | P2 | todo | 可标「支持未验」 |
-| **U15** | crystallize 对话结晶 | 精简 | P2 | todo | |
-| **U16** | 多知识库 / `~/.llm-wiki-path` 切换 | 精简 | P2 | todo | 机制有，文档级即可 |
+| **U12** | batch-ingest 文件夹 | 精简 | P2 | pass | 2026-07-29：2 个 md fixture → raw/notes + sources + cache + index/log。证据 `docs/u12-u16-evidence.json`。 |
+| **U13** | digest 深度报告 / 对比 / 时间线 | 精简 | P2 | pass | 2026-07-29：`wiki/synthesis/LLM-Wiki与RAG-深度报告.md` 综合 3 篇核心素材。 |
+| **U14** | graph Mermaid + HTML（jq/node） | 精简 | P2 | pass | 2026-07-29：`build-graph-data.sh`→14 节点/57 边；`build-graph-html.sh`→html ~604KB。修复 Windows `jq --argjson "$(cat…)"` ARG_MAX（改 `--slurpfile`）。HTML 需 `packages/graph-engine/dist`（skill 默认安装清单未带，monorepo build 后拷贝）。另有 mermaid 页。 |
+| **U15** | crystallize 对话结晶 | 精简 | P2 | pass | 2026-07-29：`wiki/synthesis/sessions/U15-Codex优先与两档安装-2026-07-29.md` + log。 |
+| **U16** | 多知识库 / `~/.llm-wiki-path` 切换 | 精简 | P2 | pass | 2026-07-29：init 第二库 `D:\wikis\u16-second-wiki`（含 audit）；切换 `~/.llm-wiki-path` 后恢复主库。CWD `.wiki-schema.md` 优先。 |
 
 ---
 
@@ -194,4 +194,16 @@ bash install.sh --upgrade --platform codex --target-dir "$CODEX_HOME/skills/llm-
 
 证据：`docs/u10-u11-evidence.json`
 
-最后更新：2026-07-29（U10/U11 pass；**P1 闭环**）。
+### U12–U16 备忘（2026-07-29）
+
+| ID | 要点 |
+|----|------|
+| U12 | 文件夹内多 md → 逐个 raw/notes + sources + cache；log 记 batch-ingest |
+| U13 | `wiki/synthesis/` 深度报告，引用多 source |
+| U14 | 需 **jq** + **node**；`build-graph-data.sh` 已修 Windows ARG_MAX；HTML 另需 monorepo `npm run build -w @llm-wiki/graph-engine` 的 `engine.iife.js` |
+| U15 | `wiki/synthesis/sessions/`，默认 INFERRED |
+| U16 | 第二库 init；`~/.llm-wiki-path` 可切换；工作区含 `.wiki-schema.md` 时优先生效 |
+
+证据：`docs/u12-u16-evidence.json`
+
+最后更新：2026-07-29（**P2 闭环**）。
