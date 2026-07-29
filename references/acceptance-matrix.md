@@ -36,8 +36,8 @@
 | **U7** | 提取失败时标准回退（粘贴 / 说明 not_installed） | 精简或完整 | P0 | pass | 2026-07-28：脚本层验证 not_installed / runtime_failed / empty_result / unsupported / 核心 available；字段含 install_hint+fallback_hint；SKILL 已有五态与回退规则；新增 `references/adapter-fallback-guide.md` + `docs/u7-evidence.json`。E2E 聊天服从度靠 SKILL 约束，不作单独 UI 测。 |
 | **U8** | 安装到 `$CODEX_HOME/skills/llm-wiki` | 精简 | P0 | pass | 2026-07；runtime-context 已尊重 CODEX_HOME |
 | **U9** | `install.sh --upgrade` 不丢 Jonoka 补丁 | 任一 | P1 | pass | 2026-07-28：从 **Jonoka fork** 工作树执行 `--upgrade --platform codex --target-dir $CODEX_HOME/skills/llm-wiki`；`git pull`→Already up to date；10 个关键文件无缺失；audit/runtime CODEX_HOME/lint argv/PRODUCT/指南均在；`resolve_platform_skill_root codex`→`D:/CodexHome/skills`。仅 `PRODUCT.md` 哈希因 fork 源刷新变化（仍为 Jonoka 内容）。**风险**：若在 **纯上游** clone 上 upgrade，`git pull`+重装会丢掉 fork 补丁。证据：`docs/u9-evidence.json`。 |
-| **U10** | query 基于 wiki 作答并引用页面 | 精简 | P1 | todo | 未系统测 |
-| **U11** | delete 素材级联 + cache invalidate | 精简 | P1 | todo | 未测 |
+| **U10** | query 基于 wiki 作答并引用页面 | 精简 | P1 | pass | 2026-07-29：基于 index/wiki 检索作答，引用 `[[LLM Wiki]]`/`[[RAG]]` 等；持久化 `wiki/queries/2026-07-29-llm-wiki-vs-rag.md`；更新 index/log。证据：`docs/u10-u11-evidence.json`。 |
+| **U11** | delete 素材级联 + cache invalidate | 精简 | P1 | pass | 2026-07-29：fixture raw+source → cache HIT → `delete-helper scan-refs` 命中实体与摘要 → 删 raw/source、去 LLM Wiki/index 引用 → `cache.sh invalidate`→INVALIDATED；残留检查全清。证据同上。 |
 | **U12** | batch-ingest 文件夹 | 精简 | P2 | todo | |
 | **U13** | digest 深度报告 / 对比 / 时间线 | 精简 | P2 | todo | |
 | **U14** | graph Mermaid + HTML（jq/node） | 精简 | P2 | todo | 可标「支持未验」 |
@@ -122,8 +122,7 @@ bash install.sh --platform codex --with-optional-adapters
 | 集合 | 进度 |
 |------|------|
 | P0 U1–U8 | **全部 pass** |
-| P1 U9 | **pass**（fork 源 upgrade；见风险说明） |
-| P1 U10–U11 | todo |
+| P1 U9–U11 | **全部 pass** |
 | P1 U9–U11 | todo |
 | P2 U12–U16 | 延后 |
 
@@ -176,4 +175,23 @@ bash install.sh --upgrade --platform codex --target-dir "$CODEX_HOME/skills/llm-
 
 证据：`docs/u9-evidence.json`、`docs/u9-before.json`、`docs/u9-after.json`
 
-最后更新：2026-07-28（U9 pass）。
+### U10 / U11 备忘（2026-07-29）
+
+**U10 query**
+
+1. 读 `index.md` + 在 `wiki/` 检索关键词  
+2. 综合回答须含 `[[页面名]]` 引用（ grounded 于库内页）  
+3. 有价值的综合可写入 `wiki/queries/{date}-{slug}.md`（`type: query` `derived: true`）  
+4. 更新 index「查询结果」与 log  
+
+**U11 delete**
+
+1. 可对 disposable 素材演练，避免误删种子文  
+2. `delete-helper.sh scan-refs <wiki> <素材文件名或 slug>`  
+3. 删 `raw/` + `wiki/sources/`；清理其它页引用与 index  
+4. `cache.sh invalidate <raw路径>`（文件已删也可）  
+5. 确认 cache 无条目、无残留链接  
+
+证据：`docs/u10-u11-evidence.json`
+
+最后更新：2026-07-29（U10/U11 pass；**P1 闭环**）。

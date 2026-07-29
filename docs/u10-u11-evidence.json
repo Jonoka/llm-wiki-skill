@@ -1,0 +1,47 @@
+{
+  "date": "2026-07-29",
+  "U10": {
+    "pass": true,
+    "question": "LLM Wiki 和 RAG 的核心区别是什么？各自适合什么场景？",
+    "top_pages": [
+      "wiki/sources/2026-07-24-mindstudio-llm-wiki-vs-rag.md",
+      "wiki/topics/知识库与RAG实践.md",
+      "wiki/entities/LLM Wiki.md",
+      "wiki/entities/RAG.md",
+      "wiki/sources/2026-07-22-karpathy-llm-wiki.md"
+    ],
+    "query_page": "wiki/queries/2026-07-29-llm-wiki-vs-rag.md",
+    "cites_llm_wiki_and_rag": true,
+    "answer_preview": "基于当前知识库（非通用闲聊）对「LLM Wiki 和 RAG 的核心区别是什么？各自适合什么场景？」的综合：\n\n1. **工作方式**：[[RAG]] 在**查询时**检索片段再生成；[[LLM Wiki]] 在 **ingest 时**把知识编译进持久 Markdown 页，查询优先读 wiki。\n2. **积累**：Wiki 强调跨问题的复利与交叉引用；RAG 基线常被描述为每次「重新发现」碎片。\n3. **场景**：小而稳、需高可靠 → 偏 Wiki；大体量、高频变更、多域 → 偏 RAG；也可混合（稳定知识在上下文/wiki，长尾走检索）。\n\n摘录依据：\n- （[[2026-07-24-mindstudio-llm-wiki-vs-rag]]）1. **LLM Wiki 的优势边界**：知识库小、聚焦、稳定且能完整放入上下文时，可省掉 chunk、embedding、vector "
+  },
+  "U11": {
+    "pass": true,
+    "raw_name": "2026-07-29-u11-disposable-source.md",
+    "cache_update": true,
+    "cache_hit_before_delete": true,
+    "scan_refs_by_stem": [
+      "wiki\\entities\\LLM Wiki.md",
+      "wiki\\sources\\2026-07-29-u11-disposable-source.md"
+    ],
+    "scan_refs_by_filename": [
+      "wiki\\sources\\2026-07-29-u11-disposable-source.md"
+    ],
+    "deleted": [
+      "raw/articles/2026-07-29-u11-disposable-source.md",
+      "wiki/sources/2026-07-29-u11-disposable-source.md"
+    ],
+    "updated": [
+      "wiki/entities/LLM Wiki.md",
+      "index.md"
+    ],
+    "invalidate_output": "INVALIDATED",
+    "raw_gone": true,
+    "source_gone": true,
+    "cache_clean": true,
+    "entity_clean": true,
+    "index_clean": true
+  },
+  "lint_exit": 0,
+  "lint_no_stdin_error": true,
+  "result": "pass"
+}
