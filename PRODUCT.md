@@ -65,7 +65,7 @@
 - [x] **U12–U16**（batch / digest / graph / crystallize / 多库）通过（2026-07-29；graph HTML 依赖 monorepo engine dist 说明见矩阵）  
 - [ ] 工作流 U10+ 在矩阵中标为抽检 / v0.2，不默认为「没做就不完整」  
 - [ ] `workbench` 深度开发标为范围外  
-- [x] 可 `git push` + tag 作为发布点：`v0.1.0-jonoka`（2026-07-28）、补丁 `v0.1.1-jonoka`（2026-07-29，含 U9）  
+- [x] 可 `git push` + tag 作为发布点：`v0.1.0-jonoka` · `v0.1.1-jonoka` · **`v0.1.2-jonoka`**（2026-07-29，含 P1 U10–U11 与 P2 U12–U16）  
 
 ## 路线图（防跑偏）
 
