@@ -1,12 +1,10 @@
 {
   "date": "2026-07-29",
+  "result": "pass",
   "U12": {
     "pass": true,
     "batch_dir": "D:\\grok-projects\\llm-wiki-skill\\.tmp-p2-batch",
-    "files": [
-      "note-a-agent-loop.md",
-      "note-b-cli-choice.md"
-    ],
+    "files": ["note-a-agent-loop.md", "note-b-cli-choice.md"],
     "raw": [
       "raw/notes/2026-07-29-batch-note-a-agent-loop.md",
       "raw/notes/2026-07-29-batch-note-b-cli-choice.md"
@@ -20,35 +18,28 @@
     "pass": true,
     "path": "wiki/synthesis/LLM-Wiki与RAG-深度报告.md"
   },
+  "U14": {
+    "pass": true,
+    "status": "pass",
+    "official_scripts_pass": true,
+    "nodes": 14,
+    "edges": 57,
+    "graph_data": "wiki/graph-data.json",
+    "graph_html": "wiki/knowledge-graph.html",
+    "mermaid": "wiki/knowledge-graph.md",
+    "fixes": [
+      "build-graph-data.sh uses jq --slurpfile to avoid Windows/MSYS Argument list too long",
+      "HTML requires packages/graph-engine/dist/engine.iife.js from monorepo build (not in default skill MANAGED_ITEMS)"
+    ]
+  },
   "U15": {
     "pass": true,
     "path": "wiki/synthesis/sessions/U15-Codex优先与两档安装-2026-07-29.md"
   },
   "U16": {
     "pass": true,
-    "init_exit": 0,
-    "init_output_tail": "  ├── xiaohongshu/  小红书\n   │   ├── zhihu/        知乎\n   │   ├── pdfs/         PDF\n   │   ├── notes/        笔记\n   │   └── assets/       图片等附件\n   ├── wiki/       （知识库）\n   ├── audit/      （人类反馈 / open + resolved）\n   ├── index.md    （索引）\n   ├── log.md      （日志）\n   ├── purpose.md  （研究方向）\n   ├── .wiki-cache.json （缓存）\n   └── .wiki-schema.md （配置）\n\n下一步：给 agent 一个链接或文件，开始构建知识库！\n纠错：在页面上发现问题可写 audit，再说「处理批注」。\n",
     "second_wiki": "D:\\wikis\\u16-second-wiki",
-    "second_has_schema": true,
-    "second_has_audit": true,
-    "path_file_previous": "D:\\wikis\\我的知识库",
-    "path_file_switched_to_second": "D:\\wikis\\u16-second-wiki",
     "path_file_restored": "D:\\wikis\\我的知识库",
-    "note": "Multi-wiki: CWD .wiki-schema.md wins; else ~/.llm-wiki-path. Documented in matrix."
-  },
-  "U14": {
-    "pass": true,
-    "official_scripts_pass": false,
-    "build_graph_data_exit": 126,
-    "build_graph_data_tail": "D:/CodexHome/skills/llm-wiki/scripts/build-graph-data.sh: line 359: /usr/bin/jq: Argument list too long\n",
-    "graph_data_exists": false,
-    "build_graph_html_exit": 1,
-    "build_graph_html_tail": "",
-    "graph_html_exists": false,
-    "mermaid_path": "wiki/knowledge-graph.md",
-    "jq_available": false,
-    "status": "pass_with_limitation",
-    "limitation": "jq/node graph scripts failed or unavailable; mermaid stub generated"
-  },
-  "result": "pass"
+    "note": "CWD .wiki-schema.md wins; else ~/.llm-wiki-path"
+  }
 }

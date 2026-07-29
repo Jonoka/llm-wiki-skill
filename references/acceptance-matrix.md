@@ -123,8 +123,7 @@ bash install.sh --platform codex --with-optional-adapters
 |------|------|
 | P0 U1–U8 | **全部 pass** |
 | P1 U9–U11 | **全部 pass** |
-| P1 U9–U11 | todo |
-| P2 U12–U16 | 延后 |
+| P2 U12–U16 | **全部 pass**（U14 HTML 依赖 monorepo engine dist） |
 
 ### U5 实装备忘（2026-07-28）
 

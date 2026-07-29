@@ -13,9 +13,10 @@ Fork 自 [sdyckjq-lab/llm-wiki-skill](https://github.com/sdyckjq-lab/llm-wiki-sk
 |------|------|
 | Audit Phase 1 | `audit/` 协议、`audit-file.py` / `audit-review.py`、SKILL 工作流 11–12、`references/audit-guide.md` |
 | 安装 | `CODEX_HOME` → `$CODEX_HOME/skills`（`scripts/runtime-context.sh`） |
-| 安装清单 | `references/`、`FORK-NOTES.md` 进入 `MANAGED_ITEMS` |
+| 安装清单 | `references/`、`FORK-NOTES.md`、`PRODUCT.md` 进入 `MANAGED_ITEMS` |
 | Lint | Windows 下 coverage 不读 `/dev/stdin`（临时文件 + `process.argv`） |
-| 文档 | `PRODUCT.md`、本文件、`references/acceptance-matrix.md`、README/Codex 入口的 Jonoka 段 |
+| Graph | `build-graph-data.sh` 用 jq `--slurpfile`，避免 Windows/MSYS ARG_MAX |
+| 文档 | `PRODUCT.md`、本文件、验收矩阵、adapter-fallback、README/Codex 入口的 Jonoka 段 |
 
 日志约定：仍用上游单文件 **`log.md`**（不用 lewislulu 按日 `log/`）。  
 `target` 路径：相对知识库根，如 `wiki/entities/Foo.md`。
