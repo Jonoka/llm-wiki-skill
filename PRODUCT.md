@@ -60,7 +60,7 @@
 - [ ] 验收：**U1–U4**（init / 本地 ingest / status·lint / audit）通过  
 - [x] 验收：**U5–U7**（完整安装 / adapter URL / 失败回退）通过（2026-07-28）  
 - [x] 验收：**U8**（`CODEX_HOME` 路径）通过  
-- [x] **U9**（upgrade 不丢 fork 补丁）通过：须从 Jonoka fork 工作树执行（2026-07-28）  
+- [x] **U9**（upgrade 不丢 fork 补丁）通过：须从 Jonoka fork 工作树执行（2026-07-29）  
 - [x] **U10 / U11**（query 引用持久化 / delete 级联+cache）通过（2026-07-29）  
 - [x] **U12–U16**（batch / digest / graph / crystallize / 多库）通过（2026-07-29；graph HTML 依赖 monorepo engine dist 说明见矩阵）  
 - [ ] 工作流 U10+ 在矩阵中标为抽检 / v0.2，不默认为「没做就不完整」  

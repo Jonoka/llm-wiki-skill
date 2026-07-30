@@ -42,7 +42,8 @@ ensure_file() {
   local label="${2:-文件}"
   [ -f "$file" ] || {
     echo "ERROR: 找不到${label} $file" >&2
-    echo "       请先运行 npm run build -w @llm-wiki/graph-engine，或重装 skill。" >&2
+    echo "       若为 graph-engine：请重装 Jonoka skill（默认含 skill-assets），" >&2
+    echo "       或 monorepo 执行：npm run build -w @llm-wiki/graph-engine && bash scripts/sync-graph-engine-dist.sh" >&2
     exit 1
   }
 }
@@ -94,7 +95,14 @@ command -v jq >/dev/null 2>&1 || {
 SKILL_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 DATA="$WIKI_ROOT/wiki/graph-data.json"
 LAYOUT="$WIKI_ROOT/.wiki-graph-layout.json"
-ENGINE="$SKILL_DIR/packages/graph-engine/dist/engine.iife.js"
+# Prefer skill-assets (default install), then packages/ (dev / install_graph_engine_runtime).
+if [ -f "$SKILL_DIR/skill-assets/graph-engine/dist/engine.iife.js" ]; then
+  ENGINE="$SKILL_DIR/skill-assets/graph-engine/dist/engine.iife.js"
+elif [ -f "$SKILL_DIR/packages/graph-engine/dist/engine.iife.js" ]; then
+  ENGINE="$SKILL_DIR/packages/graph-engine/dist/engine.iife.js"
+else
+  ENGINE="$SKILL_DIR/packages/graph-engine/dist/engine.iife.js"
+fi
 MARKED="$SKILL_DIR/deps/marked.min.js"
 PURIFY="$SKILL_DIR/deps/purify.min.js"
 OUTPUT="$WIKI_ROOT/wiki/knowledge-graph.html"
@@ -104,7 +112,15 @@ OUTPUT="$WIKI_ROOT/wiki/knowledge-graph.html"
   echo "       请先运行 build-graph-data.sh 生成图谱数据" >&2
   exit 1
 }
-ensure_file "$ENGINE" "graph-engine IIFE 产物"
+[ -f "$ENGINE" ] || {
+  echo "ERROR: 找不到 graph-engine IIFE 产物" >&2
+  echo "       期望之一：" >&2
+  echo "         $SKILL_DIR/skill-assets/graph-engine/dist/engine.iife.js" >&2
+  echo "         $SKILL_DIR/packages/graph-engine/dist/engine.iife.js" >&2
+  echo "       请重装 Jonoka skill（默认安装应含 skill-assets），或在 monorepo 执行：" >&2
+  echo "         npm run build -w @llm-wiki/graph-engine && bash scripts/sync-graph-engine-dist.sh" >&2
+  exit 1
+}
 ensure_file "$MARKED" "marked vendor"
 ensure_file "$PURIFY" "purify vendor"
 

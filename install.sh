@@ -20,6 +20,7 @@ WITH_OPTIONAL_ADAPTERS=0
 # - 安装入口：install.sh / setup.sh
 # - 实际执行内容：SKILL.md / scripts / templates / deps
 # - 平台薄入口：platforms（README、CLAUDE、AGENTS 都会引用）
+# - skill-assets：默认安装的预构建图谱引擎（engine.iife.js），供 build-graph-html 开箱使用
 MANAGED_ITEMS=(
   "SKILL.md"
   "README.md"
@@ -37,6 +38,7 @@ MANAGED_ITEMS=(
   "references"
   "deps"
   "platforms"
+  "skill-assets"
 )
 
 DEP_SKILLS=()
@@ -288,6 +290,38 @@ install_companion_skills() {
   done < <(list_companion_skill_sources "$platform")
 }
 
+install_graph_engine_runtime() {
+  # Prefer vendored skill-assets IIFE; fall back to monorepo packages/ dist for dev checkouts.
+  local target_dir="$1"
+  local asset_iife="$SCRIPT_DIR/skill-assets/graph-engine/dist/engine.iife.js"
+  local mono_iife="$SCRIPT_DIR/packages/graph-engine/dist/engine.iife.js"
+  local dest_dir="$target_dir/packages/graph-engine/dist"
+  local dest_iife="$dest_dir/engine.iife.js"
+  local src=""
+
+  if [ -f "$asset_iife" ]; then
+    src="$asset_iife"
+  elif [ -f "$mono_iife" ]; then
+    src="$mono_iife"
+    warn "skill-assets 中无 graph-engine IIFE，回退使用 monorepo packages/ 构建产物"
+  else
+    warn "未找到 graph-engine IIFE（skill-assets 与 packages/ 皆无）。build-graph-html 将不可用，直至：npm run build -w @llm-wiki/graph-engine && bash scripts/sync-graph-engine-dist.sh"
+    return 0
+  fi
+
+  if [ "$DRY_RUN" -eq 1 ]; then
+    printf '[dry-run] ensure graph engine IIFE %s -> %s\n' "$src" "$dest_iife"
+    return 0
+  fi
+
+  mkdir -p "$dest_dir"
+  cp "$src" "$dest_iife"
+  if [ -f "$SCRIPT_DIR/skill-assets/graph-engine/dist/BUILD-INFO.txt" ]; then
+    cp "$SCRIPT_DIR/skill-assets/graph-engine/dist/BUILD-INFO.txt" "$dest_dir/BUILD-INFO.txt"
+  fi
+  ok "graph-engine IIFE 已安装到 $dest_iife"
+}
+
 install_bundle() {
   local target_dir="$1"
   local item source_path target_path
@@ -308,6 +342,9 @@ install_bundle() {
     copy_item "$source_path" "$target_path"
   done
 
+  # Always materialize the path build-graph-html.sh expects.
+  install_graph_engine_runtime "$target_dir"
+
   # 安装后校验：确保清单文件都已就位（Windows install.ps1 尤其重要）
   if [ "$DRY_RUN" -ne 1 ]; then
     for item in "${MANAGED_ITEMS[@]}"; do
@@ -318,6 +355,9 @@ install_bundle() {
         exit 1
       fi
     done
+    if [ ! -f "$target_dir/packages/graph-engine/dist/engine.iife.js" ]; then
+      warn "packages/graph-engine/dist/engine.iife.js 未就位：离线 knowledge-graph.html 生成可能失败"
+    fi
     ok "已校验全部 ${#MANAGED_ITEMS[@]} 项安装清单文件"
   fi
 }

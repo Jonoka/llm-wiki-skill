@@ -1,0 +1,7 @@
+source=packages/graph-engine
+artifact=engine.iife.js
+built_for=skill default install (Jonoka)
+sha256=0a99f152e9f603d6bd773322654f786facceea1e96280158843937cbfe110e2c
+bytes=498125
+synced_at=2026-07-30T08:12:43Z
+note=Rebuild with: npm run build -w @llm-wiki/graph-engine && bash scripts/sync-graph-engine-dist.sh

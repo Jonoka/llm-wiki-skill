@@ -4,6 +4,9 @@ node_modules/
 *.pyc
 __pycache__/
 dist/
+# Keep vendored skill runtime IIFE tracked (default install graph HTML).
+!skill-assets/graph-engine/dist/
+!skill-assets/graph-engine/dist/**
 build/
 *.tsbuildinfo
 *.log
