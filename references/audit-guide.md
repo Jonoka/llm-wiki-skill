@@ -117,6 +117,41 @@ python ${SKILL_DIR}/scripts/audit-file.py "<wiki_root>" \
 
 复制 `templates/audit-template.md`，填好 frontmatter 后放到 `audit/`。
 
+### D. Obsidian 轻量录入（无插件）
+
+不依赖社区插件；用 Obsidian **核心 Templates** 即可：
+
+1. 把知识库根当 vault 打开（与 skill 安装目录无关）。  
+2. 将 skill 内 `templates/obsidian-audit.md` 复制到 vault 的模板文件夹（或直接从 skill 仓拷贝）。  
+3. 在目标 wiki 页选中有问题的原文 → 复制。  
+4. 新建笔记（建议稍后移入 `audit/`）→ 插入模板 →  
+   - `target` 改成相对知识库根路径（如 `wiki/entities/Foo.md`）  
+   - `anchor_text` 粘贴选中原文  
+   - `# Comment` 写说明  
+   - `source` 保持 `manual`（手写/模板路径）；未来真插件再用 `obsidian-plugin`  
+5. 把文件**移动/重命名**到 `audit/YYYYMMDD-HHMMSS-slug.md`（不要放进 `resolved/`）。  
+6. 在 Codex 说：**处理批注**。
+
+### E. Web 轻量录入（无服务）
+
+默认安装含 `skill-assets/audit-entry.html`：
+
+1. 浏览器打开（双击或 `file://…/skill-assets/audit-entry.html`）。  
+2. 填 target / 选中原文 / Comment → **下载 audit .md**（或复制 Markdown / Python 命令）。  
+3. 将下载文件放入知识库 `audit/`。  
+4. frontmatter `source: web-viewer`。  
+5. 对话：**处理批注**。
+
+也可用脚本等价写入：
+
+```bash
+python ${SKILL_DIR}/scripts/audit-file.py "<wiki_root>" \
+  --target "wiki/sources/某页.md" \
+  --anchor-text "原文" \
+  --comment "说明" \
+  --source web-viewer
+```
+
 ## 处理工作流（audit 操作）
 
 1. `python ${SKILL_DIR}/scripts/audit-review.py <wiki_root> --open`  
@@ -156,8 +191,15 @@ mkdir -p "<wiki_root>/audit/resolved"
 
 或任意一次成功的 `audit-file.py` 会自动创建目录。
 
-## Phase 2（未做）
+## Phase 1.5（轻量录入，2026-07-31）
 
-- Obsidian 选中批注插件  
-- Web 预览选中批注  
+- [x] Obsidian：核心 Templates + `templates/obsidian-audit.md`（无社区插件）  
+- [x] Web：`skill-assets/audit-entry.html` 本地表单 → 下载 open audit  
+- [x] `audit-file.py` 已支持 `--source manual|agent|obsidian-plugin|web-viewer`
+
+## Phase 2（仍未做 · 真插件）
+
+- Obsidian 选区一键插件（读写 vault `audit/`）  
+- 图谱 HTML / Web 预览内嵌选中批注  
 - 共享 `audit-shared` TypeScript 库  
+

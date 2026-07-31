@@ -3,7 +3,7 @@
 > 按「价值 vs 成本」排序；每项完成后改「状态」并写「记录」。  
 > **只维护本文件**，不要另起一套口头清单。
 
-更新：2026-07-31（E 完成）
+更新：2026-07-31（F 完成）
 
 ---
 
@@ -16,7 +16,7 @@
 | P2 U12–U16 | **全部 pass**（见矩阵） |
 | 安装体验 | graph dist 默认安装 **已做**（2026-07-30） |
 | 发布 | **`v0.1.3-jonoka`** 已 push（2026-07-31） |
-| 余项 A–E | **全部 pass**（2026-07-31；F later / G oos） |
+| 余项 A–F | **全部 pass**（2026-07-31；G oos） |
 
 详细记录以 [references/acceptance-matrix.md](../references/acceptance-matrix.md) 为准。
 
@@ -54,7 +54,7 @@
 | C | **graph 缺 jq 时 Windows PATH 再测**（脚本已有提示） | 体验 | **pass**（2026-07-31：藏 tools+Git jq → 两脚本 exit 1 + winget 提示；恢复 → 14n/57e；`docs/c-evidence.json`） |
 | D | **engine.iife 更新流程进 CI/发版检查**（改 engine 必跑 `sync-graph-engine-dist.sh`） | 防 dist 漂移 | **pass**（2026-07-31：`check:skill-assets-graph` + `sync --check`；quality 在 build-graph 后门禁；`docs/d-evidence.json`） |
 | E | **Codex 聊天 E2E**：短口令再跑 ingest/query/audit（人机） | agent 服从 SKILL | **pass**（2026-07-31：`codex exec` 短口令 → source + query + open audit；隐私门 y/n 先拦后放行；`docs/e-evidence.json`） |
-| F | Obsidian / Web audit 录入 | 体验；非必需 | later |
+| F | Obsidian / Web audit 录入 | 体验；非必需 | **pass**（2026-07-31：轻量路径 — `templates/obsidian-audit.md` + `skill-assets/audit-entry.html`；非真插件；`docs/f-evidence.json`） |
 | G | skill 打包 graph-engine 以外 monorepo | 不做除非改目标 | out of scope |
 
 ---

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>llm-wiki · Audit 轻量录入</title>
+  <style>
+    :root {
+      --bg: #f6f1e7;
+      --ink: #1f1a14;
+      --muted: #6b6258;
+      --card: #fffdf8;
+      --line: #d9cfc0;
+      --accent: #8b3a2b;
+      --ok: #2f5d3a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font: 15px/1.55 "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 0%, #fff8ea 0, transparent 40%),
+        radial-gradient(circle at 90% 10%, #f0e6d6 0, transparent 35%),
+        var(--bg);
+      min-height: 100vh;
+      padding: 24px 16px 48px;
+    }
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 22px 22px 18px;
+      box-shadow: 0 10px 30px rgba(40, 30, 10, 0.06);
+    }
+    h1 { font-size: 1.25rem; margin: 0 0 6px; letter-spacing: 0.02em; }
+    .sub { color: var(--muted); font-size: 0.92rem; margin: 0 0 18px; }
+    label {
+      display: block;
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin: 12px 0 4px;
+    }
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font: inherit;
+      background: #fff;
+      color: var(--ink);
+    }
+    textarea { min-height: 72px; resize: vertical; }
+    textarea.tall { min-height: 110px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 560px) { .row { grid-template-columns: 1fr; } }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 9px 14px;
+      font: inherit;
+      cursor: pointer;
+      background: var(--accent);
+      color: #fff;
+    }
+    button.secondary {
+      background: transparent;
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+    pre {
+      margin: 14px 0 0;
+      padding: 12px;
+      background: #f3ebe0;
+      border-radius: 10px;
+      overflow: auto;
+      font-size: 12px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .hint {
+      margin-top: 14px;
+      padding: 10px 12px;
+      border-left: 3px solid var(--accent);
+      background: #faf4eb;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .status { margin-top: 10px; min-height: 1.2em; font-size: 0.9rem; color: var(--ok); }
+    .status.err { color: var(--accent); }
+    code { font-family: ui-monospace, Consolas, monospace; font-size: 0.9em; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Audit 轻量录入（Web）</h1>
+    <p class="sub">
+      Jonoka llm-wiki · 无插件。填表后下载 <code>audit/*.md</code>，或复制
+      <code>audit-file.py</code> 命令。装在 skill 的
+      <code>skill-assets/audit-entry.html</code>，用浏览器本地打开即可。
+    </p>
+
+    <label for="target">目标页 target（相对知识库根）</label>
+    <input id="target" value="wiki/entities/某概念.md" placeholder="wiki/entities/Foo.md" />
+
+    <label for="anchorText">选中原文 anchor_text（须与页面一字不差）</label>
+    <textarea id="anchorText" class="tall" placeholder="粘贴 wiki 页里的原文片段"></textarea>
+
+    <div class="row">
+      <div>
+        <label for="anchorBefore">前文 anchor_before（可选，~80 字）</label>
+        <textarea id="anchorBefore"></textarea>
+      </div>
+      <div>
+        <label for="anchorAfter">后文 anchor_after（可选，~80 字）</label>
+        <textarea id="anchorAfter"></textarea>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label for="lineStart">起始行（1-based，可估）</label>
+        <input id="lineStart" type="number" min="1" value="1" />
+      </div>
+      <div>
+        <label for="lineEnd">结束行</label>
+        <input id="lineEnd" type="number" min="1" value="1" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label for="severity">severity</label>
+        <select id="severity">
+          <option value="error">error · 事实错误</option>
+          <option value="warn" selected>warn · 可疑/过时</option>
+          <option value="suggest">suggest · 建议改写</option>
+          <option value="info">info · 补充</option>
+        </select>
+      </div>
+      <div>
+        <label for="author">author</label>
+        <input id="author" value="you" />
+      </div>
+    </div>
+
+    <label for="comment">Comment（纠错说明）</label>
+    <textarea id="comment" class="tall" placeholder="实际应为…；依据…"></textarea>
+
+    <label for="wikiRoot">wiki 根路径（仅用于生成 CLI，下载 md 不需要）</label>
+    <input id="wikiRoot" placeholder="D:/wikis/我的知识库 或 /path/to/wiki" />
+
+    <label for="skillDir">SKILL_DIR（可选，生成 CLI 时用）</label>
+    <input id="skillDir" placeholder="D:/CodexHome/skills/llm-wiki" />
+
+    <div class="actions">
+      <button type="button" id="btnDownload">下载 audit .md</button>
+      <button type="button" class="secondary" id="btnCopyMd">复制 Markdown</button>
+      <button type="button" class="secondary" id="btnCopyCli">复制 Python 命令</button>
+      <button type="button" class="secondary" id="btnPreview">预览</button>
+    </div>
+    <div class="status" id="status"></div>
+    <pre id="preview" hidden></pre>
+
+    <div class="hint">
+      <strong>用法</strong>：下载文件放到知识库 <code>audit/</code>（不要放进
+      <code>resolved/</code>）。然后在 Codex / Agent 里说「处理批注」。
+      <br />
+      <strong>Obsidian</strong>：也可用 skill 自带
+      <code>templates/obsidian-audit.md</code> 作核心 Templates 模板，手写
+      <code>source: manual</code>。
+      <br />
+      本页写入的 frontmatter 使用 <code>source: web-viewer</code>。
+    </div>
+  </main>
+
+  <script>
+    function pad(n) { return String(n).padStart(2, "0"); }
+
+    function nowParts() {
+      const d = new Date();
+      const stamp =
+        d.getFullYear() +
+        pad(d.getMonth() + 1) +
+        pad(d.getDate()) +
+        "-" +
+        pad(d.getHours()) +
+        pad(d.getMinutes()) +
+        pad(d.getSeconds());
+      const iso =
+        d.getFullYear() +
+        "-" +
+        pad(d.getMonth() + 1) +
+        "-" +
+        pad(d.getDate()) +
+        "T" +
+        pad(d.getHours()) +
+        ":" +
+        pad(d.getMinutes()) +
+        ":" +
+        pad(d.getSeconds());
+      // keep local offset like +08:00
+      const offMin = -d.getTimezoneOffset();
+      const sign = offMin >= 0 ? "+" : "-";
+      const abs = Math.abs(offMin);
+      const tz = sign + pad(Math.floor(abs / 60)) + ":" + pad(abs % 60);
+      return { stamp, created: iso + tz };
+    }
+
+    function slugify(text) {
+      const s = String(text || "note")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w\u4e00-\u9fff\-]+/g, "")
+        .replace(/^-+|-+$/g, "")
+        .slice(0, 40);
+      return s || "note";
+    }
+
+    function yamlEscape(s) {
+      return (
+        '"' +
+        String(s || "")
+          .replace(/\\/g, "\\\\")
+          .replace(/"/g, '\\"')
+          .replace(/\r/g, "")
+          .replace(/\n/g, "\\n") +
+        '"'
+      );
+    }
+
+    function shellSingle(s) {
+      return "'" + String(s).replace(/'/g, "'\\''") + "'";
+    }
+
+    function collect() {
+      const target = document.getElementById("target").value.trim();
+      const anchorText = document.getElementById("anchorText").value;
+      const comment = document.getElementById("comment").value.trim();
+      const lineStart = parseInt(document.getElementById("lineStart").value, 10) || 1;
+      const lineEnd = parseInt(document.getElementById("lineEnd").value, 10) || lineStart;
+      if (!target) throw new Error("请填写 target");
+      if (!anchorText.trim()) throw new Error("请填写 anchor_text");
+      if (!comment) throw new Error("请填写 Comment");
+      return {
+        target,
+        anchorText,
+        anchorBefore: document.getElementById("anchorBefore").value.slice(0, 200),
+        anchorAfter: document.getElementById("anchorAfter").value.slice(0, 200),
+        lineStart,
+        lineEnd: Math.max(lineEnd, lineStart),
+        severity: document.getElementById("severity").value,
+        author: document.getElementById("author").value.trim() || "you",
+        comment,
+        wikiRoot: document.getElementById("wikiRoot").value.trim(),
+        skillDir: document.getElementById("skillDir").value.trim(),
+      };
+    }
+
+    function buildMarkdown(data) {
+      const { stamp, created } = nowParts();
+      const hex4 = Math.floor(Math.random() * 0x10000)
+        .toString(16)
+        .padStart(4, "0");
+      const id = stamp + "-" + hex4;
+      const slug = slugify(data.comment || data.anchorText);
+      const filename = stamp + "-" + slug + ".md";
+      const body =
+`---
+id: ${id}
+target: ${data.target}
+target_lines: [${data.lineStart}, ${data.lineEnd}]
+anchor_before: ${yamlEscape(data.anchorBefore)}
+anchor_text: ${yamlEscape(data.anchorText)}
+anchor_after: ${yamlEscape(data.anchorAfter)}
+severity: ${data.severity}
+author: ${data.author}
+source: web-viewer
+created: ${created}
+status: open
+---
+
+# Comment
+
+${data.comment}
+
+# Resolution
+
+<!-- Filled when processed and moved to audit/resolved/ -->
+`;
+      return { filename, body, id };
+    }
+
+    function buildCli(data) {
+      const skill = data.skillDir || "${SKILL_DIR}";
+      const root = data.wikiRoot || "<wiki_root>";
+      return (
+        "python " +
+        skill.replace(/\\/g, "/") +
+        "/scripts/audit-file.py " +
+        shellSingle(root) +
+        " \\\n  --target " +
+        shellSingle(data.target) +
+        " \\\n  --anchor-text " +
+        shellSingle(data.anchorText) +
+        " \\\n  --comment " +
+        shellSingle(data.comment) +
+        " \\\n  --severity " +
+        data.severity +
+        " \\\n  --author " +
+        shellSingle(data.author) +
+        " \\\n  --source web-viewer" +
+        " \\\n  --anchor-before " +
+        shellSingle(data.anchorBefore) +
+        " \\\n  --anchor-after " +
+        shellSingle(data.anchorAfter) +
+        " \\\n  --target-lines " +
+        data.lineStart +
+        "," +
+        data.lineEnd
+      );
+    }
+
+    function setStatus(msg, err) {
+      const el = document.getElementById("status");
+      el.textContent = msg || "";
+      el.className = "status" + (err ? " err" : "");
+    }
+
+    async function copyText(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+        return;
+      }
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      ta.remove();
+    }
+
+    document.getElementById("btnPreview").addEventListener("click", () => {
+      try {
+        const data = collect();
+        const { body } = buildMarkdown(data);
+        const pre = document.getElementById("preview");
+        pre.hidden = false;
+        pre.textContent = body;
+        setStatus("已预览");
+      } catch (e) {
+        setStatus(e.message || String(e), true);
+      }
+    });
+
+    document.getElementById("btnDownload").addEventListener("click", () => {
+      try {
+        const data = collect();
+        const { filename, body } = buildMarkdown(data);
+        const blob = new Blob([body], { type: "text/markdown;charset=utf-8" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(a.href);
+        setStatus("已下载 " + filename + " → 请移到知识库 audit/ 目录");
+      } catch (e) {
+        setStatus(e.message || String(e), true);
+      }
+    });
+
+    document.getElementById("btnCopyMd").addEventListener("click", async () => {
+      try {
+        const data = collect();
+        const { body, filename } = buildMarkdown(data);
+        await copyText(body);
+        setStatus("已复制 Markdown（建议保存为 " + filename + "）");
+      } catch (e) {
+        setStatus(e.message || String(e), true);
+      }
+    });
+
+    document.getElementById("btnCopyCli").addEventListener("click", async () => {
+      try {
+        const data = collect();
+        const cmd = buildCli(data);
+        await copyText(cmd);
+        const pre = document.getElementById("preview");
+        pre.hidden = false;
+        pre.textContent = cmd;
+        setStatus("已复制 Python 命令");
+      } catch (e) {
+        setStatus(e.message || String(e), true);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -2,6 +2,16 @@
 
 预构建、随 **默认 skill 安装** 分发的运行时资产（Jonoka）。
 
+## audit-entry.html
+
+| 路径 | 用途 |
+|------|------|
+| `audit-entry.html` | 浏览器本地打开的 **Audit 轻量录入** 表单（无服务） |
+
+用法：双击打开 → 填 target / 原文 / 说明 → 下载 `audit/*.md` 放到知识库 `audit/` → 对话说「处理批注」。  
+协议见 `references/audit-guide.md`（`source: web-viewer`）。  
+Obsidian 侧用 `templates/obsidian-audit.md`（核心 Templates，无插件）。
+
 ## graph-engine
 
 | 路径 | 用途 |

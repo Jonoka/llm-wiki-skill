@@ -125,6 +125,7 @@ bash install.sh --platform codex --with-optional-adapters
 | P1 U9–U11 | **全部 pass** |
 | P2 U12–U16 | **全部 pass**（U14 HTML 默认 skill-assets IIFE；D 防漂移门禁） |
 | 待办 E | **pass**（2026-07-31 Codex 短口令 E2E：ingest/query/audit-file；`docs/e-evidence.json`） |
+| 待办 F | **pass**（2026-07-31 Obsidian 模板 + Web `audit-entry.html` 轻量录入；非真插件；`docs/f-evidence.json`） |
 
 ### U5 实装备忘（2026-07-28）
 
@@ -206,4 +207,4 @@ bash install.sh --upgrade --platform codex --target-dir "$CODEX_HOME/skills/llm-
 
 证据：`docs/u12-u16-evidence.json`
 
-最后更新：2026-07-31（**A–E 闭环**：tag / 文档 / 缺 jq / IIFE 防漂移 / Codex 短口令 E2E）。
+最后更新：2026-07-31（**A–F 闭环**：… + Obsidian/Web audit 轻量录入）。

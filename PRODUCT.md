@@ -26,7 +26,7 @@
 - 深度运营 / 替代上游 `workbench/` 桌面产品。
 - 保证全网站点、全登录态抓取成功。
 - 四平台同等测试与同等文档篇幅。
-- Obsidian / Web 选中批注插件（属 v0.2+ 体验，不挡 v0.1）。
+- Obsidian / Web **真插件**（选区一键写 vault）属 v0.2+；v0.1 已提供 **轻量录入**（Obsidian 模板 + `skill-assets/audit-entry.html`，见 audit-guide Phase 1.5）。
 
 ## 两档安装（一等公民）
 
@@ -72,8 +72,8 @@
 
 ```text
 0–4  文档 + P0/P1/P2 验收 + 多版 tag     ← 已完成至 v0.1.3-jonoka
-5    余项 A–E 已 pass（todo-list）；F later / G out of scope
-6    可选 v0.2：Obsidian/Web audit UX 等
+5    余项 A–F 已 pass（todo-list）；G out of scope
+6    可选 v0.2：Obsidian/Web **真插件** 选区批注等
 ```
 
 ## 与本机知识库的关系

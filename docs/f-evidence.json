@@ -1,0 +1,40 @@
+{
+  "id": "F",
+  "date": "2026-07-31",
+  "title": "Obsidian / Web audit 录入（轻量，无真插件）",
+  "result": "pass",
+  "scope_note": "Not full Obsidian/Web plugins (still Phase 2). Delivers usable entry paths for v0.1.",
+  "deliverables": {
+    "obsidian_template": "templates/obsidian-audit.md",
+    "web_form": "skill-assets/audit-entry.html",
+    "docs": [
+      "references/audit-guide.md (D/E + Phase 1.5)",
+      "skill-assets/README.md",
+      "FORK-NOTES.md",
+      "PRODUCT.md"
+    ]
+  },
+  "smoke": {
+    "wiki": "D:\\\\wikis\\\\我的知识库",
+    "web_viewer_script": {
+      "command": "audit-file.py --source web-viewer",
+      "result": "SUCCESS:audit/20260731-140931-f-web-entry.md",
+      "severity": "suggest"
+    },
+    "obsidian_manual_path": {
+      "command": "audit-file.py --source manual (template-equivalent)",
+      "result": "SUCCESS:audit/20260731-140931-f-obsidian-entry.md",
+      "severity": "info"
+    },
+    "audit_review_open": 3,
+    "install_refreshed": {
+      "target": "D:/CodexHome/skills/llm-wiki",
+      "has_audit_entry_html": true,
+      "has_obsidian_template": true
+    },
+    "html_checks": [
+      "source: web-viewer",
+      "下载 audit"
+    ]
+  }
+}
