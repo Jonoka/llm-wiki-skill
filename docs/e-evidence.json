@@ -1,0 +1,45 @@
+{
+  "id": "E",
+  "date": "2026-07-31",
+  "title": "Codex 聊天 E2E：短口令 ingest / query / audit",
+  "result": "pass",
+  "platform": "Windows + Codex CLI exec (CODEX_HOME=D:/CodexHome)",
+  "skill_install": "bash install.sh --platform codex --target-dir $CODEX_HOME/skills/llm-wiki (refreshed 2026-07-31)",
+  "wiki": "D:\\wikis\\我的知识库",
+  "method": {
+    "tool": "codex exec",
+    "sandbox": "workspace-write",
+    "short_prompts": [
+      "消化：raw/notes/2026-07-31-e2e-codex-short-prompt.md",
+      "问：Codex 短口令 E2E 在验证什么？（基于 wiki + 写 queries/）",
+      "记一条反馈：audit-file「标题可更短」，不改正文"
+    ],
+    "privacy_gate": {
+      "first_run": "agent stopped and asked y/n per SKILL ingest privacy checklist (exit 0 with waiting message)",
+      "second_run": "prompt began with y + 素材无敏感信息，直接开始 → completed full chain"
+    }
+  },
+  "artifacts": {
+    "fixture_raw": "raw/notes/2026-07-31-e2e-codex-short-prompt.md",
+    "source": "wiki/sources/2026-07-31-e2e-codex-short-prompt.md",
+    "query": "wiki/queries/2026-07-31-a4d5f5fb.md",
+    "audit_open": "audit/20260731-120724-shorter-title.md",
+    "log_entries": [
+      "2026-07-31 ingest | Codex 短口令 E2E 验收",
+      "2026-07-31 query | Codex 短口令 E2E 在验证什么？"
+    ],
+    "cache": "raw/notes/2026-07-31-e2e-codex-short-prompt.md → source_page mapped in .wiki-cache.json",
+    "agent_last_message": "docs/e-codex-last-message.md"
+  },
+  "checks": {
+    "ingest_source_exists": true,
+    "query_persisted_with_wiki_links": true,
+    "query_references": ["[[2026-07-31-e2e-codex-short-prompt]]", "[[LLM Wiki]]"],
+    "audit_status_open": true,
+    "audit_severity_warn": true,
+    "audit_target": "wiki/sources/2026-07-31-e2e-codex-short-prompt.md",
+    "audit_did_not_edit_source_body": true,
+    "skill_read": true
+  },
+  "note": "人机 E2E via non-interactive codex exec; first turn correctly enforced privacy self-check from SKILL."
+}

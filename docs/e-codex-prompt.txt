@@ -1,0 +1,9 @@
+知识库根目录就是当前工作目录。请严格服从已安装的 llm-wiki skill（$CODEX_HOME/skills/llm-wiki/SKILL.md），用脚本落盘，不要只口头回答。
+
+依次执行这三条短口令：
+
+1) 消化：raw/notes/2026-07-31-e2e-codex-short-prompt.md
+2) 问：Codex 短口令 E2E 在验证什么？请基于 wiki 作答并引用页面；若 SKILL 要求则写入 wiki/queries/
+3) 记一条反馈：针对刚 ingest 的 source 页，用 audit-file 记「标题可更短」类建议，只写 audit/*.md，不改正文
+
+每步完成后用一两句说明产物路径。全部完成后列出：raw/source/query/audit 相关新文件路径。
