@@ -21,6 +21,7 @@
 export CODEX_HOME="D:/CodexHome"
 
 # 精简档：本地文件 / 粘贴 / PDF（核心主线）
+# 默认已含离线图谱引擎 IIFE（skill-assets，~500KB）
 bash install.sh --platform codex
 
 # 完整档：再加上网页 / X / 公众号 / YouTube / 知乎等官方提取器
@@ -29,6 +30,9 @@ bash install.sh --platform codex --with-optional-adapters
 
 也可：`--target-dir "$CODEX_HOME/skills/llm-wiki"`。Windows 请用 Git Bash 或 `install.ps1`。  
 装好后日常三句：`消化：…` · `知识库状态` · `处理批注`。
+
+**图谱说明（Jonoka）**：精简档**已带** `engine.iife.js`，不必再 monorepo 手工拷 dist。  
+生成 `wiki/knowledge-graph.html` 时本机仍需 **`jq` + `node`**（与是否 `--with-optional-adapters` 无关）。缺 jq 时 `build-graph-data.sh` 会报错并给出安装提示。
 
 [![version](https://img.shields.io/badge/v3.6.86-图谱架构收口-E8D5B5?style=flat-square&labelColor=3a3026&color=E8D5B5)](https://github.com/sdyckjq-lab/llm-wiki-skill/releases)
 [![license](https://img.shields.io/badge/MIT-license-5a6e5c?style=flat-square&labelColor=3a3026)](LICENSE)

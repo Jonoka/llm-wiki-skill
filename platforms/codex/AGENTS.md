@@ -22,8 +22,10 @@ bash install.sh --platform codex
 bash install.sh --platform codex --target-dir "$CODEX_HOME/skills/llm-wiki"
 ```
 
-能力：本地 Markdown/文本/HTML/PDF、纯文本粘贴。  
+能力：本地 Markdown/文本/HTML/PDF、纯文本粘贴；**默认含**离线图谱 IIFE（`skill-assets/graph-engine/dist`）。  
 **不含**官方 URL 提取器。
+
+生成交互式图谱 HTML 时，本机另需 **`jq` + `node`**（装 skill 不会自动装 jq）。完整档与否无关。
 
 ### 完整档（+ 可选提取器）
 

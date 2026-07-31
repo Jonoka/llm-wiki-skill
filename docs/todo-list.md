@@ -3,7 +3,7 @@
 > 按「价值 vs 成本」排序；每项完成后改「状态」并写「记录」。  
 > **只维护本文件**，不要另起一套口头清单。
 
-更新：2026-07-31
+更新：2026-07-31（B 完成）
 
 ---
 
@@ -49,7 +49,7 @@
 | 序 | 项 | 为何 | 状态 |
 |----|----|------|------|
 | A | 发 `v0.1.3-jonoka`（含 graph dist 默认安装） | 钉发布点 | **pass**（2026-07-31） |
-| B | **install / FORK 文档补一句**：精简档已含离线图谱 IIFE；生成 HTML 仍需本机 **jq + node** | 减少误解 | todo |
+| B | **install / FORK 文档补一句**：精简档已含离线图谱 IIFE；生成 HTML 仍需本机 **jq + node** | 减少误解 | **pass**（2026-07-31：README / FORK / Codex AGENTS / SKILL graph 段） |
 | C | **graph 缺 jq 时 Windows PATH 再测**（脚本已有提示） | 体验 | todo |
 | D | **engine.iife 更新流程进 CI/发版检查**（改 engine 必跑 `sync-graph-engine-dist.sh`） | 防 dist 漂移 | todo |
 | E | **Codex 聊天 E2E**：短口令再跑 ingest/query/audit（人机） | agent 服从 SKILL | todo |

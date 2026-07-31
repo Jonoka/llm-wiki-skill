@@ -1019,12 +1019,15 @@ bash ${SKILL_DIR}/scripts/adapter-state.sh classify-run <source_id> <exit_code> 
    解析同行 `[[双向链接]]` 与 `<!-- confidence: EXTRACTED|INFERRED|AMBIGUOUS -->` 注释，
    调用本地 Node helper 计算 3 信号边权重（共引强度 / 来源重叠 / 类型亲和度）、Louvain 社区和规则 insights，
    并写入 `wiki/graph-data.json`（内容 >2MB 自动降级，单节点只留 500 行；图规模超预算时 insights 自动降级）。
-   依赖 `jq` + `node`（如缺失可运行 `brew install jq node`）。
+   依赖本机 **`jq` + `node`**（与是否安装完整档 adapters **无关**）。  
+   缺 jq 时脚本会报错并打印安装提示（Windows 可将 `jq.exe` 放入 PATH，例如 `D:\tools\jq`）。  
+   macOS 示例：`brew install jq node`。
 
-2c. **图谱运行时说明**：
-   - 图谱基础构建现在依赖 `jq` + `node`
-   - 不需要额外 `npm install`
-   - `node` 只用于运行随仓库分发的本地预构建 helper
+2c. **图谱运行时说明（Jonoka）**：
+   - 图谱 **数据**构建依赖本机 `jq` + `node`
+   - **不需要**为图谱再 `npm install` monorepo
+   - **引擎 IIFE**：默认 skill 安装已含 `skill-assets/graph-engine/dist/engine.iife.js`（并同步到 `packages/graph-engine/dist/`）；**不要**要求用户 monorepo 手工拷 dist，除非安装残缺
+   - `node` 用于运行随 skill 分发的本地 helper（如 `graph-analysis.js`）
 
 2d. **生成交互式图谱 HTML**（东方编辑部 × 数字山水风）：
 
@@ -1033,7 +1036,9 @@ bash ${SKILL_DIR}/scripts/adapter-state.sh classify-run <source_id> <exit_code> 
    ```
 
    生成 `wiki/knowledge-graph.html`。脚本把 `graph-data.json`（已做 `</script>` 转义）
-   内嵌进 `<script id="graph-data" type="application/json">`，离线双击即可打开。
+   与 **预构建** `engine.iife.js` 内嵌进单文件，离线双击即可打开。  
+   若报找不到 IIFE：请重装 Jonoka skill（默认含 skill-assets），或 monorepo 执行  
+   `npm run build -w @llm-wiki/graph-engine && bash scripts/sync-graph-engine-dist.sh`。  
    页面保持三栏国风布局：左侧文献索引，中间数字山水图谱，右侧常驻节点详情。
    包含搜索、社区筛选、节点视觉分层、首屏推荐预览、摘要、正文、相邻节点、洞察、小地图和关系置信度图例。
 

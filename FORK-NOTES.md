@@ -69,7 +69,8 @@ U5 已在 2026-07-28 于 `D:\CodexHome` 实装通过。
 
 - 推荐：Git Bash 执行 `install.sh`，或仓库根 `install.ps1`（处理编码）。  
 - 系统自带 `C:\Windows\System32\bash.exe`（WSL 启动器）可能不可用；用 `Git\bin\bash.exe`。  
-- 勿把「仅 WSL 路径」写死进文档。
+- 勿把「仅 WSL 路径」写死进文档。  
+- **图谱**：精简安装已含 IIFE；跑 `build-graph-data.sh` / `build-graph-html.sh` 前请保证 PATH 上有 **`jq`** 与 **`node`**（例如 `D:\tools\jq` 或 `winget install jqlang.jq`）。缺 jq ≠ 未装 skill。
 
 ### 升级（U9 已验收）
 
