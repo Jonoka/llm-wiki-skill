@@ -3,7 +3,7 @@
 > 按「价值 vs 成本」排序；每项完成后改「状态」并写「记录」。  
 > **只维护本文件**，不要另起一套口头清单。
 
-更新：2026-07-30
+更新：2026-07-31
 
 ---
 
@@ -13,8 +13,9 @@
 |------|------|
 | P0 U1–U8 | **全部 pass** |
 | P1 U9–U11 | **全部 pass** |
-| P2 U12–U16 | **全部 pass**（见矩阵；部分在演示库已实装） |
+| P2 U12–U16 | **全部 pass**（见矩阵） |
 | 安装体验 | graph dist 默认安装 **已做**（2026-07-30） |
+| 发布 | **`v0.1.3-jonoka`** 已 push（2026-07-31） |
 
 详细记录以 [references/acceptance-matrix.md](../references/acceptance-matrix.md) 为准。
 
@@ -39,7 +40,7 @@
 | U16 | 多 wiki / `~/.llm-wiki-path` | pass | 2026-07-29；`D:\wikis\u16-second-wiki` |
 | Graph dist 默认安装 | skill-assets IIFE | pass | 2026-07-30；`install_graph_engine_runtime` |
 | 文档骨架 | PRODUCT / 矩阵 / FORK | pass | 2026-07-28+ |
-| 发布 | `v0.1.0` / `0.1.1` / `0.1.2-jonoka` | pass | 已 push tags |
+| 发布 | `v0.1.0` … **`v0.1.3-jonoka`** | pass | 2026-07-31 tag push |
 
 ---
 
@@ -47,13 +48,13 @@
 
 | 序 | 项 | 为何 | 状态 |
 |----|----|------|------|
-| A | **发 `v0.1.3-jonoka`**（含 graph dist 默认安装） | 把 07-30 安装改进钉到 tag | todo |
-| B | **install 文档补一句**：精简档已含离线图谱 IIFE；HTML 仍需本机 `jq`+`node` | 减少「装了还不能出 HTML」误解 | todo |
-| C | **graph 缺 jq 时的友好报错**（`build-graph-data.sh` 已有，可再测 Windows PATH） | 体验 | todo |
-| D | **把 `engine.iife` 更新流程写进 CI/发版检查**（改 engine 必跑 sync） | 防 dist 漂移 | todo |
-| E | **Codex 聊天 E2E**：短口令再跑一轮 ingest/query/audit（人机） | 证明 agent 服从 SKILL，非仅脚本验收 | todo |
-| F | **Obsidian / Web audit 录入（原 Phase 2 插件）** | 体验升级；非必需 | later |
-| G | **skill 安装打包 graph-engine 以外的 monorepo 能力** | 明确不做除非改目标 | out of scope |
+| A | 发 `v0.1.3-jonoka`（含 graph dist 默认安装） | 钉发布点 | **pass**（2026-07-31） |
+| B | **install / FORK 文档补一句**：精简档已含离线图谱 IIFE；生成 HTML 仍需本机 **jq + node** | 减少误解 | todo |
+| C | **graph 缺 jq 时 Windows PATH 再测**（脚本已有提示） | 体验 | todo |
+| D | **engine.iife 更新流程进 CI/发版检查**（改 engine 必跑 `sync-graph-engine-dist.sh`） | 防 dist 漂移 | todo |
+| E | **Codex 聊天 E2E**：短口令再跑 ingest/query/audit（人机） | agent 服从 SKILL | todo |
+| F | Obsidian / Web audit 录入 | 体验；非必需 | later |
+| G | skill 打包 graph-engine 以外 monorepo | 不做除非改目标 | out of scope |
 
 ---
 

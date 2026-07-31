@@ -62,20 +62,17 @@
 - [x] 验收：**U8**（`CODEX_HOME` 路径）通过  
 - [x] **U9**（upgrade 不丢 fork 补丁）通过：须从 Jonoka fork 工作树执行（2026-07-29）  
 - [x] **U10 / U11**（query 引用持久化 / delete 级联+cache）通过（2026-07-29）  
-- [x] **U12–U16**（batch / digest / graph / crystallize / 多库）通过（2026-07-29；graph HTML 依赖 monorepo engine dist 说明见矩阵）  
-- [ ] 工作流 U10+ 在矩阵中标为抽检 / v0.2，不默认为「没做就不完整」  
-- [ ] `workbench` 深度开发标为范围外  
-- [x] 可 `git push` + tag 作为发布点：`v0.1.0-jonoka` · `v0.1.1-jonoka` · **`v0.1.2-jonoka`**（2026-07-29，含 P1 U10–U11 与 P2 U12–U16）  
+- [x] **U12–U16**（batch / digest / graph / crystallize / 多库）通过（2026-07-29；**2026-07-30/31** 起默认安装含 graph IIFE，开箱 HTML）  
+- [x] 工作流 U10–U16 已在矩阵标为 pass（P1/P2 抽样验收完成）  
+- [x] `workbench` 深度开发标为范围外（见非目标）  
+- [x] 可 `git push` + tag：`v0.1.0` · `v0.1.1` · `v0.1.2` · **`v0.1.3-jonoka`**（2026-07-31：默认 graph dist + 单源 todo-list）
 
 ## 路线图（防跑偏）
 
 ```text
-0  锁定本文 + 验收矩阵          ← 当前
-1  产品骨架文档（安装两档等）    ← 当前
-2  本机夹具验收 U5–U9           ← 下一阶段（实装，不为养库）
-3  按失败打磨 SKILL / install
-4  发布 tag
-5  v0.2：graph/query/delete 等抽样与 audit UX
+0–4  文档 + P0/P1/P2 验收 + 多版 tag     ← 已完成至 v0.1.3-jonoka
+5    余项见 docs/todo-list.md（B–E 等）
+6    可选 v0.2：Obsidian/Web audit UX 等
 ```
 
 ## 与本机知识库的关系

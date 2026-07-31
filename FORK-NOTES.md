@@ -38,8 +38,9 @@ bash install.sh --platform codex
 # bash install.sh --platform codex --target-dir "$CODEX_HOME/skills/llm-wiki"
 ```
 
-能力：本地文件、粘贴文本、PDF 等核心主线。  
-**不含**官方网页/X/公众号/YouTube/知乎提取器。
+能力：本地文件、粘贴文本、PDF 等核心主线；**默认含**离线图谱 IIFE（`skill-assets/graph-engine/dist`，~500KB）。  
+生成 `knowledge-graph.html` 仍需本机 **jq + node**（与是否完整档无关）。  
+**不含**官方网页/X/公众号/YouTube/知乎提取器（那是完整档）。
 
 ### 完整安装（核心 + 可选提取器）
 
@@ -131,7 +132,7 @@ bash scripts/wiki-compat.sh ensure-audit-dirs "<wiki_root>"
 | adapter URL ingest（U6） | **已通过**（2026-07-28 baoyu → SharkTime 文） |
 | 提取失败回退（U7） | **已通过**（2026-07-28；见 adapter-fallback-guide） |
 | upgrade 不丢补丁（U9） | **已通过**（须从 Jonoka fork 升级；见上节） |
-| 发布标签 | `v0.1.0-jonoka` · `v0.1.1-jonoka` · **`v0.1.2-jonoka`**（P1 U10-U11 + P2 + graph Windows 修复） |
+| 发布标签 | `v0.1.0` · `v0.1.1` · `v0.1.2` · **`v0.1.3-jonoka`**（默认 graph IIFE + todo-list；升级仍须从本 fork） |
 | query / delete（U10–U11） | **已通过**（2026-07-29；见 u10-u11-evidence） |
 | P2 U12–U16 | **已通过**（2026-07-29；见 u12-u16-evidence） |
 | graph Windows | `build-graph-data.sh` 用 jq `--slurpfile`，避免 ARG_MAX |
