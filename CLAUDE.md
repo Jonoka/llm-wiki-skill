@@ -57,6 +57,7 @@ npm workspaces，三个包（根 `package.json` 不设 `"type": "module"`——S
 
 - 测试统一用 Node 内置 `node --test`（不是 jest/vitest）。前端 DOM 测试走 jsdom + @testing-library/react，视觉回归用 playwright（仅 dev 依赖，不进运行时）。
 - `web` / `server` 的 `build` 与 `typecheck` 带 `prebuild` / `pretypecheck` 钩子，会**自动先 build `@llm-wiki/graph-engine`**。改了引擎代码后，跑前端/后端的 typecheck 或 build 会自动带上最新引擎产物；单跑引擎自己的 `tsc --noEmit` 不会刷新 `dist/`。
+- **Skill 默认安装 IIFE**：改 `packages/graph-engine` 后还须 `bash scripts/sync-graph-engine-dist.sh`（或 `npm run sync:graph-engine-dist`），提交 `skill-assets/graph-engine/dist/`。CI 门禁：`npm run check:skill-assets-graph`（`quality-and-tests` 在 build-graph 之后自动跑）。
 - Node `>=22.19.0`（pi-coding-agent 硬要求，`.mise.toml` / `.nvmrc` 锁定）。
 
 ---

@@ -29,9 +29,11 @@
     "mermaid": "wiki/knowledge-graph.md",
     "fixes": [
       "build-graph-data.sh uses jq --slurpfile to avoid Windows/MSYS Argument list too long",
-      "HTML requires packages/graph-engine/dist/engine.iife.js from monorepo build (not in default skill MANAGED_ITEMS)"
+      "HTML requires packages/graph-engine/dist/engine.iife.js from monorepo build (not in default skill MANAGED_ITEMS)",
+      "SUPERSEDED 2026-07-30+: default install ships skill-assets/graph-engine/dist/engine.iife.js; D 2026-07-31 adds CI drift gate"
     ]
   },
+  "note_2026_07_31": "U14 monorepo-only HTML note above is historical; skill-assets IIFE is default since v0.1.3-jonoka.",
   "U15": {
     "pass": true,
     "path": "wiki/synthesis/sessions/U15-Codex优先与两档安装-2026-07-29.md"

@@ -16,6 +16,7 @@
 | P2 U12–U16 | **全部 pass**（见矩阵） |
 | 安装体验 | graph dist 默认安装 **已做**（2026-07-30） |
 | 发布 | **`v0.1.3-jonoka`** 已 push（2026-07-31） |
+| 余项 A–E | **全部 pass**（2026-07-31；F later / G oos） |
 
 详细记录以 [references/acceptance-matrix.md](../references/acceptance-matrix.md) 为准。
 

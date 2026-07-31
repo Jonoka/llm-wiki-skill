@@ -55,9 +55,9 @@
 ## v0.1 成功标准（可勾选）
 
 - [x] [PRODUCT.md](PRODUCT.md) / [FORK-NOTES.md](FORK-NOTES.md) / 验收矩阵与本文一致且已入库（2026-07-28）  
-- [ ] Codex 精简安装文档含 `CODEX_HOME` 与 Windows 注意点  
-- [ ] 完整档 `--with-optional-adapters` 写进主安装叙事  
-- [ ] 验收：**U1–U4**（init / 本地 ingest / status·lint / audit）通过  
+- [x] Codex 精简安装文档含 `CODEX_HOME` 与 Windows 注意点（FORK / README / platforms/codex）  
+- [x] 完整档 `--with-optional-adapters` 写进主安装叙事（U5）  
+- [x] 验收：**U1–U4**（init / 本地 ingest / status·lint / audit）通过  
 - [x] 验收：**U5–U7**（完整安装 / adapter URL / 失败回退）通过（2026-07-28）  
 - [x] 验收：**U8**（`CODEX_HOME` 路径）通过  
 - [x] **U9**（upgrade 不丢 fork 补丁）通过：须从 Jonoka fork 工作树执行（2026-07-29）  
@@ -65,13 +65,14 @@
 - [x] **U12–U16**（batch / digest / graph / crystallize / 多库）通过（2026-07-29；**2026-07-30/31** 起默认安装含 graph IIFE，开箱 HTML）  
 - [x] 工作流 U10–U16 已在矩阵标为 pass（P1/P2 抽样验收完成）  
 - [x] `workbench` 深度开发标为范围外（见非目标）  
-- [x] 可 `git push` + tag：`v0.1.0` · `v0.1.1` · `v0.1.2` · **`v0.1.3-jonoka`**（2026-07-31：默认 graph dist + 单源 todo-list）
+- [x] 可 `git push` + tag：`v0.1.0` · `v0.1.1` · `v0.1.2` · **`v0.1.3-jonoka`**（2026-07-31：默认 graph dist + 单源 todo-list）  
+- [x] 余项 **A–E**（tag / 文档 / 缺 jq / IIFE 防漂移 / Codex 短口令 E2E）见 `docs/todo-list.md`（2026-07-31）
 
 ## 路线图（防跑偏）
 
 ```text
 0–4  文档 + P0/P1/P2 验收 + 多版 tag     ← 已完成至 v0.1.3-jonoka
-5    余项见 docs/todo-list.md（B–E 等）
+5    余项 A–E 已 pass（todo-list）；F later / G out of scope
 6    可选 v0.2：Obsidian/Web audit UX 等
 ```
 

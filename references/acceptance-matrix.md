@@ -200,10 +200,10 @@ bash install.sh --upgrade --platform codex --target-dir "$CODEX_HOME/skills/llm-
 |----|------|
 | U12 | 文件夹内多 md → 逐个 raw/notes + sources + cache；log 记 batch-ingest |
 | U13 | `wiki/synthesis/` 深度报告，引用多 source |
-| U14 | 需 **jq** + **node**；`build-graph-data.sh` 已修 Windows ARG_MAX；HTML 另需 monorepo `npm run build -w @llm-wiki/graph-engine` 的 `engine.iife.js` |
+| U14 | 需 **jq** + **node**；`build-graph-data.sh` 已修 Windows ARG_MAX；HTML 用默认 **skill-assets** `engine.iife.js`（2026-07-30+）；改 engine 须 `sync-graph-engine-dist`（D 门禁） |
 | U15 | `wiki/synthesis/sessions/`，默认 INFERRED |
 | U16 | 第二库 init；`~/.llm-wiki-path` 可切换；工作区含 `.wiki-schema.md` 时优先生效 |
 
 证据：`docs/u12-u16-evidence.json`
 
-最后更新：2026-07-29（**P2 闭环**）。
+最后更新：2026-07-31（**A–E 闭环**：tag / 文档 / 缺 jq / IIFE 防漂移 / Codex 短口令 E2E）。
