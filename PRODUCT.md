@@ -78,7 +78,7 @@
 - [x] **V1 契约**：`references/audit-contract-v1.md` + fixture + `check-audit-compat.py`（2026-07-31）  
 - [x] **V2 Obsidian MVP**：`obsidian-plugin/llm-wiki-audit` 选区写入 `audit/`（2026-07-31）  
 - [x] **V3 用户文档**：`docs/obsidian-audit-install.md` + README/FORK/Codex 入口（2026-07-31）  
-- [ ] **U17 / U18**：插件录入 + Agent「处理批注」闭环有证据（V4）  
+- [x] **U17 / U18 / U19**：插件等价写入 + accept 归档 + 拒绝非法选区（V4，`docs/v4-evidence.json`）  
 - [ ] 发版说明或 tag（如 `v0.2.0-jonoka` / 插件版本）（V6）
 
 ## 路线图（防跑偏）
@@ -86,7 +86,7 @@
 ```text
 0–4  文档 + P0/P1/P2 验收 + 多版 tag     ← 已完成至 v0.1.3-jonoka
 5    余项 A–F 已 pass；G out of scope
-6    v0.2：Obsidian audit 真插件（V0–V3 pass → 下一步 V4 验收）
+6    v0.2：Obsidian audit 真插件（V0–V4 pass → 下一步 V6 发版；V5 later）
 7    可选 V5：图谱 HTML 选区/预填；真插件写盘方案 B/C 另议
 ```
 

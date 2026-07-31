@@ -43,9 +43,9 @@
 | **U14** | graph Mermaid + HTML（jq/node） | 精简 | P2 | pass | 2026-07-29：data 14 节点/57 边 + HTML；Windows ARG_MAX 已修（`--slurpfile`）。**2026-07-30**：默认安装纳入 `skill-assets/graph-engine/dist/engine.iife.js`，开箱 `build-graph-html` 不再依赖 monorepo 手工拷 dist。**2026-07-31（C）**：真缺 jq（藏 `D:\tools\jq` + `Git\usr\bin\jq`）时两脚本 exit 1 并打印 `winget install jqlang.jq` + portable PATH 提示；恢复后 14n/57e。证据：`docs/c-evidence.json`。**2026-07-31（D）**：`check:skill-assets-graph` / `sync-graph-engine-dist.sh --check` 进 quality-and-tests（build-graph 后），防 skill-assets IIFE 漂移。证据：`docs/d-evidence.json`。 |
 | **U15** | crystallize 对话结晶 | 精简 | P2 | pass | 2026-07-29：`wiki/synthesis/sessions/U15-Codex优先与两档安装-2026-07-29.md` + log。 |
 | **U16** | 多知识库 / `~/.llm-wiki-path` 切换 | 精简 | P2 | pass | 2026-07-29：init 第二库 `D:\wikis\u16-second-wiki`（含 audit）；切换 `~/.llm-wiki-path` 后恢复主库。CWD `.wiki-schema.md` 优先。 |
-| **U17** | Obsidian 选区记批注 → open audit | 精简 | v0.2 | todo | 见 [v0.2 brief](../docs/v0.2-audit-plugins-brief.md) §10；`source: obsidian-plugin` |
-| **U18** | 插件 audit 可被「处理批注」闭环 | 精简 | v0.2 | todo | 复用 U4 流程 accept/reject → resolved |
-| **U19** | 无选区 / 非 wiki 路径拒绝写入 | 精简 | v0.2 | todo | 明确错误，无半截文件 |
+| **U17** | Obsidian 选区记批注 → open audit | 精简 | v0.2 | pass | 2026-07-31：插件文件装入演示 vault；`audit-core`（与 main.js 同路径）写 `source: obsidian-plugin` open audit；`check-audit-compat` 0；`audit-review --open` 列出。GUI 点击未自动化。证据：`docs/v4-evidence.json`。 |
+| **U18** | 插件 audit 可被「处理批注」闭环 | 精简 | v0.2 | pass | 2026-07-31：对 U17 文件 **accept**（标题缩短）、`status: resolved` → `audit/resolved/`、`log.md` 追加；open 列表不再含该 id。证据同上。 |
+| **U19** | 无选区 / 非 wiki 路径拒绝写入 | 精简 | v0.2 | pass | 2026-07-31：`empty_selection` / `target_not_wiki_page` / `audit/` 路径拒绝。证据同上。 |
 | **U20** | （可选）图谱预填 target + 选区 | 精简 | v0.2 | later | V5；默认方案 A 不强写盘 |
 
 ---
@@ -130,7 +130,7 @@ bash install.sh --platform codex --with-optional-adapters
 | P2 U12–U16 | **全部 pass**（U14 HTML 默认 skill-assets IIFE；D 防漂移门禁） |
 | 待办 E | **pass**（2026-07-31 Codex 短口令 E2E：ingest/query/audit-file；`docs/e-evidence.json`） |
 | 待办 F | **pass**（2026-07-31 Obsidian 模板 + Web `audit-entry.html` 轻量录入；非真插件；`docs/f-evidence.json`） |
-| **v0.2** | **已立项**（V0 pass）：[v0.2-audit-plugins-brief.md](../docs/v0.2-audit-plugins-brief.md)；下一步 V1 契约 → V2 Obsidian MVP；U17–U20 草案 |
+| **v0.2** | **V0–V4 pass**：[brief](../docs/v0.2-audit-plugins-brief.md)；U17–U19 pass（`docs/v4-evidence.json`）；下一步 V6 发版；V5/U20 later |
 
 ### U5 实装备忘（2026-07-28）
 
@@ -212,4 +212,4 @@ bash install.sh --upgrade --platform codex --target-dir "$CODEX_HOME/skills/llm-
 
 证据：`docs/u12-u16-evidence.json`
 
-最后更新：2026-07-31（**A–F 闭环**；**v0.2 V0 立项** Audit 真插件）。
+最后更新：2026-07-31（**v0.2 V0–V4 pass**：Obsidian 插件 + U17–U19）。

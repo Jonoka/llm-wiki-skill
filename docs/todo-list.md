@@ -3,7 +3,7 @@
 > 按「价值 vs 成本」排序；每项完成后改「状态」并写「记录」。  
 > **只维护本文件**，不要另起一套口头清单。
 
-更新：2026-07-31（V3 完成）
+更新：2026-07-31（V4 完成）
 
 ---
 
@@ -17,7 +17,7 @@
 | 安装体验 | graph dist 默认安装 **已做**（2026-07-30） |
 | 发布 v0.1 | **`v0.1.3-jonoka`** 已 push（2026-07-31） |
 | 余项 A–F | **全部 pass**（2026-07-31；G oos） |
-| **v0.2 Audit 真插件** | V0–V3 **pass**；下一步 **V4** U17/U18 验收；见 [brief](./v0.2-audit-plugins-brief.md) |
+| **v0.2 Audit 真插件** | V0–V4 **pass**；下一步 **V6** 发版（V5 later）；见 [brief](./v0.2-audit-plugins-brief.md) |
 
 详细记录以 [references/acceptance-matrix.md](../references/acceptance-matrix.md) 为准。
 
@@ -41,7 +41,8 @@
 | **V0** | **v0.2 立项 brief** | **pass** | **2026-07-31**；`docs/v0.2-audit-plugins-brief.md` |
 | **V1** | **契约 + fixture + check-audit-compat** | **pass** | **2026-07-31**；`docs/v1-evidence.json` |
 | **V2** | **Obsidian 插件 MVP** | **pass** | **2026-07-31**；`docs/v2-evidence.json` |
-| **V3** | **用户文档与分发** | **pass** | **2026-07-31**；`docs/obsidian-audit-install.md`；`docs/v3-evidence.json` |
+| **V3** | **用户文档与分发** | **pass** | **2026-07-31**；`docs/v3-evidence.json` |
+| **V4** | **U17/U18/U19 验收** | **pass** | **2026-07-31**；`docs/v4-evidence.json` |
 
 ---
 
@@ -52,9 +53,9 @@
 | 序 | 项 | 为何 | 状态 |
 |----|----|------|------|
 | **V1** | 契约冻结 + 最小 vault fixture + 兼容检查清单 | 插件与 `audit-file.py` 同构 | **pass**（2026-07-31） |
-| **V2** | **Obsidian 插件 MVP**：选区 → severity/comment → 写 `audit/`（`source: obsidian-plugin`） | 核心价值 | **pass**（2026-07-31；`docs/v2-evidence.json`） |
-| **V3** | 用户文档与分发（装插件 / 与「处理批注」衔接） | 可安装 | **pass**（2026-07-31；`docs/obsidian-audit-install.md`） |
-| **V4** | 验收 U17/U18 + evidence；矩阵补行 | 可证明 | todo |
+| **V2** | **Obsidian 插件 MVP**：选区 → severity/comment → 写 `audit/`（`source: obsidian-plugin`） | 核心价值 | **pass**（2026-07-31） |
+| **V3** | 用户文档与分发（装插件 / 与「处理批注」衔接） | 可安装 | **pass**（2026-07-31） |
+| **V4** | 验收 U17/U18 + evidence；矩阵补行 | 可证明 | **pass**（2026-07-31；`docs/v4-evidence.json`） |
 | **V5** | 图谱 HTML 选区/预填增强（默认方案 A，不强写盘） | 体验；可后移 | later |
 | **V6** | 发版 `v0.2.0-jonoka`（或插件独立版本说明） | 钉发布点 | todo（依赖 V2–V4） |
 

@@ -1,0 +1,29 @@
+{
+  "id": "V4",
+  "date": "2026-07-31",
+  "result": "pass",
+  "wiki": "D:\\wikis\\我的知识库",
+  "U17": {
+    "method": "buildAuditMarkdown from plugin audit-core (same code path as Obsidian main.js); plugin files installed to vault",
+    "plugin_install_dir": "D:/wikis/我的知识库/.obsidian/plugins/llm-wiki-audit",
+    "open_audit_was": "audit/20260731-193516-v4-u17插件路径等价写入标题可缩短为e2e-验收.md",
+    "audit_id": "20260731-193516-c8f9",
+    "source": "obsidian-plugin",
+    "target": "wiki/sources/2026-07-31-e2e-codex-short-prompt.md",
+    "check_audit_compat_exit": 0,
+    "note": "Obsidian GUI click not automated; file body is contract-identical to plugin vault.create"
+  },
+  "U18": {
+    "decision": "accepted",
+    "resolved": "audit/resolved/20260731-193516-v4-u17插件路径等价写入标题可缩短为e2e-验收.md",
+    "body_updated": "wiki/sources/2026-07-31-e2e-codex-short-prompt.md",
+    "change": "heading Codex 短口令 E2E 验收 → E2E 验收",
+    "log_appended": true,
+    "still_in_open": false
+  },
+  "U19": {
+    "empty_selection_error": "empty_selection",
+    "non_wiki_error": "target_not_wiki_page",
+    "audit_path_rejected": true
+  }
+}
