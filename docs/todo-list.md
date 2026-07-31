@@ -3,7 +3,7 @@
 > 按「价值 vs 成本」排序；每项完成后改「状态」并写「记录」。  
 > **只维护本文件**，不要另起一套口头清单。
 
-更新：2026-07-31（C 完成）
+更新：2026-07-31（D 完成）
 
 ---
 
@@ -51,7 +51,7 @@
 | A | 发 `v0.1.3-jonoka`（含 graph dist 默认安装） | 钉发布点 | **pass**（2026-07-31） |
 | B | **install / FORK 文档补一句**：精简档已含离线图谱 IIFE；生成 HTML 仍需本机 **jq + node** | 减少误解 | **pass**（2026-07-31：README / FORK / Codex AGENTS / SKILL graph 段） |
 | C | **graph 缺 jq 时 Windows PATH 再测**（脚本已有提示） | 体验 | **pass**（2026-07-31：藏 tools+Git jq → 两脚本 exit 1 + winget 提示；恢复 → 14n/57e；`docs/c-evidence.json`） |
-| D | **engine.iife 更新流程进 CI/发版检查**（改 engine 必跑 `sync-graph-engine-dist.sh`） | 防 dist 漂移 | todo |
+| D | **engine.iife 更新流程进 CI/发版检查**（改 engine 必跑 `sync-graph-engine-dist.sh`） | 防 dist 漂移 | **pass**（2026-07-31：`check:skill-assets-graph` + `sync --check`；quality 在 build-graph 后门禁；`docs/d-evidence.json`） |
 | E | **Codex 聊天 E2E**：短口令再跑 ingest/query/audit（人机） | agent 服从 SKILL | todo |
 | F | Obsidian / Web audit 录入 | 体验；非必需 | later |
 | G | skill 打包 graph-engine 以外 monorepo | 不做除非改目标 | out of scope |

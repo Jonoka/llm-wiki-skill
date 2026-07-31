@@ -17,7 +17,7 @@ Fork 自 [sdyckjq-lab/llm-wiki-skill](https://github.com/sdyckjq-lab/llm-wiki-sk
 | Lint | Windows 下 coverage 不读 `/dev/stdin`（临时文件 + `process.argv`） |
 | Graph | `build-graph-data.sh` 用 jq `--slurpfile`，避免 Windows/MSYS ARG_MAX |
 | Graph dist | 默认安装含 `skill-assets/graph-engine/dist/engine.iife.js`（~500KB），`install_graph_engine_runtime` 同步到 `packages/graph-engine/dist/` |
-| 文档 | `PRODUCT.md`、本文件、验收矩阵、adapter-fallback、README/Codex 入口的 Jonoka 段 |
+| Graph dist 防漂移 | 改 engine 后必 `bash scripts/sync-graph-engine-dist.sh`；CI：`quality-and-tests` 在 build-graph 后跑 `check:skill-assets-graph` / `--check` |
 | 文档 | `PRODUCT.md`、本文件、验收矩阵、adapter-fallback、README/Codex 入口的 Jonoka 段 |
 
 日志约定：仍用上游单文件 **`log.md`**（不用 lewislulu 按日 `log/`）。  

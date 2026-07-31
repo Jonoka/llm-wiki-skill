@@ -55,6 +55,16 @@ export const QUALITY_STEPS = [
 		],
 	},
 	{
+		// After vite rebuild: skill default-install IIFE must match packages dist
+		// (Jonoka skill-assets). Fail closed so engine edits force sync-graph-engine-dist.
+		id: "skill-assets-graph-engine",
+		timeoutMs: COMMAND_TIMEOUT_MS,
+		commands: [
+			command(["--test", "workbench/scripts/check-skill-assets-graph-engine.test.mjs"]),
+			command(["workbench/scripts/check-skill-assets-graph-engine.mjs"]),
+		],
+	},
+	{
 		id: "build-server",
 		timeoutMs: COMMAND_TIMEOUT_MS,
 		commands: [

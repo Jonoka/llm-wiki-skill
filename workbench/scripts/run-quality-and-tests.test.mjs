@@ -20,6 +20,7 @@ const REQUIRED_STEPS = [
 	"repository-privacy",
 	"build-contracts",
 	"build-graph",
+	"skill-assets-graph-engine",
 	"build-server",
 	"build-web",
 	"boundary-negative-controls",
@@ -74,6 +75,10 @@ test("quality entrypoint covers every required check in a stable sequence", () =
 	assert.ok(browserTrialArgs.includes("tests/browser/compare-issue-159-hover-baseline.test.ts"));
 	const graphBuildArgs = QUALITY_STEPS.find((step) => step.id === "build-graph").commands.flatMap((item) => item.args);
 	assert.ok(graphBuildArgs.includes("packages/graph-engine/test-types/dist-consumer/tsconfig.json"));
+	const skillAssetsStep = QUALITY_STEPS.find((step) => step.id === "skill-assets-graph-engine");
+	const skillAssetsArgs = skillAssetsStep.commands.flatMap((item) => item.args);
+	assert.ok(skillAssetsArgs.includes("workbench/scripts/check-skill-assets-graph-engine.test.mjs"));
+	assert.ok(skillAssetsArgs.includes("workbench/scripts/check-skill-assets-graph-engine.mjs"));
 	const graphTypeStep = QUALITY_STEPS.find((step) => step.id === "types-graph");
 	assert.equal(graphTypeStep.commands.length, 1);
 	const graphTypeArgs = graphTypeStep.commands.flatMap((item) => item.args);

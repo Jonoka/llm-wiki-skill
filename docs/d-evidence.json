@@ -1,0 +1,47 @@
+{
+  "id": "D",
+  "date": "2026-07-31",
+  "title": "engine.iife 更新流程进 CI/发版检查",
+  "result": "pass",
+  "goal": "改 packages/graph-engine 后必须 sync skill-assets；CI 防 dist 漂移",
+  "artifacts": {
+    "check_node": "workbench/scripts/check-skill-assets-graph-engine.mjs",
+    "check_node_test": "workbench/scripts/check-skill-assets-graph-engine.test.mjs",
+    "sync_bash": "scripts/sync-graph-engine-dist.sh (--check)",
+    "npm_scripts": [
+      "check:skill-assets-graph",
+      "sync:graph-engine-dist"
+    ],
+    "quality_step": "skill-assets-graph-engine (after build-graph in run-quality-and-tests.mjs)",
+    "ci": ".github/workflows/quality-and-tests.yml → npm run quality-and-tests"
+  },
+  "smoke": {
+    "unit_tests": "4/4 pass (check-skill-assets-graph-engine.test.mjs)",
+    "live_check_node": {
+      "exit": 0,
+      "sha256": "0a99f152e9f603d6bd773322654f786facceea1e96280158843937cbfe110e2c"
+    },
+    "live_check_bash": {
+      "exit": 0,
+      "command": "bash scripts/sync-graph-engine-dist.sh --check"
+    },
+    "drift_injection": {
+      "action": "append // drift-test to skill-assets IIFE",
+      "exit": 1,
+      "message_contains": "dist drift",
+      "restored": true
+    },
+    "quality_step_order": [
+      "build-graph",
+      "skill-assets-graph-engine",
+      "build-server"
+    ]
+  },
+  "docs_updated": [
+    "skill-assets/README.md",
+    "FORK-NOTES.md",
+    "AGENTS.md",
+    "docs/todo-list.md",
+    "references/acceptance-matrix.md"
+  ]
+}
