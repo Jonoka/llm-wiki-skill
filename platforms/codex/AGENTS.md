@@ -45,6 +45,13 @@ bash install.sh --platform codex --with-optional-adapters
 
 Windows：用 Git Bash 或仓库根目录 `install.ps1`。
 
+### 记批注（Obsidian）→ 处理批注（Codex）
+
+1. 安装插件：见 [docs/obsidian-audit-install.md](../../docs/obsidian-audit-install.md)  
+   （`main.js` 等拷到 `<wiki>/.obsidian/plugins/llm-wiki-audit/`）  
+2. Obsidian 选中 `wiki/**` 原文 →「记 llm-wiki 批注」→ 生成 `audit/*.md`  
+3. 在本知识库上下文对 Codex 说：**处理批注**（不要让插件改正文；accept 由你执行）
+
 ### 升级
 
 ```bash

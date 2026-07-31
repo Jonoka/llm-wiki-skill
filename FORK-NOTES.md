@@ -19,7 +19,7 @@ Fork 自 [sdyckjq-lab/llm-wiki-skill](https://github.com/sdyckjq-lab/llm-wiki-sk
 | Graph dist | 默认安装含 `skill-assets/graph-engine/dist/engine.iife.js`（~500KB），`install_graph_engine_runtime` 同步到 `packages/graph-engine/dist/` |
 | Graph dist 防漂移 | 改 engine 后必 `bash scripts/sync-graph-engine-dist.sh`；CI：`quality-and-tests` 在 build-graph 后跑 `check:skill-assets-graph` / `--check` |
 | Audit 轻量录入 | Obsidian：`templates/obsidian-audit.md`；Web：`skill-assets/audit-entry.html`（v0.1；audit-guide Phase 1.5） |
-| Audit v0.2 | V0–V2：契约 + **Obsidian 插件** `obsidian-plugin/llm-wiki-audit`（拷贝 main.js 到 vault）；下一步 V3 文档 / V4 验收 |
+| Audit v0.2 | V0–V3：插件 + 安装文档 `docs/obsidian-audit-install.md`；下一步 V4 U17/U18 人机验收 |
 | 文档 | `PRODUCT.md`、本文件、验收矩阵、adapter-fallback、README/Codex 入口的 Jonoka 段 |
 
 日志约定：仍用上游单文件 **`log.md`**（不用 lewislulu 按日 `log/`）。  
@@ -73,6 +73,17 @@ U5 已在 2026-07-28 于 `D:\CodexHome` 实装通过。
 - 系统自带 `C:\Windows\System32\bash.exe`（WSL 启动器）可能不可用；用 `Git\bin\bash.exe`。  
 - 勿把「仅 WSL 路径」写死进文档。  
 - **图谱**：精简安装已含 IIFE；跑 `build-graph-data.sh` / `build-graph-html.sh` 前请保证 PATH 上有 **`jq`** 与 **`node`**（例如 `D:\tools\jq` 或 `winget install jqlang.jq`）。缺 jq ≠ 未装 skill。
+
+### Obsidian 批注插件（v0.2）
+
+插件在 **知识库 vault**，不在 `CODEX_HOME`：
+
+1. 拷贝 `obsidian-plugin/llm-wiki-audit/{main.js,manifest.json,styles.css}`  
+   → `<wiki>/.obsidian/plugins/llm-wiki-audit/`  
+2. Obsidian 启用 **llm-wiki Audit**  
+3. 选中 `wiki/**/*.md` 原文 →「记 llm-wiki 批注」→ Codex：**处理批注**
+
+完整步骤与 PowerShell 示例：[docs/obsidian-audit-install.md](docs/obsidian-audit-install.md)。
 
 ### 升级（U9 已验收）
 

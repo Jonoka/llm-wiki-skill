@@ -29,8 +29,12 @@ bash install.sh --platform codex --with-optional-adapters
 ```
 
 也可：`--target-dir "$CODEX_HOME/skills/llm-wiki"`。Windows 请用 Git Bash 或 `install.ps1`。  
-装好后日常三句：`消化：…` · `知识库状态` · `处理批注`。  
-记批注（可选）：Obsidian **插件** `obsidian-plugin/llm-wiki-audit`（选区一键写 `audit/`）；或轻量模板 `templates/obsidian-audit.md` / `skill-assets/audit-entry.html`（见 `references/audit-guide.md`）。
+装好后日常三句：`消化：…` · `知识库状态` · `处理批注`。
+
+**记批注（Obsidian 插件 · 推荐）**：把 `obsidian-plugin/llm-wiki-audit/` 下的 `main.js` + `manifest.json` + `styles.css` 拷到  
+`<知识库>/.obsidian/plugins/llm-wiki-audit/`，启用后选中 wiki 原文 →「记 llm-wiki 批注」→ 再对 Codex 说「处理批注」。  
+分步说明：[docs/obsidian-audit-install.md](docs/obsidian-audit-install.md)。  
+轻量备选：`templates/obsidian-audit.md` / `skill-assets/audit-entry.html`（见 [audit-guide](references/audit-guide.md)）。
 
 **图谱说明（Jonoka）**：精简档**已带** `engine.iife.js`，不必再 monorepo 手工拷 dist。  
 生成 `wiki/knowledge-graph.html` 时本机仍需 **`jq` + `node`**（与是否 `--with-optional-adapters` 无关）。缺 jq 时 `build-graph-data.sh` 会报错并给出安装提示。

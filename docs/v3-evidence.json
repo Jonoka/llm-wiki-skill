@@ -1,0 +1,25 @@
+{
+  "id": "V3",
+  "date": "2026-07-31",
+  "title": "用户文档与分发：Obsidian 插件安装 + 处理批注衔接",
+  "result": "pass",
+  "primary_doc": "docs/obsidian-audit-install.md",
+  "wired_into": [
+    "README.md",
+    "FORK-NOTES.md",
+    "references/audit-guide.md",
+    "platforms/codex/AGENTS.md",
+    "PRODUCT.md",
+    "obsidian-plugin/llm-wiki-audit/README.md",
+    "docs/todo-list.md",
+    "docs/v0.2-audit-plugins-brief.md"
+  ],
+  "user_paths_documented": {
+    "install_copy_three_files": true,
+    "bash_and_powershell_examples": true,
+    "obsidian_enable_steps": true,
+    "record_then_process_handoff": true,
+    "lightweight_fallbacks_still_listed": true
+  },
+  "note": "No community-store publish; manual/BRAT-style copy from monorepo."
+}

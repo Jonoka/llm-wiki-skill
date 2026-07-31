@@ -50,6 +50,8 @@
 
 可选：`检查知识库`、`对 wiki/entities/某页.md 这段有问题：…`
 
+**Obsidian 录入**：插件安装与衔接见 [docs/obsidian-audit-install.md](docs/obsidian-audit-install.md)（选区记批注 → 再「处理批注」）。
+
 排障时再加长提示（路径、跳过隐私确认、禁止只口头总结等），**日常默认短句**。
 
 ## v0.1 成功标准（可勾选）
@@ -113,6 +115,7 @@
 | [references/audit-guide.md](references/audit-guide.md) | audit 协议 |
 | [docs/v0.2-audit-plugins-brief.md](docs/v0.2-audit-plugins-brief.md) | **v0.2** Audit 真插件立项简报 |
 | [references/audit-contract-v1.md](references/audit-contract-v1.md) | **v0.2 V1** 插件数据契约（冻结） |
+| [docs/obsidian-audit-install.md](docs/obsidian-audit-install.md) | **v0.2 V3** Obsidian 插件安装与 Codex 衔接 |
 | [docs/todo-list.md](docs/todo-list.md) | 单源待办（含 v0.2 V 序） |
 | [SKILL.md](SKILL.md) | Agent 执行规范 |
 | [platforms/codex/AGENTS.md](platforms/codex/AGENTS.md) | Codex 薄入口 |

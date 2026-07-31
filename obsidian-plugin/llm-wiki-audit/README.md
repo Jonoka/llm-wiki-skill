@@ -5,24 +5,22 @@
 
 契约：[references/audit-contract-v1.md](../../references/audit-contract-v1.md)
 
-## 安装（开发 / 手动）
+## 用户安装（推荐先读）
 
-1. 用 Obsidian 打开你的 **知识库根** 作为 vault（含 `wiki/`、`audit/`）。  
-2. 创建目录：  
-   `<vault>/.obsidian/plugins/llm-wiki-audit/`  
-3. 复制本目录中的：  
-   - `main.js`  
-   - `manifest.json`  
-   - `styles.css`  
-4. 设置 → 第三方插件 → 启用 **llm-wiki Audit**。
+完整步骤、Windows PowerShell 示例、与 Codex「处理批注」衔接：
 
-或从 monorepo 构建后再拷贝：
+→ **[docs/obsidian-audit-install.md](../../docs/obsidian-audit-install.md)**
+
+摘要：复制本目录 `main.js` + `manifest.json` + `styles.css` 到  
+`<知识库>/.obsidian/plugins/llm-wiki-audit/` → Obsidian 启用 **llm-wiki Audit**。
+
+开发构建：
 
 ```bash
 cd obsidian-plugin/llm-wiki-audit
 npm install
 npm run build
-# 再复制 main.js manifest.json styles.css 到 vault 插件目录
+# 再复制三文件到 vault 插件目录
 ```
 
 ## 使用
@@ -31,8 +29,7 @@ npm run build
 2. 选中有问题的句子  
 3. 命令面板：`记 llm-wiki 批注（选区）`，或编辑器右键同名项  
 4. 填 severity / Comment → 写入 `audit/`  
-5. 对话：**处理批注**
-
+5. 对 Codex：**处理批注**
 ## 开发
 
 ```bash
