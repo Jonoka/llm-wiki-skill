@@ -73,6 +73,7 @@
 > 规格：[docs/v0.2-audit-plugins-brief.md](docs/v0.2-audit-plugins-brief.md) · 进度：`docs/todo-list.md` V 序
 
 - [x] **V0 立项**：brief 入库，范围 / 非目标 / MVP / 验收草案写清（2026-07-31）  
+- [x] **V1 契约**：`references/audit-contract-v1.md` + fixture + `check-audit-compat.py`（2026-07-31）  
 - [ ] **V2 Obsidian MVP**：选区一键写入 `audit/`（`source: obsidian-plugin`），不改正文  
 - [ ] **U17 / U18**：插件录入 + Agent「处理批注」闭环有证据  
 - [ ] 用户文档：安装插件 + 与 Codex 衔接；v0.1 轻量路径仍可用  
@@ -110,6 +111,7 @@
 | [references/acceptance-matrix.md](references/acceptance-matrix.md) | U1–U16 验收矩阵 |
 | [references/audit-guide.md](references/audit-guide.md) | audit 协议 |
 | [docs/v0.2-audit-plugins-brief.md](docs/v0.2-audit-plugins-brief.md) | **v0.2** Audit 真插件立项简报 |
+| [references/audit-contract-v1.md](references/audit-contract-v1.md) | **v0.2 V1** 插件数据契约（冻结） |
 | [docs/todo-list.md](docs/todo-list.md) | 单源待办（含 v0.2 V 序） |
 | [SKILL.md](SKILL.md) | Agent 执行规范 |
 | [platforms/codex/AGENTS.md](platforms/codex/AGENTS.md) | Codex 薄入口 |

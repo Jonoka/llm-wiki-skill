@@ -1,0 +1,24 @@
+{
+  "id": "V1",
+  "date": "2026-07-31",
+  "title": "v0.2 契约冻结 + fixture + 兼容检查",
+  "result": "pass",
+  "deliverables": {
+    "contract": "references/audit-contract-v1.md",
+    "fixture": "tests/fixtures/audit-v1-wiki/",
+    "gold_open": "tests/fixtures/audit-v1-wiki/audit/20260101-120000-gold-shape.md",
+    "checker": "scripts/check-audit-compat.py",
+    "regression": "tests/audit-compat.regression-1.sh"
+  },
+  "smoke": {
+    "check_fixture_exit": 0,
+    "smoke_write_exit": 0,
+    "smoke_source": "obsidian-plugin",
+    "audit_review_exit": 0,
+    "regression_exit": 0
+  },
+  "notes": [
+    "Contract freezes frontmatter enums aligned with audit-review.py",
+    "Plugins must pass check-audit-compat before V2 merge"
+  ]
+}

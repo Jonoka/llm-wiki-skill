@@ -197,11 +197,17 @@ mkdir -p "<wiki_root>/audit/resolved"
 - [x] Web：`skill-assets/audit-entry.html` 本地表单 → 下载 open audit  
 - [x] `audit-file.py` 已支持 `--source manual|agent|obsidian-plugin|web-viewer`
 
-## Phase 2 / v0.2（真插件 · 已立项）
+## 契约 v1（插件必须遵守）
+
+机器侧冻结说明：**[audit-contract-v1.md](./audit-contract-v1.md)**  
+夹具：`tests/fixtures/audit-v1-wiki/`  
+校验：`python scripts/check-audit-compat.py <wiki_root> [--smoke-write]`
+
+## Phase 2 / v0.2（真插件 · V0–V1 已完成）
 
 规格与里程碑见 **[docs/v0.2-audit-plugins-brief.md](../docs/v0.2-audit-plugins-brief.md)**；进度见 `docs/todo-list.md` V 序。
 
-- [ ] Obsidian 选区一键插件（直接写 vault `audit/`，`source: obsidian-plugin`）  
+- [ ] Obsidian 选区一键插件（直接写 vault `audit/`，`source: obsidian-plugin`）← **V2**  
 - [ ] 图谱 HTML / Web 预览选中批注（默认预填增强；真写盘可选）  
 - [ ] 可选共享 `audit-shared` TypeScript 库  
 
