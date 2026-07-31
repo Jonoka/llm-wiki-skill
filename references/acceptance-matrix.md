@@ -40,7 +40,7 @@
 | **U11** | delete 素材级联 + cache invalidate | 精简 | P1 | pass | 2026-07-29：fixture raw+source → cache HIT → `delete-helper scan-refs` 命中实体与摘要 → 删 raw/source、去 LLM Wiki/index 引用 → `cache.sh invalidate`→INVALIDATED；残留检查全清。证据同上。 |
 | **U12** | batch-ingest 文件夹 | 精简 | P2 | pass | 2026-07-29：2 个 md fixture → raw/notes + sources + cache + index/log。证据 `docs/u12-u16-evidence.json`。 |
 | **U13** | digest 深度报告 / 对比 / 时间线 | 精简 | P2 | pass | 2026-07-29：`wiki/synthesis/LLM-Wiki与RAG-深度报告.md` 综合 3 篇核心素材。 |
-| **U14** | graph Mermaid + HTML（jq/node） | 精简 | P2 | pass | 2026-07-29：data 14 节点/57 边 + HTML；Windows ARG_MAX 已修（`--slurpfile`）。**2026-07-30**：默认安装纳入 `skill-assets/graph-engine/dist/engine.iife.js`，开箱 `build-graph-html` 不再依赖 monorepo 手工拷 dist。 |
+| **U14** | graph Mermaid + HTML（jq/node） | 精简 | P2 | pass | 2026-07-29：data 14 节点/57 边 + HTML；Windows ARG_MAX 已修（`--slurpfile`）。**2026-07-30**：默认安装纳入 `skill-assets/graph-engine/dist/engine.iife.js`，开箱 `build-graph-html` 不再依赖 monorepo 手工拷 dist。**2026-07-31（C）**：真缺 jq（藏 `D:\tools\jq` + `Git\usr\bin\jq`）时两脚本 exit 1 并打印 `winget install jqlang.jq` + portable PATH 提示；恢复后 14n/57e。证据：`docs/c-evidence.json`。 |
 | **U15** | crystallize 对话结晶 | 精简 | P2 | pass | 2026-07-29：`wiki/synthesis/sessions/U15-Codex优先与两档安装-2026-07-29.md` + log。 |
 | **U16** | 多知识库 / `~/.llm-wiki-path` 切换 | 精简 | P2 | pass | 2026-07-29：init 第二库 `D:\wikis\u16-second-wiki`（含 audit）；切换 `~/.llm-wiki-path` 后恢复主库。CWD `.wiki-schema.md` 优先。 |
 

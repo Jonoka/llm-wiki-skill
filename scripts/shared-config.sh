@@ -63,6 +63,7 @@ print_install_hint() {
       echo "  Linux/WSL:    sudo apt-get install jq   (Debian/Ubuntu)" >&2
       echo "                sudo dnf install jq       (RHEL/Fedora)" >&2
       echo "  Windows:      winget install jqlang.jq  (or choco install jq)" >&2
+      echo "                or put jq.exe on PATH (e.g. D:\\tools\\jq)" >&2
       ;;
     node)
       echo "  macOS:        brew install node" >&2

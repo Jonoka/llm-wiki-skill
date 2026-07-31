@@ -1,0 +1,43 @@
+{
+  "id": "C",
+  "date": "2026-07-31",
+  "title": "graph 缺 jq 时 Windows PATH 再测",
+  "result": "pass",
+  "platform": "Windows + Git Bash (D:\\Git\\bin\\bash.exe)",
+  "wiki": "D:\\wikis\\我的知识库",
+  "method": {
+    "hide": [
+      "D:\\tools\\jq\\jq.exe → jq.exe.hidden-for-c-test",
+      "D:\\Git\\usr\\bin\\jq.exe → jq.exe.hidden-for-c-test"
+    ],
+    "note": "Must hide both portable and Git usr/bin jq; otherwise command -v jq still finds /usr/bin/jq and false-passes."
+  },
+  "missing_jq": {
+    "command_v_jq": "NO_JQ",
+    "build_graph_data": {
+      "exit": 1,
+      "stderr_contains": [
+        "ERROR: jq is not installed. Install it via:",
+        "Windows:      winget install jqlang.jq  (or choco install jq)"
+      ]
+    },
+    "build_graph_html": {
+      "exit": 1,
+      "stderr_contains": [
+        "ERROR: jq is not installed. Install it via:",
+        "Windows:      winget install jqlang.jq  (or choco install jq)"
+      ]
+    }
+  },
+  "restore_jq": {
+    "command_v_jq": "/usr/bin/jq",
+    "version": "jq-1.7.1",
+    "build_graph_data": {
+      "exit": 0,
+      "nodes": 14,
+      "edges": 57,
+      "output": "D:\\wikis\\我的知识库/wiki/graph-data.json"
+    }
+  },
+  "hint_change": "shared-config print_install_hint jq: added Windows portable PATH line (matches SKILL)"
+}
