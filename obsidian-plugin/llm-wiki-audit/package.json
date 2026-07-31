@@ -1,0 +1,18 @@
+{
+  "name": "llm-wiki-audit",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Obsidian plugin: write llm-wiki open audit from selection",
+  "scripts": {
+    "build": "node esbuild.config.mjs production",
+    "dev": "node esbuild.config.mjs",
+    "test": "node --test ../../tests/js/audit-core.test.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "esbuild": "^0.25.0",
+    "obsidian": "^1.7.2",
+    "typescript": "~5.7.2"
+  }
+}

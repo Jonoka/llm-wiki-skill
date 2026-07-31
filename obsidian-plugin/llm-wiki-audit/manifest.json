@@ -1,0 +1,10 @@
+{
+  "id": "llm-wiki-audit",
+  "name": "llm-wiki Audit",
+  "version": "0.2.0",
+  "minAppVersion": "1.5.0",
+  "description": "Select text in a wiki page and write an open llm-wiki audit file (contract v1). Does not edit page body.",
+  "author": "Jonoka",
+  "authorUrl": "https://github.com/Jonoka/llm-wiki-skill",
+  "isDesktopOnly": false
+}

@@ -1,0 +1,28 @@
+{
+  "id": "V2",
+  "date": "2026-07-31",
+  "title": "Obsidian 插件 MVP：选区写入 open audit",
+  "result": "pass",
+  "deliverables": {
+    "plugin_dir": "obsidian-plugin/llm-wiki-audit/",
+    "manifest": "obsidian-plugin/llm-wiki-audit/manifest.json",
+    "bundle": "obsidian-plugin/llm-wiki-audit/main.js",
+    "core": "obsidian-plugin/llm-wiki-audit/src/audit-core.js",
+    "readme": "obsidian-plugin/llm-wiki-audit/README.md"
+  },
+  "mvp_features": [
+    "command: 记 llm-wiki 批注（选区）",
+    "editor context menu",
+    "modal: severity + comment + author",
+    "writes audit/*.md with source=obsidian-plugin",
+    "does not edit target page body",
+    "settings: defaultAuthor, requireWikiPath",
+    "copy 处理批注 hint"
+  ],
+  "tests": {
+    "unit": "tests/js/audit-core.test.mjs — 7/7 pass",
+    "contract": "buildAuditMarkdown output passes scripts/check-audit-compat.py"
+  },
+  "install": "Copy main.js + manifest.json + styles.css to <vault>/.obsidian/plugins/llm-wiki-audit/",
+  "note": "Interactive Obsidian UI not automated in CI; pure core + contract gate covered."
+}

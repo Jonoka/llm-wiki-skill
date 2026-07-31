@@ -74,7 +74,8 @@
 
 - [x] **V0 立项**：brief 入库，范围 / 非目标 / MVP / 验收草案写清（2026-07-31）  
 - [x] **V1 契约**：`references/audit-contract-v1.md` + fixture + `check-audit-compat.py`（2026-07-31）  
-- [ ] **V2 Obsidian MVP**：选区一键写入 `audit/`（`source: obsidian-plugin`），不改正文  
+- [x] **V2 Obsidian MVP**：`obsidian-plugin/llm-wiki-audit` 选区写入 `audit/`（2026-07-31）  
+
 - [ ] **U17 / U18**：插件录入 + Agent「处理批注」闭环有证据  
 - [ ] 用户文档：安装插件 + 与 Codex 衔接；v0.1 轻量路径仍可用  
 - [ ] 发版说明或 tag（如 `v0.2.0-jonoka` / 插件版本）

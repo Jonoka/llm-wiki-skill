@@ -207,7 +207,8 @@ mkdir -p "<wiki_root>/audit/resolved"
 
 规格与里程碑见 **[docs/v0.2-audit-plugins-brief.md](../docs/v0.2-audit-plugins-brief.md)**；进度见 `docs/todo-list.md` V 序。
 
-- [ ] Obsidian 选区一键插件（直接写 vault `audit/`，`source: obsidian-plugin`）← **V2**  
+- [x] Obsidian 选区一键插件（`obsidian-plugin/llm-wiki-audit`，`source: obsidian-plugin`）← **V2**  
+
 - [ ] 图谱 HTML / Web 预览选中批注（默认预填增强；真写盘可选）  
 - [ ] 可选共享 `audit-shared` TypeScript 库  
 
