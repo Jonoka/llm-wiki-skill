@@ -68,7 +68,8 @@
 - [x] 工作流 U10–U16 已在矩阵标为 pass（P1/P2 抽样验收完成）  
 - [x] `workbench` 深度开发标为范围外（见非目标）  
 - [x] 可 `git push` + tag：`v0.1.0` · `v0.1.1` · `v0.1.2` · **`v0.1.3-jonoka`**（2026-07-31：默认 graph dist + 单源 todo-list）  
-- [x] 余项 **A–F**（tag / 文档 / 缺 jq / IIFE 防漂移 / Codex E2E / 轻量 audit 录入）见 `docs/todo-list.md`（2026-07-31）
+- [x] 余项 **A–F**（tag / 文档 / 缺 jq / IIFE 防漂移 / Codex E2E / 轻量 audit 录入）见 `docs/todo-list.md`（2026-07-31）  
+- [x] **v0.2.0-jonoka**（2026-08-01：Obsidian audit 插件 + 契约 + U17–U19；见 `docs/releases/v0.2.0-jonoka.md`）
 
 ## v0.2 成功标准（立项中 · 可勾选）
 
@@ -79,14 +80,14 @@
 - [x] **V2 Obsidian MVP**：`obsidian-plugin/llm-wiki-audit` 选区写入 `audit/`（2026-07-31）  
 - [x] **V3 用户文档**：`docs/obsidian-audit-install.md` + README/FORK/Codex 入口（2026-07-31）  
 - [x] **U17 / U18 / U19**：插件等价写入 + accept 归档 + 拒绝非法选区（V4，`docs/v4-evidence.json`）  
-- [ ] 发版说明或 tag（如 `v0.2.0-jonoka` / 插件版本）（V6）
+- [x] **V6 发版**：tag **`v0.2.0-jonoka`** + `docs/releases/v0.2.0-jonoka.md` + CHANGELOG（2026-08-01）；插件 manifest `0.2.0`
 
 ## 路线图（防跑偏）
 
 ```text
 0–4  文档 + P0/P1/P2 验收 + 多版 tag     ← 已完成至 v0.1.3-jonoka
 5    余项 A–F 已 pass；G out of scope
-6    v0.2：Obsidian audit 真插件（V0–V4 pass → 下一步 V6 发版；V5 later）
+6    v0.2：Obsidian audit 真插件     ← 已完成至 **v0.2.0-jonoka**（V0–V4、V6）
 7    可选 V5：图谱 HTML 选区/预填；真插件写盘方案 B/C 另议
 ```
 
@@ -115,6 +116,7 @@
 | [docs/v0.2-audit-plugins-brief.md](docs/v0.2-audit-plugins-brief.md) | **v0.2** Audit 真插件立项简报 |
 | [references/audit-contract-v1.md](references/audit-contract-v1.md) | **v0.2 V1** 插件数据契约（冻结） |
 | [docs/obsidian-audit-install.md](docs/obsidian-audit-install.md) | **v0.2 V3** Obsidian 插件安装与 Codex 衔接 |
+| [docs/releases/v0.2.0-jonoka.md](docs/releases/v0.2.0-jonoka.md) | **v0.2.0-jonoka** 发版说明 |
 | [docs/todo-list.md](docs/todo-list.md) | 单源待办（含 v0.2 V 序） |
 | [SKILL.md](SKILL.md) | Agent 执行规范 |
 | [platforms/codex/AGENTS.md](platforms/codex/AGENTS.md) | Codex 薄入口 |

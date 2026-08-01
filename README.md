@@ -12,7 +12,8 @@
 
 > **Jonoka fork**：在 [sdyckjq-lab/llm-wiki-skill](https://github.com/sdyckjq-lab/llm-wiki-skill) 底座上增加
 > [lewislulu](https://github.com/lewislulu/llm-wiki-skill) 风格的 **audit 定点反馈**；**主平台 Codex**，支持精简 / 完整（`--with-optional-adapters`）两档安装。  
-> 产品定义：[PRODUCT.md](PRODUCT.md) · 差异与安装：[FORK-NOTES.md](FORK-NOTES.md) · 验收：[references/acceptance-matrix.md](references/acceptance-matrix.md) · Audit：[references/audit-guide.md](references/audit-guide.md)
+> 产品定义：[PRODUCT.md](PRODUCT.md) · 差异与安装：[FORK-NOTES.md](FORK-NOTES.md) · 验收：[references/acceptance-matrix.md](references/acceptance-matrix.md) · Audit：[references/audit-guide.md](references/audit-guide.md)  
+> 当前 Jonoka 发版：**[v0.2.0-jonoka](docs/releases/v0.2.0-jonoka.md)**（Obsidian audit 插件）· 前序 [v0.1.3-jonoka](https://github.com/Jonoka/llm-wiki-skill/releases/tag/v0.1.3-jonoka)
 
 ### Jonoka · Codex 安装（推荐先看）
 

@@ -1,5 +1,32 @@
 # Changelog
 
+## Jonoka v0.2.0-jonoka (2026-08-01)
+
+Obsidian **audit 真插件**发版（在 v0.1.3-jonoka 编译式 wiki + audit Phase 1 之上）。
+
+### 新增
+
+- **Obsidian 插件** `obsidian-plugin/llm-wiki-audit`（v0.2.0）：选中 `wiki/**/*.md` 原文 → 写入 open `audit/*.md`（`source: obsidian-plugin`），**不改正文**。
+- **契约 v1** `references/audit-contract-v1.md` + `scripts/check-audit-compat.py` + 夹具 `tests/fixtures/audit-v1-wiki`。
+- **安装说明** `docs/obsidian-audit-install.md`（Bash / PowerShell 拷贝到 vault；与 Codex「处理批注」衔接）。
+
+### 验收
+
+- U17 / U18 / U19 pass（`docs/v4-evidence.json`）；里程碑 V0–V4、V6。
+- 图谱 HTML 选区（V5 / U20）仍为 later。
+
+### 安装摘要
+
+```text
+skill:  bash install.sh --platform codex   # 同 v0.1；从 Jonoka fork 升级
+plugin: 拷贝 main.js + manifest.json + styles.css
+        → <wiki>/.obsidian/plugins/llm-wiki-audit/
+```
+
+详见 [docs/obsidian-audit-install.md](docs/obsidian-audit-install.md)、[PRODUCT.md](PRODUCT.md)。
+
+---
+
 ## v3.6.86 (2026-07-18)
 
 ### 修复

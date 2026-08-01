@@ -19,7 +19,7 @@ Fork 自 [sdyckjq-lab/llm-wiki-skill](https://github.com/sdyckjq-lab/llm-wiki-sk
 | Graph dist | 默认安装含 `skill-assets/graph-engine/dist/engine.iife.js`（~500KB），`install_graph_engine_runtime` 同步到 `packages/graph-engine/dist/` |
 | Graph dist 防漂移 | 改 engine 后必 `bash scripts/sync-graph-engine-dist.sh`；CI：`quality-and-tests` 在 build-graph 后跑 `check:skill-assets-graph` / `--check` |
 | Audit 轻量录入 | Obsidian：`templates/obsidian-audit.md`；Web：`skill-assets/audit-entry.html`（v0.1；audit-guide Phase 1.5） |
-| Audit v0.2 | V0–V4 pass：插件 + 安装文档 + U17/U18/U19 证据；下一步 V6 发版（V5 later） |
+| Audit v0.2 | **v0.2.0-jonoka**：Obsidian 插件 + 契约 + 安装文档 + U17–U19；V5 later |
 | 文档 | `PRODUCT.md`、本文件、验收矩阵、adapter-fallback、README/Codex 入口的 Jonoka 段 |
 
 日志约定：仍用上游单文件 **`log.md`**（不用 lewislulu 按日 `log/`）。  
@@ -146,7 +146,7 @@ bash scripts/wiki-compat.sh ensure-audit-dirs "<wiki_root>"
 | adapter URL ingest（U6） | **已通过**（2026-07-28 baoyu → SharkTime 文） |
 | 提取失败回退（U7） | **已通过**（2026-07-28；见 adapter-fallback-guide） |
 | upgrade 不丢补丁（U9） | **已通过**（须从 Jonoka fork 升级；见上节） |
-| 发布标签 | `v0.1.0` · `v0.1.1` · `v0.1.2` · **`v0.1.3-jonoka`**（默认 graph IIFE + todo-list；升级仍须从本 fork） |
+| 发布标签 | `v0.1.0` … **`v0.1.3-jonoka`** · **`v0.2.0-jonoka`**（Obsidian audit 插件；升级仍须从本 fork） |
 | query / delete（U10–U11） | **已通过**（2026-07-29；见 u10-u11-evidence） |
 | P2 U12–U16 | **已通过**（2026-07-29；见 u12-u16-evidence） |
 | graph Windows | `build-graph-data.sh` 用 jq `--slurpfile`，避免 ARG_MAX |

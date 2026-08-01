@@ -1,0 +1,17 @@
+{
+  "id": "V6",
+  "date": "2026-08-01",
+  "title": "发版 v0.2.0-jonoka",
+  "result": "pass",
+  "tag": "v0.2.0-jonoka",
+  "plugin_version": "0.2.0",
+  "release_notes": "docs/releases/v0.2.0-jonoka.md",
+  "changelog": "CHANGELOG.md (Jonoka v0.2.0-jonoka section)",
+  "includes": [
+    "obsidian-plugin/llm-wiki-audit",
+    "references/audit-contract-v1.md",
+    "docs/obsidian-audit-install.md",
+    "U17-U19 (docs/v4-evidence.json)"
+  ],
+  "deferred": ["V5 graph HTML annotate", "community store publish"]
+}
