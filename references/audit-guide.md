@@ -143,8 +143,21 @@ python ${SKILL_DIR}/scripts/audit-file.py "<wiki_root>" \
 2. 填 target / 选中原文 / Comment → **下载 audit .md**（或复制 Markdown / Python 命令）。  
 3. 将下载文件放入知识库 `audit/`。  
 4. frontmatter `source: web-viewer`。  
-5. 对话：**处理批注**。
+5. 对话：**处理批注**。  
 
+支持 URL 预填：`audit-entry.html?target=wiki/entities/Foo.md&anchor=原文片段`。
+
+### G. 离线知识图谱 HTML（V5 · 方案 A）
+
+`build-graph-html.sh` 内嵌 `skill-assets/graph-audit-panel.js`：
+
+1. 生成并打开 `wiki/knowledge-graph.html`。  
+2. **点选节点**（预填 `source_path` → `target`）。  
+3. （可选）在抽屉正文中 **选中** 原文。  
+4. 顶栏 **记批注** → 填 Comment → **下载 audit .md**（**不**直接写 vault）。  
+5. 把文件放进知识库 `audit/` → Codex：**处理批注**。  
+
+`source: web-viewer`。真写盘（本地 helper）不在 v0.2 范围。
 也可用脚本等价写入：
 
 ```bash

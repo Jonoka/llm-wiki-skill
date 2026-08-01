@@ -2,16 +2,17 @@
 
 预构建、随 **默认 skill 安装** 分发的运行时资产（Jonoka）。
 
-## audit-entry.html
+## audit-entry.html / graph-audit-panel.js
 
 | 路径 | 用途 |
 |------|------|
-| `audit-entry.html` | 浏览器本地打开的 **Audit 轻量录入** 表单（无服务） |
+| `audit-entry.html` | 浏览器本地 **Audit 轻量录入** 表单（无服务）；支持 `?target=&anchor=` 预填 |
+| `graph-audit-panel.js` | 离线 `knowledge-graph.html` 内嵌「记批注」（V5 方案 A：预填 + 下载，不写 vault） |
 
 用法：双击打开 → 填 target / 原文 / 说明 → 下载 `audit/*.md` 放到知识库 `audit/` → 对话说「处理批注」。  
+图谱：生成 HTML 后点顶栏 **记批注**（先点选节点，可在抽屉选中原文）。  
 协议见 `references/audit-guide.md`（`source: web-viewer`）。  
-Obsidian 侧用 `templates/obsidian-audit.md`（核心 Templates，无插件）。
-
+Obsidian 侧优先用插件 `obsidian-plugin/llm-wiki-audit`。
 ## graph-engine
 
 | 路径 | 用途 |

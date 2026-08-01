@@ -46,7 +46,7 @@
 | **U17** | Obsidian 选区记批注 → open audit | 精简 | v0.2 | pass | 2026-07-31：插件文件装入演示 vault；`audit-core`（与 main.js 同路径）写 `source: obsidian-plugin` open audit；`check-audit-compat` 0；`audit-review --open` 列出。GUI 点击未自动化。证据：`docs/v4-evidence.json`。 |
 | **U18** | 插件 audit 可被「处理批注」闭环 | 精简 | v0.2 | pass | 2026-07-31：对 U17 文件 **accept**（标题缩短）、`status: resolved` → `audit/resolved/`、`log.md` 追加；open 列表不再含该 id。证据同上。 |
 | **U19** | 无选区 / 非 wiki 路径拒绝写入 | 精简 | v0.2 | pass | 2026-07-31：`empty_selection` / `target_not_wiki_page` / `audit/` 路径拒绝。证据同上。 |
-| **U20** | （可选）图谱预填 target + 选区 | 精简 | v0.2 | later | V5；默认方案 A 不强写盘 |
+| **U20** | 图谱 HTML 预填 target + 选区下载 | 精简 | v0.2 | pass | 2026-08-01：`graph-audit-panel.js` 内嵌 knowledge-graph.html；点节点预填 `source_path`→target；下载 open audit（`source: web-viewer`），不写 vault。回归 `tests/graph-audit-panel.regression-1.sh`。证据：`docs/v5-evidence.json`。 |
 
 ---
 
@@ -130,7 +130,7 @@ bash install.sh --platform codex --with-optional-adapters
 | P2 U12–U16 | **全部 pass**（U14 HTML 默认 skill-assets IIFE；D 防漂移门禁） |
 | 待办 E | **pass**（2026-07-31 Codex 短口令 E2E：ingest/query/audit-file；`docs/e-evidence.json`） |
 | 待办 F | **pass**（2026-07-31 Obsidian 模板 + Web `audit-entry.html` 轻量录入；非真插件；`docs/f-evidence.json`） |
-| **v0.2** | **V0–V4、V6 pass** · tag **`v0.2.0-jonoka`**（2026-08-01）；U17–U19；[release](../docs/releases/v0.2.0-jonoka.md)；V5/U20 later |
+| **v0.2** | **V0–V6 全 pass** · tag **`v0.2.0-jonoka`**；U17–U20；[release](../docs/releases/v0.2.0-jonoka.md) |
 
 ### U5 实装备忘（2026-07-28）
 
@@ -212,4 +212,4 @@ bash install.sh --upgrade --platform codex --target-dir "$CODEX_HOME/skills/llm-
 
 证据：`docs/u12-u16-evidence.json`
 
-最后更新：2026-08-01（**v0.2.0-jonoka** 发版；V0–V4、V6 pass）。
+最后更新：2026-08-01（**v0.2 闭环**：V0–V6 + U17–U20；tag `v0.2.0-jonoka`）。

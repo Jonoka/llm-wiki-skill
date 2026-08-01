@@ -105,6 +105,12 @@ else
 fi
 MARKED="$SKILL_DIR/deps/marked.min.js"
 PURIFY="$SKILL_DIR/deps/purify.min.js"
+# V5: offline graph audit prefill + download panel (scheme A, no vault write)
+if [ -f "$SKILL_DIR/skill-assets/graph-audit-panel.js" ]; then
+  AUDIT_PANEL="$SKILL_DIR/skill-assets/graph-audit-panel.js"
+else
+  AUDIT_PANEL=""
+fi
 OUTPUT="$WIKI_ROOT/wiki/knowledge-graph.html"
 
 [ -f "$DATA" ] || {
@@ -329,6 +335,10 @@ printf '\n' >> "$output_tmp"
 script_for_inline "$PURIFY" >> "$output_tmp"
 printf '\n' >> "$output_tmp"
 script_for_inline "$ENGINE" >> "$output_tmp"
+if [ -n "$AUDIT_PANEL" ] && [ -f "$AUDIT_PANEL" ]; then
+  printf '\n' >> "$output_tmp"
+  script_for_inline "$AUDIT_PANEL" >> "$output_tmp"
+fi
 cat >> "$output_tmp" <<'HTML_BOOT'
   </script>
   <script>
@@ -338,6 +348,7 @@ cat >> "$output_tmp" <<'HTML_BOOT'
       var dataEl = document.getElementById("graph-data");
       var layoutEl = document.getElementById("graph-layout");
       var storageAvailable = true;
+      var lastSelectedNodeId = null;
       function showError(message) {
         if (!root) return;
         root.innerHTML = "";
@@ -450,17 +461,28 @@ cat >> "$output_tmp" <<'HTML_BOOT'
       var currentTheme = readStoredTheme();
       var engine = null;
       try {
+        var offlineCaps = window.LlmWikiGraphEngine.createGraphOfflineCapabilities({
+          persistPins: function (nextPins) {
+            writeStoredPins(key, nextPins || {});
+            return Promise.resolve();
+          }
+        });
+        var caps = Object.assign({}, offlineCaps.capabilities || {}, {
+          onSelectionChange: function (selection) {
+            if (selection && selection.nodeIds && selection.nodeIds.length) {
+              lastSelectedNodeId = selection.nodeIds[0];
+            }
+          },
+          onSelectionClear: function () {
+            lastSelectedNodeId = null;
+          }
+        });
         engine = window.LlmWikiGraphEngine.createGraphEngine(root, {
           data: graphData,
           pins: pins,
           theme: currentTheme,
           toolbarContainer: toolbarHost,
-          capabilities: window.LlmWikiGraphEngine.createGraphOfflineCapabilities({
-            persistPins: function (nextPins) {
-              writeStoredPins(key, nextPins || {});
-              return Promise.resolve();
-            }
-          }).capabilities
+          capabilities: caps
         });
         syncThemeToggle(currentTheme);
         if (themeToggle) {
@@ -474,6 +496,14 @@ cat >> "$output_tmp" <<'HTML_BOOT'
         window.__LLM_WIKI_GRAPH_ENGINE__ = engine;
         window.__LLM_WIKI_GRAPH_PINS_KEY__ = key;
         window.__LLM_WIKI_GRAPH_THEME_KEY__ = themeKey;
+        // V5: audit prefill + download (scheme A — no vault write)
+        if (window.LlmWikiGraphAuditPanel && typeof window.LlmWikiGraphAuditPanel.mount === "function") {
+          window.LlmWikiGraphAuditPanel.mount({
+            getGraphData: function () { return graphData; },
+            getSelectedNodeId: function () { return lastSelectedNodeId; },
+            headerHost: document.querySelector(".offline-badges")
+          });
+        }
         if (!storageAvailable) showStorageRecoveryHint();
       } catch (_) {
         try { if (engine) engine.destroy(); } catch (_) {}

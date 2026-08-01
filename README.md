@@ -38,7 +38,8 @@ bash install.sh --platform codex --with-optional-adapters
 轻量备选：`templates/obsidian-audit.md` / `skill-assets/audit-entry.html`（见 [audit-guide](references/audit-guide.md)）。
 
 **图谱说明（Jonoka）**：精简档**已带** `engine.iife.js`，不必再 monorepo 手工拷 dist。  
-生成 `wiki/knowledge-graph.html` 时本机仍需 **`jq` + `node`**（与是否 `--with-optional-adapters` 无关）。缺 jq 时 `build-graph-data.sh` 会报错并给出安装提示。
+生成 `wiki/knowledge-graph.html` 时本机仍需 **`jq` + `node`**（与是否 `--with-optional-adapters` 无关）。缺 jq 时 `build-graph-data.sh` 会报错并给出安装提示。  
+图谱顶栏 **记批注**：点选节点预填 target，下载 open audit（不写 vault）→ 放进 `audit/` →「处理批注」（见 audit-guide G）。
 
 [![version](https://img.shields.io/badge/v3.6.86-图谱架构收口-E8D5B5?style=flat-square&labelColor=3a3026&color=E8D5B5)](https://github.com/sdyckjq-lab/llm-wiki-skill/releases)
 [![license](https://img.shields.io/badge/MIT-license-5a6e5c?style=flat-square&labelColor=3a3026)](LICENSE)

@@ -133,11 +133,11 @@ python "$SKILL_DIR/scripts/check-audit-compat.py" "<wiki_root>"
 | **本插件** | 日常在 Obsidian 读 wiki 时 |
 | 对话「对 [[某页]] 这段有问题…」 | 已在 Codex 里讨论 |
 | `templates/obsidian-audit.md` | 无第三方插件时 |
-| `skill-assets/audit-entry.html` | 浏览器表单 / 图谱旁路 |
+| `skill-assets/audit-entry.html` | 浏览器表单；支持 `?target=&anchor=` 预填 |
+| **离线图谱 HTML「记批注」** | 读 `knowledge-graph.html` 时点节点 + 下载 md（V5 方案 A） |
 | `audit-file.py` | 脚本 / CI / Agent |
 
 均须最终落到 `audit/*.md`，再「处理批注」。
-
 ---
 
 ## 排障

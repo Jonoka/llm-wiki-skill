@@ -3,7 +3,7 @@
 > 按「价值 vs 成本」排序；每项完成后改「状态」并写「记录」。  
 > **只维护本文件**，不要另起一套口头清单。
 
-更新：2026-08-01（V6 发版 v0.2.0-jonoka）
+更新：2026-08-01（V5 图谱 HTML 记批注）
 
 ---
 
@@ -17,7 +17,7 @@
 | 安装体验 | graph dist 默认安装 **已做**（2026-07-30） |
 | 发布 v0.1 | **`v0.1.3-jonoka`** 已 push（2026-07-31） |
 | 余项 A–F | **全部 pass**（2026-07-31；G oos） |
-| **v0.2 Audit 真插件** | V0–V4、**V6 pass** · tag **`v0.2.0-jonoka`**（V5 later） |
+| **v0.2 Audit 真插件** | V0–V6 **pass**（含 V5 图谱 HTML 记批注）· tag **`v0.2.0-jonoka`** |
 
 详细记录以 [references/acceptance-matrix.md](../references/acceptance-matrix.md) 为准。
 
@@ -44,6 +44,7 @@
 | **V3** | **用户文档与分发** | **pass** | **2026-07-31**；`docs/v3-evidence.json` |
 | **V4** | **U17/U18/U19 验收** | **pass** | **2026-07-31**；`docs/v4-evidence.json` |
 | **V6** | **发版 v0.2.0-jonoka** | **pass** | **2026-08-01**；tag + `docs/releases/v0.2.0-jonoka.md` |
+| **V5** | **图谱 HTML 记批注（方案 A）** | **pass** | **2026-08-01**；`graph-audit-panel.js` + U20；`docs/v5-evidence.json` |
 
 ---
 
@@ -57,7 +58,7 @@
 | **V2** | **Obsidian 插件 MVP**：选区 → severity/comment → 写 `audit/`（`source: obsidian-plugin`） | 核心价值 | **pass**（2026-07-31） |
 | **V3** | 用户文档与分发（装插件 / 与「处理批注」衔接） | 可安装 | **pass**（2026-07-31） |
 | **V4** | 验收 U17/U18 + evidence；矩阵补行 | 可证明 | **pass**（2026-07-31；`docs/v4-evidence.json`） |
-| **V5** | 图谱 HTML 选区/预填增强（默认方案 A，不强写盘） | 体验；可后移 | later |
+| **V5** | 图谱 HTML 选区/预填增强（默认方案 A，不强写盘） | 体验 | **pass**（2026-08-01；`docs/v5-evidence.json`） |
 | **V6** | 发版 `v0.2.0-jonoka`（或插件独立版本说明） | 钉发布点 | **pass**（2026-08-01；tag `v0.2.0-jonoka`） |
 
 ---

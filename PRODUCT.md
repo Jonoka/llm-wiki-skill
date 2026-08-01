@@ -87,8 +87,8 @@
 ```text
 0–4  文档 + P0/P1/P2 验收 + 多版 tag     ← 已完成至 v0.1.3-jonoka
 5    余项 A–F 已 pass；G out of scope
-6    v0.2：Obsidian audit 真插件     ← 已完成至 **v0.2.0-jonoka**（V0–V4、V6）
-7    可选 V5：图谱 HTML 选区/预填；真插件写盘方案 B/C 另议
+6    v0.2：Obsidian 插件 + 图谱 HTML 记批注  ← **v0.2.0-jonoka**（V0–V6 全 pass）
+7    可选后续：社区插件市场 / 图谱真写盘 helper（方案 B/C）
 ```
 
 ## 与本机知识库的关系

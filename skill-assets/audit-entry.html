@@ -402,6 +402,35 @@ ${data.comment}
         setStatus(e.message || String(e), true);
       }
     });
+
+    // V5 / deep-link prefill: ?target=&anchor=&comment=&severity=
+    (function prefillFromQuery() {
+      try {
+        const q = new URLSearchParams(location.search || "");
+        const map = {
+          target: "target",
+          anchor: "anchorText",
+          anchor_text: "anchorText",
+          comment: "comment",
+          severity: "severity",
+          author: "author",
+          wiki: "wikiRoot",
+          wiki_root: "wikiRoot",
+        };
+        let any = false;
+        Object.keys(map).forEach((key) => {
+          if (!q.has(key)) return;
+          const el = document.getElementById(map[key]);
+          if (el) {
+            el.value = q.get(key) || "";
+            any = true;
+          }
+        });
+        if (any) setStatus("已从 URL 预填字段（图谱/外部链接）");
+      } catch (_) {
+        /* ignore */
+      }
+    })();
   </script>
 </body>
 </html>

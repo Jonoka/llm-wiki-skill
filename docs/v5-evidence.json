@@ -1,0 +1,32 @@
+{
+  "id": "V5",
+  "date": "2026-08-01",
+  "title": "图谱 HTML 记批注（方案 A：预填 + 下载，不写 vault）",
+  "result": "pass",
+  "scheme": "A",
+  "deliverables": {
+    "panel": "skill-assets/graph-audit-panel.js",
+    "html_wire": "scripts/build-graph-html.sh (inline panel + onSelectionChange + mount)",
+    "audit_entry_prefill": "skill-assets/audit-entry.html ?target=&anchor=",
+    "regression": "tests/graph-audit-panel.regression-1.sh",
+    "unit": "tests/js/graph-audit-panel.test.mjs"
+  },
+  "U20": {
+    "pass": true,
+    "behavior": [
+      "offline HTML embeds LlmWikiGraphAuditPanel",
+      "header button 记批注 / data-testid=offline-audit-btn",
+      "selection tracks nodeIds via onSelectionChange",
+      "toWikiTarget normalizes source_path → wiki/...",
+      "download open audit source=web-viewer"
+    ],
+    "smoke": {
+      "unit_tests": "3/3 pass",
+      "regression": "PASS (build-graph-html embeds panel)"
+    }
+  },
+  "out_of_scope": [
+    "silent write to vault from file:// (scheme B/C)",
+    "rebuild of graph-engine IIFE for this feature"
+  ]
+}
