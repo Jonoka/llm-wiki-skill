@@ -146,7 +146,7 @@ bash scripts/wiki-compat.sh ensure-audit-dirs "<wiki_root>"
 | adapter URL ingest（U6） | **已通过**（2026-07-28 baoyu → SharkTime 文） |
 | 提取失败回退（U7） | **已通过**（2026-07-28；见 adapter-fallback-guide） |
 | upgrade 不丢补丁（U9） | **已通过**（须从 Jonoka fork 升级；见上节） |
-| 发布标签 | `v0.1.0` … **`v0.1.3-jonoka`** · **`v0.2.0-jonoka`**（Obsidian audit 插件；升级仍须从本 fork） |
+| 发布标签 | `v0.1.0` … **`v0.1.3-jonoka`** · **`v0.2.0-jonoka`** · **`v0.2.1-jonoka`**（+ 图谱 HTML 记批注；升级仍须从本 fork） |
 | query / delete（U10–U11） | **已通过**（2026-07-29；见 u10-u11-evidence） |
 | P2 U12–U16 | **已通过**（2026-07-29；见 u12-u16-evidence） |
 | graph Windows | `build-graph-data.sh` 用 jq `--slurpfile`，避免 ARG_MAX |

@@ -3,7 +3,7 @@
 > 按「价值 vs 成本」排序；每项完成后改「状态」并写「记录」。  
 > **只维护本文件**，不要另起一套口头清单。
 
-更新：2026-08-01（V5 图谱 HTML 记批注）
+更新：2026-08-01（发版 v0.2.1-jonoka，含 V5）
 
 ---
 
@@ -17,7 +17,7 @@
 | 安装体验 | graph dist 默认安装 **已做**（2026-07-30） |
 | 发布 v0.1 | **`v0.1.3-jonoka`** 已 push（2026-07-31） |
 | 余项 A–F | **全部 pass**（2026-07-31；G oos） |
-| **v0.2 Audit 真插件** | V0–V6 **pass**（含 V5 图谱 HTML 记批注）· tag **`v0.2.0-jonoka`** |
+| **v0.2 Audit 真插件** | V0–V6 **pass** · tags **`v0.2.0-jonoka`** + **`v0.2.1-jonoka`**（含 V5） |
 
 详细记录以 [references/acceptance-matrix.md](../references/acceptance-matrix.md) 为准。
 
@@ -44,7 +44,7 @@
 | **V3** | **用户文档与分发** | **pass** | **2026-07-31**；`docs/v3-evidence.json` |
 | **V4** | **U17/U18/U19 验收** | **pass** | **2026-07-31**；`docs/v4-evidence.json` |
 | **V6** | **发版 v0.2.0-jonoka** | **pass** | **2026-08-01**；tag + `docs/releases/v0.2.0-jonoka.md` |
-| **V5** | **图谱 HTML 记批注（方案 A）** | **pass** | **2026-08-01**；`graph-audit-panel.js` + U20；`docs/v5-evidence.json` |
+| **V5** | **图谱 HTML 记批注（方案 A）** | **pass** | **2026-08-01**；`docs/v5-evidence.json`；钉 tag **`v0.2.1-jonoka`** |
 
 ---
 

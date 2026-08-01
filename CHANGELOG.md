@@ -1,5 +1,27 @@
 # Changelog
 
+## Jonoka v0.2.1-jonoka (2026-08-01)
+
+在 `v0.2.0-jonoka` 之上钉入 **V5 图谱 HTML 记批注**（方案 A）。
+
+### 新增
+
+- **离线图谱「记批注」**：`skill-assets/graph-audit-panel.js` 由 `build-graph-html.sh` 内嵌；点选节点预填 `source_path`→target，可选正文选区，**下载** open audit（`source: web-viewer`），不写 vault。
+- `audit-entry.html` 支持 `?target=&anchor=` URL 预填。
+- U20 pass；回归 `tests/graph-audit-panel.regression-1.sh`。
+
+### 安装 / 使用
+
+```text
+bash scripts/build-graph-data.sh <wiki>
+bash scripts/build-graph-html.sh <wiki>
+# 打开 wiki/knowledge-graph.html → 点节点 → 顶栏「记批注」→ 下载 md → 放进 audit/
+```
+
+详见 [docs/releases/v0.2.1-jonoka.md](docs/releases/v0.2.1-jonoka.md)、audit-guide 入口 G。
+
+---
+
 ## Jonoka v0.2.0-jonoka (2026-08-01)
 
 Obsidian **audit 真插件**发版（在 v0.1.3-jonoka 编译式 wiki + audit Phase 1 之上）。
@@ -13,7 +35,7 @@ Obsidian **audit 真插件**发版（在 v0.1.3-jonoka 编译式 wiki + audit Ph
 ### 验收
 
 - U17 / U18 / U19 pass（`docs/v4-evidence.json`）；里程碑 V0–V4、V6。
-- 图谱 HTML 选区（V5 / U20）仍为 later。
+- 图谱 HTML 记批注见后续 **v0.2.1-jonoka**（V5 / U20）。
 
 ### 安装摘要
 

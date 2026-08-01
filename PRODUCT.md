@@ -69,7 +69,8 @@
 - [x] `workbench` 深度开发标为范围外（见非目标）  
 - [x] 可 `git push` + tag：`v0.1.0` · `v0.1.1` · `v0.1.2` · **`v0.1.3-jonoka`**（2026-07-31：默认 graph dist + 单源 todo-list）  
 - [x] 余项 **A–F**（tag / 文档 / 缺 jq / IIFE 防漂移 / Codex E2E / 轻量 audit 录入）见 `docs/todo-list.md`（2026-07-31）  
-- [x] **v0.2.0-jonoka**（2026-08-01：Obsidian audit 插件 + 契约 + U17–U19；见 `docs/releases/v0.2.0-jonoka.md`）
+- [x] **v0.2.0-jonoka**（2026-08-01：Obsidian audit 插件 + 契约 + U17–U19；见 `docs/releases/v0.2.0-jonoka.md`）  
+- [x] **v0.2.1-jonoka**（2026-08-01：V5 图谱 HTML 记批注 + U20；见 `docs/releases/v0.2.1-jonoka.md`）
 
 ## v0.2 成功标准（立项中 · 可勾选）
 
@@ -87,7 +88,7 @@
 ```text
 0–4  文档 + P0/P1/P2 验收 + 多版 tag     ← 已完成至 v0.1.3-jonoka
 5    余项 A–F 已 pass；G out of scope
-6    v0.2：Obsidian 插件 + 图谱 HTML 记批注  ← **v0.2.0-jonoka**（V0–V6 全 pass）
+6    v0.2：Obsidian 插件 + 图谱 HTML 记批注  ← **v0.2.0** / **v0.2.1-jonoka**（V0–V6 全 pass）
 7    可选后续：社区插件市场 / 图谱真写盘 helper（方案 B/C）
 ```
 
@@ -117,6 +118,7 @@
 | [references/audit-contract-v1.md](references/audit-contract-v1.md) | **v0.2 V1** 插件数据契约（冻结） |
 | [docs/obsidian-audit-install.md](docs/obsidian-audit-install.md) | **v0.2 V3** Obsidian 插件安装与 Codex 衔接 |
 | [docs/releases/v0.2.0-jonoka.md](docs/releases/v0.2.0-jonoka.md) | **v0.2.0-jonoka** 发版说明 |
+| [docs/releases/v0.2.1-jonoka.md](docs/releases/v0.2.1-jonoka.md) | **v0.2.1-jonoka**（V5 图谱记批注） |
 | [docs/todo-list.md](docs/todo-list.md) | 单源待办（含 v0.2 V 序） |
 | [SKILL.md](SKILL.md) | Agent 执行规范 |
 | [platforms/codex/AGENTS.md](platforms/codex/AGENTS.md) | Codex 薄入口 |

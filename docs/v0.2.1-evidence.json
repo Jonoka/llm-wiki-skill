@@ -1,0 +1,11 @@
+{
+  "id": "release-v0.2.1-jonoka",
+  "date": "2026-08-01",
+  "result": "pass",
+  "tag": "v0.2.1-jonoka",
+  "includes_commit": "472c9bd",
+  "release_notes": "docs/releases/v0.2.1-jonoka.md",
+  "primary_feature": "V5 graph HTML audit panel (scheme A)",
+  "evidence": ["docs/v5-evidence.json"],
+  "matrix": ["U20"]
+}
