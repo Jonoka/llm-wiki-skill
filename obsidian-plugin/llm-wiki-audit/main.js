@@ -55,11 +55,13 @@ function normalizeVaultPath(path) {
   return String(path || "").replace(/\\/g, "/").replace(/^\.\//, "");
 }
 function isAllowedWikiTarget(relPath) {
-  const p = normalizeVaultPath(relPath);
+  const raw = String(relPath || "").replace(/\\/g, "/");
+  if (raw.split("/").some((part) => !part || part === "." || part === "..")) return false;
+  const p = normalizeVaultPath(raw);
+  if (/^(?:\/|[A-Za-z]:\/)/.test(p)) return false;
   if (!p.toLowerCase().endsWith(".md")) return false;
   if (p.startsWith("audit/") || p.includes("/audit/")) return false;
-  if (p.startsWith("wiki/")) return true;
-  return false;
+  return p.startsWith("wiki/");
 }
 function lineRangeFromOffsets(fullText, from, to) {
   const start = Math.max(0, Math.min(from, fullText.length));
@@ -153,8 +155,7 @@ function processHint(relAuditPath, id) {
 
 // src/main.ts
 var DEFAULT_SETTINGS = {
-  defaultAuthor: "you",
-  requireWikiPath: true
+  defaultAuthor: "you"
 };
 var LlmWikiAuditPlugin = class extends import_obsidian.Plugin {
   constructor() {
@@ -211,10 +212,8 @@ var LlmWikiAuditPlugin = class extends import_obsidian.Plugin {
       return;
     }
     const rel = normalizeVaultPath(file.path);
-    if (this.settings.requireWikiPath && !isAllowedWikiTarget(rel)) {
-      new import_obsidian.Notice(
-        `\u5F53\u524D\u6587\u4EF6\u4E0D\u5728 wiki/ \u4E0B\uFF08${rel}\uFF09\u3002\u53EF\u5728\u63D2\u4EF6\u8BBE\u7F6E\u4E2D\u5173\u95ED\u300C\u4EC5\u5141\u8BB8 wiki/ \u9875\u9762\u300D\u3002`
-      );
+    if (!isAllowedWikiTarget(rel)) {
+      new import_obsidian.Notice(`\u5F53\u524D\u6587\u4EF6\u4E0D\u662F\u5B89\u5168\u7684 wiki/*.md \u9875\u9762\uFF08${rel}\uFF09`);
       return;
     }
     if (!rel.toLowerCase().endsWith(".md")) {
@@ -366,13 +365,6 @@ var LlmWikiAuditSettingTab = class extends import_obsidian.PluginSettingTab {
       t.setValue(this.plugin.settings.defaultAuthor);
       t.onChange(async (v) => {
         this.plugin.settings.defaultAuthor = v || "you";
-        await this.plugin.saveSettings();
-      });
-    });
-    new import_obsidian.Setting(containerEl).setName("\u4EC5\u5141\u8BB8 wiki/ \u9875\u9762").setDesc("\u5173\u95ED\u540E\u53EF\u5BF9 vault \u5185\u4EFB\u610F .md \u8BB0\u6279\u6CE8\uFF08\u4ECD\u7981\u6B62 audit/\uFF09").addToggle((tg) => {
-      tg.setValue(this.plugin.settings.requireWikiPath);
-      tg.onChange(async (v) => {
-        this.plugin.settings.requireWikiPath = v;
         await this.plugin.saveSettings();
       });
     });

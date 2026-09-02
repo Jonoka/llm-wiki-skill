@@ -21,12 +21,10 @@ import {
 
 interface LlmWikiAuditSettings {
   defaultAuthor: string;
-  requireWikiPath: boolean;
 }
 
 const DEFAULT_SETTINGS: LlmWikiAuditSettings = {
   defaultAuthor: "you",
-  requireWikiPath: true,
 };
 
 export default class LlmWikiAuditPlugin extends Plugin {
@@ -94,10 +92,8 @@ export default class LlmWikiAuditPlugin extends Plugin {
     }
 
     const rel = normalizeVaultPath(file.path);
-    if (this.settings.requireWikiPath && !isAllowedWikiTarget(rel)) {
-      new Notice(
-        `当前文件不在 wiki/ 下（${rel}）。可在插件设置中关闭「仅允许 wiki/ 页面」。`,
-      );
+    if (!isAllowedWikiTarget(rel)) {
+      new Notice(`当前文件不是安全的 wiki/*.md 页面（${rel}）`);
       return;
     }
     if (!rel.toLowerCase().endsWith(".md")) {
@@ -316,15 +312,5 @@ class LlmWikiAuditSettingTab extends PluginSettingTab {
         });
       });
 
-    new Setting(containerEl)
-      .setName("仅允许 wiki/ 页面")
-      .setDesc("关闭后可对 vault 内任意 .md 记批注（仍禁止 audit/）")
-      .addToggle((tg) => {
-        tg.setValue(this.plugin.settings.requireWikiPath);
-        tg.onChange(async (v) => {
-          this.plugin.settings.requireWikiPath = v;
-          await this.plugin.saveSettings();
-        });
-      });
   }
 }

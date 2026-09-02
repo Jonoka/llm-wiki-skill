@@ -84,12 +84,13 @@ export function normalizeVaultPath(path) {
  * @param {string} relPath
  */
 export function isAllowedWikiTarget(relPath) {
-  const p = normalizeVaultPath(relPath);
+  const raw = String(relPath || "").replace(/\\/g, "/");
+  if (raw.split("/").some((part) => !part || part === "." || part === "..")) return false;
+  const p = normalizeVaultPath(raw);
+  if (/^(?:\/|[A-Za-z]:\/)/.test(p)) return false;
   if (!p.toLowerCase().endsWith(".md")) return false;
   if (p.startsWith("audit/") || p.includes("/audit/")) return false;
-  // Prefer wiki/ tree; also allow root overview-like pages sometimes used
-  if (p.startsWith("wiki/")) return true;
-  return false;
+  return p.startsWith("wiki/");
 }
 
 /**

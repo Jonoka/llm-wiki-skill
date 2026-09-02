@@ -16,69 +16,17 @@ from __future__ import annotations
 
 import argparse
 import json
-import re
 import shutil
 import subprocess
 import sys
 import tempfile
 from pathlib import Path
 
-# 与 audit-review.py 保持同步（契约 v1）
-REQUIRED_FIELDS = (
-    "id",
-    "target",
-    "target_lines",
-    "anchor_before",
-    "anchor_after",
-    "anchor_text",
-    "severity",
-    "author",
-    "source",
-    "created",
-    "status",
-)
-VALID_SEVERITIES = {"error", "warn", "suggest", "info"}
-VALID_SOURCES = {"manual", "agent", "obsidian-plugin", "web-viewer"}
-VALID_STATUSES = {"open", "resolved"}
-ID_RE = re.compile(r"^\d{8}-\d{6}-[0-9a-f]{4}$")
-FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---\n", re.DOTALL)
+from audit_contract import parse_frontmatter, validate_frontmatter
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 AUDIT_FILE_PY = SCRIPT_DIR / "audit-file.py"
 AUDIT_REVIEW_PY = SCRIPT_DIR / "audit-review.py"
-
-
-def parse_frontmatter(text: str) -> dict | None:
-    m = FRONTMATTER_RE.match(text)
-    if not m:
-        return None
-    result: dict = {}
-    for line in m.group(1).split("\n"):
-        if not line.strip() or line.lstrip().startswith("#"):
-            continue
-        if ":" not in line:
-            continue
-        key, _, rest = line.partition(":")
-        key = key.strip()
-        val = rest.strip()
-        if val.startswith("[") and val.endswith("]"):
-            items = []
-            for p in val[1:-1].split(","):
-                p = p.strip().strip('"').strip("'")
-                if not p:
-                    continue
-                try:
-                    items.append(int(p))
-                except ValueError:
-                    items.append(p)
-            result[key] = items
-        elif (val.startswith('"') and val.endswith('"')) or (
-            val.startswith("'") and val.endswith("'")
-        ):
-            result[key] = val[1:-1].replace("\\n", "\n").replace('\\"', '"')
-        else:
-            result[key] = val
-    return result
 
 
 def has_comment_body(text: str) -> bool:
@@ -97,16 +45,6 @@ def has_comment_body(text: str) -> bool:
     return False
 
 
-def resolve_target(root: Path, target: str) -> Path | None:
-    if not target:
-        return None
-    t = target.replace("\\", "/").lstrip("./")
-    for c in (root / t, root / "wiki" / t):
-        if c.is_file():
-            return c
-    return None
-
-
 def validate_file(root: Path, path: Path, expect_status: str) -> list[str]:
     issues: list[str] = []
     try:
@@ -114,50 +52,11 @@ def validate_file(root: Path, path: Path, expect_status: str) -> list[str]:
     except OSError as e:
         return [f"read_error:{e}"]
 
-    fm = parse_frontmatter(text)
+    fm, parse_issues = parse_frontmatter(text)
     if fm is None:
-        return ["no_frontmatter"]
+        return parse_issues
 
-    empty_ok = {"anchor_before", "anchor_after"}
-    for field in REQUIRED_FIELDS:
-        if field not in fm:
-            issues.append(f"missing:{field}")
-            continue
-        if field in empty_ok:
-            continue
-        if fm[field] in ("", None, []):
-            issues.append(f"empty:{field}")
-
-    if fm.get("severity") not in VALID_SEVERITIES:
-        issues.append(f"bad_severity:{fm.get('severity')}")
-    if fm.get("source") not in VALID_SOURCES:
-        issues.append(f"bad_source:{fm.get('source')}")
-    status = fm.get("status")
-    if status not in VALID_STATUSES:
-        issues.append(f"bad_status:{status}")
-    elif status != expect_status:
-        issues.append(f"status_mismatch:want={expect_status},got={status}")
-
-    lines = fm.get("target_lines")
-    if not isinstance(lines, list) or len(lines) != 2:
-        issues.append("bad_target_lines")
-    else:
-        try:
-            a, b = int(lines[0]), int(lines[1])
-            if a < 1 or b < a:
-                issues.append("bad_target_lines_range")
-        except (TypeError, ValueError):
-            issues.append("bad_target_lines_type")
-
-    aid = str(fm.get("id") or "")
-    if aid and not ID_RE.match(aid):
-        issues.append(f"bad_id_format:{aid}")
-
-    target = str(fm.get("target") or "").replace("\\", "/")
-    if target and "\\" in str(fm.get("target") or ""):
-        issues.append("target_backslash")
-    if target and resolve_target(root, target) is None:
-        issues.append(f"target_missing:{target}")
+    issues.extend(validate_frontmatter(root, fm, parse_issues, expect_status=expect_status))
 
     if not has_comment_body(text):
         issues.append("empty_comment")
@@ -255,7 +154,7 @@ def smoke_write(fixture_root: Path) -> dict:
         if not new_path.is_file():
             # try posix
             new_path = dest / rel
-        fm = parse_frontmatter(new_path.read_text(encoding="utf-8")) if new_path.is_file() else None
+        fm = parse_frontmatter(new_path.read_text(encoding="utf-8"))[0] if new_path.is_file() else None
         plugin_ok = bool(fm and fm.get("source") == "obsidian-plugin")
         review = subprocess.run(
             [sys.executable, str(AUDIT_REVIEW_PY), str(dest), "--open"],
