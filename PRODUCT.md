@@ -80,6 +80,7 @@
 - [x] **V1 契约**：`references/audit-contract-v1.md` + fixture + `check-audit-compat.py`（2026-07-31）  
 - [x] **V2 Obsidian MVP**：`obsidian-plugin/llm-wiki-audit` 选区写入 `audit/`（2026-07-31）  
 - [x] **V3 用户文档**：`docs/obsidian-audit-install.md` + README/FORK/Codex 入口（2026-07-31）  
+- [x] **Audit ship-risk hardening**：vault containment、无覆盖可恢复 resolve、安装源保护、Git Bash 选择与 CI 回归（2026-09-02）
 - [x] **U17 / U18 / U19**：插件等价写入 + accept 归档 + 拒绝非法选区（V4，`docs/v4-evidence.json`）  
 - [x] **V6 发版**：tag **`v0.2.0-jonoka`** + `docs/releases/v0.2.0-jonoka.md` + CHANGELOG（2026-08-01）；插件 manifest `0.2.0`
 

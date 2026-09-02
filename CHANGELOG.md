@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+### 修复
+
+- Audit v1 的 writer / reviewer / checker 共用规范化 vault 边界：拒绝绝对路径、`.` / `..` 段、逃逸符号链接、重复或额外字段和非 ISO `created`；shape 错误时 review 非零退出。
+- 「处理批注」accept / partial 改用无覆盖、可重试的 `audit-resolve.py`：先归档 open，再按 before/after SHA-256 原子替换正文并幂等记 log，避免崩溃后留下已应用但仍 open 的记录。
+- 安装器拒绝源树及其父子目录作为目标，先在同级目录完整暂存后切换；Windows wrapper 优先 Git Bash，不再误选 System32 WSL launcher。
+- Obsidian / 离线图谱 / `audit-entry.html` 统一只接受安全 `wiki/*.md` target；移除无效的 Obsidian wiki-only 开关，并把 audit 回归纳入 `quality-and-tests`。
+
 ## Jonoka v0.2.1-jonoka (2026-08-01)
 
 在 `v0.2.0-jonoka` 之上钉入 **V5 图谱 HTML 记批注**（方案 A）。

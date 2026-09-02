@@ -147,7 +147,7 @@ bash ${SKILL_DIR}/scripts/adapter-state.sh classify-run <source_id> <exit_code> 
 **重要**：如果用户直接给了一个 URL 或文件，但没有明确说要做什么，默认走 **ingest** 工作流。如果知识库还不存在，先自动走 **init** 再走 **ingest**。
 
 **纠错分流**：
-- 用户明确要求**立刻改正文** → 可直接改 wiki 页，并**建议**同时写一条 `resolved` audit 留痕
+- 用户明确要求**立刻改正文** → 先建 open audit，再立即走 **audit accept**；不得绕过 audit 直接改 wiki 页
 - 用户只是**标问题 / 记反馈** → 走 **audit-file**，只写 `audit/*.md`，不改正文
 - 已有 `audit/*.md` open 文件 → 用户说处理时必须走 **audit**，禁止忽略
 
@@ -1205,7 +1205,7 @@ bash ${SKILL_DIR}/scripts/wiki-compat.sh ensure-audit-dirs "<wiki_root>"
 
    - 成功输出：`SUCCESS:audit/....md`  
    - 失败：不要手写残缺 frontmatter；先修 target/路径再重试  
-6. **不要**在本工作流改正文（除非用户明确说「直接改」→ 改完后仍建议写 resolved audit）  
+6. **不要**在本工作流改正文；用户说「直接改」时也先建 open audit，再立即进入工作流 12 accept
 7. **向用户报告**（zh 示例）：
 
    ```
@@ -1254,21 +1254,23 @@ bash ${SKILL_DIR}/scripts/wiki-compat.sh ensure-audit-dirs "<wiki_root>"
       - **partial**：改一部分，Resolution 写清未改原因  
       - **reject**：不改正文，Resolution 写清理由（范围外/与更权威来源冲突等）  
       - **defer**：留在 `audit/`，并在 `purpose.md`「关键问题」里记一条（引用 audit id）  
-   5. **置信度**：error/warn 改正文后，相关 claim 可降为 `AMBIGUOUS` 或修正错误的 `EXTRACTED`  
-   6. **默认不改 `raw/`**，除非用户明确要求  
-   7. 在 audit 文件追加或填写 `# Resolution`，例如：
+   5. **准备修改**：accept / partial 时，把修改后的目标页完整 UTF-8 内容写到知识库外的临时文件；不要先改目标页
+   6. **原子 resolve**（归档先于正文替换，重试幂等且归档不覆盖同名文件）：
 
-      ```markdown
-      # Resolution
+      ```bash
+      python ${SKILL_DIR}/scripts/audit-resolve.py "<wiki_root>" "<audit-id>" \
+        --outcome accept \
+        --summary "将错误数字改为 1800，依据用户说明" \
+        --replacement-file "<知识库外的 UTF-8 临时文件>"
 
-      2026-07-20 · accepted.
-      将错误数字改为 1800，依据用户说明。
-      Updated: wiki/entities/某概念.md
+      # reject / archive 不传 replacement-file
+      python ${SKILL_DIR}/scripts/audit-resolve.py "<wiki_root>" "<audit-id>" \
+        --outcome reject --summary "与更权威来源冲突"
       ```
 
-   8. frontmatter：`status: resolved`  
-   9. **移动**文件到 `audit/resolved/`（同名；**永不 delete**）  
-   10. **log.md** 追加：`## {日期} audit | resolved {id} — {一句话}`  
+      该命令先写 `status: resolved` 并无覆盖归档，再以哈希冲突检查原子替换 target，最后幂等追加 `log.md`。中断后用同一 audit id、同一 replacement-file 重跑；禁止自行 `mv` 覆盖。
+   7. **置信度**：error/warn 改正文后，相关 claim 可降为 `AMBIGUOUS` 或修正错误的 `EXTRACTED`
+   8. **默认不改 `raw/`**，除非用户明确要求
 
 4. **向用户汇总**（zh 示例）：
 

@@ -3,7 +3,7 @@
 > 按「价值 vs 成本」排序；每项完成后改「状态」并写「记录」。  
 > **只维护本文件**，不要另起一套口头清单。
 
-更新：2026-08-01（发版 v0.2.1-jonoka，含 V5）
+更新：2026-09-02（Audit ship-risk hardening；未新增 release tag）
 
 ---
 
@@ -45,6 +45,7 @@
 | **V4** | **U17/U18/U19 验收** | **pass** | **2026-07-31**；`docs/v4-evidence.json` |
 | **V6** | **发版 v0.2.0-jonoka** | **pass** | **2026-08-01**；tag + `docs/releases/v0.2.0-jonoka.md` |
 | **V5** | **图谱 HTML 记批注（方案 A）** | **pass** | **2026-08-01**；`docs/v5-evidence.json`；钉 tag **`v0.2.1-jonoka`** |
+| **H1** | **Audit ship-risk hardening** | **pass** | **2026-09-02**；路径逃逸、崩溃重试、归档碰撞、安装源保护与 required gate 回归 |
 
 ---
 

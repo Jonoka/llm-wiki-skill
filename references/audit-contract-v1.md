@@ -16,19 +16,19 @@
 | 路径 | 含义 |
 |------|------|
 | `<wiki_root>/audit/*.md` | **open** 反馈（待处理） |
-| `<wiki_root>/audit/resolved/*.md` | **resolved**（含 Resolution；永不删除） |
+| `<wiki_root>/audit/resolved/*.md` | **resolved**（含 Resolution；同名不覆盖，永不丢记录） |
 | 插件默认只写 | `audit/` open；**不**写 `resolved/` |
 
 文件名建议：`YYYYMMDD-HHMMSS-<slug>.md`（slug 可来自 comment 摘要）。
 
 ---
 
-## 2. Frontmatter 字段（全部必填键）
+## 2. Frontmatter 字段（以下 11 个键必须且只能各出现一次）
 
 | 字段 | 类型 | 规则 |
 |------|------|------|
 | `id` | string | `YYYYMMDD-HHMMSS-` + 4 位 hex（小写） |
-| `target` | string | **相对知识库根**，正斜杠，如 `wiki/entities/Foo.md` |
+| `target` | string | **相对知识库根**的 `wiki/*.md` 正斜杠路径；禁止绝对路径、空段、`.` / `..` 段及解析后逃出根目录的符号链接 |
 | `target_lines` | `[int, int]` | 1-based 闭区间；可漂移，处理时以文本锚点为准 |
 | `anchor_before` | string | 选区前上下文，建议 ≤200 字；**允许空串** |
 | `anchor_text` | string | 选中原文 **verbatim**；**禁止空** |
@@ -36,7 +36,7 @@
 | `severity` | enum | `error` \| `warn` \| `suggest` \| `info` |
 | `author` | string | 非空 |
 | `source` | enum | `manual` \| `agent` \| `obsidian-plugin` \| `web-viewer` |
-| `created` | string | ISO 8601（可含时区） |
+| `created` | string | ISO 8601 日期时间（可含时区），如 `2026-08-01T12:00:00+08:00` |
 | `status` | enum | open 区必须为 `open`；resolved 区为 `resolved` |
 
 ### source 语义
@@ -72,6 +72,10 @@
 
 - `# Comment` 标题下至少一行有效说明。  
 - 插件 **不得** 修改 `target` 指向的 wiki 正文。
+
+### resolved 顺序与恢复
+
+accept / partial 由 `audit-resolve.py` 执行：先以不覆盖方式写入 resolved 并移除 open，再核对 target 的 before/after SHA-256 后原子替换正文，最后幂等追加 `log.md`。进程在任一步中断时，以同一 audit id 和同一 replacement-file 重跑；不得先改正文再留下 stale open，也不得用普通覆盖移动吞掉同名归档。
 
 ---
 
