@@ -89,6 +89,8 @@
 
   function isAllowedWikiTarget(relPath) {
     var p = String(relPath || "").replace(/\\/g, "/");
+    if (/^(?:\/|[A-Za-z]:\/)/.test(p)) return false;
+    if (p.split("/").some(function (part) { return !part || part === "." || part === ".."; })) return false;
     if (!/\.md$/i.test(p)) return false;
     if (p.indexOf("audit/") === 0 || p.indexOf("/audit/") >= 0) return false;
     return p.indexOf("wiki/") === 0;

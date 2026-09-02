@@ -27,6 +27,8 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+from audit_contract import is_wiki_markdown_target, normalize_relative_target, resolve_vault_target
+
 
 def slugify(text: str, max_len: int = 40) -> str:
     text = text.strip().lower()
@@ -48,23 +50,8 @@ def yaml_escape(s: str) -> str:
     )
 
 
-def resolve_target(root: Path, target: str) -> Path | None:
-    t = target.replace("\\", "/").lstrip("./")
-    candidates = [root / t, root / "wiki" / t]
-    if not t.endswith(".md"):
-        candidates.append(root / f"{t}.md")
-        candidates.append(root / "wiki" / f"{t}.md")
-    for c in candidates:
-        if c.is_file():
-            return c.resolve()
-    return None
-
-
 def normalize_target(root: Path, target_path: Path) -> str:
-    try:
-        rel = target_path.relative_to(root.resolve())
-    except ValueError:
-        rel = target_path
+    rel = target_path.relative_to(root.resolve())
     return str(rel).replace("\\", "/")
 
 
@@ -100,12 +87,21 @@ def main() -> int:
         print(f"ERROR: wiki root not found: {root}", file=sys.stderr)
         return 1
 
-    target_path = resolve_target(root, args.target)
+    try:
+        normalize_relative_target(args.target)
+    except ValueError as error:
+        print(f"ERROR: invalid target: {error}", file=sys.stderr)
+        return 1
+
+    target_path = resolve_vault_target(root, args.target, allow_aliases=True)
     if target_path is None:
         print(f"ERROR: target not found: {args.target}", file=sys.stderr)
         return 1
 
     target_rel = normalize_target(root, target_path)
+    if not is_wiki_markdown_target(target_rel):
+        print(f"ERROR: target must resolve to a wiki/*.md page: {args.target}", file=sys.stderr)
+        return 1
 
     try:
         start_s, end_s = [p.strip() for p in args.target_lines.split(",", 1)]

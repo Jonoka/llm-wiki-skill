@@ -111,7 +111,7 @@ python ${SKILL_DIR}/scripts/audit-file.py "<wiki_root>" \
 
 ### B. Agent 代写
 
-用户说「对 [[某页]] 这段有意见…」→ agent 用 `audit-file.py` 或按模板写入 `audit/`，**默认只建 open 文件，不立刻改页**（除非用户明确要求「直接改」）。
+用户说「对 [[某页]] 这段有意见…」→ agent 用 `audit-file.py` 或按模板写入 `audit/`。即使用户要求「直接改」，也必须先建 open audit，再立即走「处理批注」accept。
 
 ### C. 手写 markdown
 
@@ -178,10 +178,15 @@ python ${SKILL_DIR}/scripts/audit-file.py "<wiki_root>" \
 1. `python ${SKILL_DIR}/scripts/audit-review.py <wiki_root> --open`  
 2. 按 severity：error → warn → suggest → info  
 3. 对每条：定位锚点 → accept / partial / reject / defer  
-4. 最小范围改正文  
-5. 在 audit 文件追加 `# Resolution`，`status: resolved`  
-6. 移到 `audit/resolved/`（**不删除**）  
-7. `log.md` 追加：`## {日期} audit | resolved {id} — 一句话`  
+4. accept / partial：把修改后的完整目标页写到知识库外 UTF-8 临时文件（此时不改正文）
+5. 调 `audit-resolve.py`，由它先无覆盖归档，再做哈希冲突检查和原子正文替换，最后幂等写 `log.md`
+6. 中断后用同一 audit id 和 replacement-file 重跑；不要手工 `mv` 覆盖同名 resolved 文件
+
+```bash
+python ${SKILL_DIR}/scripts/audit-resolve.py "<wiki_root>" "<audit-id>" \
+  --outcome accept --summary "一句话" \
+  --replacement-file "<知识库外的 UTF-8 临时文件>"
+```
 
 ### Resolution 示例
 
@@ -199,6 +204,7 @@ Updated: wiki/entities/某概念.md
 |------|------|
 | `scripts/audit-file.py` | 创建 open audit |
 | `scripts/audit-review.py` | 按 target 分组列出 open/resolved |
+| `scripts/audit-resolve.py` | 无覆盖归档并幂等应用 accept / partial |
 | `scripts/check-audit-compat.py` | 契约 v1 形状校验 |
 | `scripts/lint-runner.sh` | 机械检查 frontmatter 与 target 是否存在 |
 | `templates/audit-template.md` | 手写模板 |
@@ -236,4 +242,3 @@ mkdir -p "<wiki_root>/audit/resolved"
 - [ ] 可选共享 `audit-shared` TypeScript 库  
 
 **原则不变**：插件默认只建 open 文件；改正文与 resolved 仍走 Agent「处理批注」。
-

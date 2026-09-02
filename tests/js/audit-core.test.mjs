@@ -25,6 +25,11 @@ test("slugify and yamlEscape", () => {
 test("isAllowedWikiTarget", () => {
   assert.equal(isAllowedWikiTarget("wiki/entities/Foo.md"), true);
   assert.equal(isAllowedWikiTarget("audit/x.md"), false);
+  assert.equal(isAllowedWikiTarget("wiki/../../../../SKILL.md"), false);
+  assert.equal(isAllowedWikiTarget("wiki/entities/../Foo.md"), false);
+  assert.equal(isAllowedWikiTarget("C:/wiki/entities/Foo.md"), false);
+  assert.equal(isAllowedWikiTarget("/wiki/entities/Foo.md"), false);
+  assert.equal(isAllowedWikiTarget("./wiki/entities/Foo.md"), false);
   assert.equal(isAllowedWikiTarget("index.md"), false);
 });
 

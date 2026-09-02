@@ -14,6 +14,9 @@ INSTALL_HOOKS=0
 UNINSTALL_HOOKS=0
 UPGRADE=0
 WITH_OPTIONAL_ADAPTERS=0
+INSTALL_STAGE_DIR=""
+INSTALL_BACKUP_DIR=""
+INSTALL_BACKUP_TARGET=""
 
 # 这些项目都在运行时会被读取或链接：
 # - 入口与说明文件：README / CLAUDE / AGENTS / CHANGELOG
@@ -213,6 +216,62 @@ run_cmd() {
   "$@"
 }
 
+canonical_path() {
+  local path="$1" parent base
+  if command -v realpath >/dev/null 2>&1; then
+    realpath -m -- "$path"
+    return
+  fi
+  if [ -d "$path" ]; then
+    (cd "$path" && pwd -P)
+    return
+  fi
+  parent="$(dirname "$path")"
+  base="$(basename "$path")"
+  [ -d "$parent" ] || return 1
+  printf '%s/%s\n' "$(cd "$parent" && pwd -P)" "$base"
+}
+
+assert_safe_install_target() {
+  local target source
+  target="$(canonical_path "$1")" || {
+    err "无法规范化安装目标：$1"
+    return 1
+  }
+  source="$(canonical_path "$SCRIPT_DIR")"
+  if [ "$target" = "$(dirname "$target")" ]; then
+    err "拒绝把技能安装到文件系统根目录：$target"
+    return 1
+  fi
+  case "$target/" in
+    "$source/"*)
+      err "拒绝把技能安装到安装源目录内部：$target"
+      return 1
+      ;;
+  esac
+  case "$source/" in
+    "$target/"*)
+      err "拒绝用安装目标覆盖安装源目录：$target"
+      return 1
+      ;;
+  esac
+}
+
+cleanup_install_staging() {
+  if [ -n "$INSTALL_BACKUP_DIR" ] && [ -d "$INSTALL_BACKUP_DIR" ]; then
+    if [ -n "$INSTALL_BACKUP_TARGET" ] && [ ! -e "$INSTALL_BACKUP_TARGET" ]; then
+      mv "$INSTALL_BACKUP_DIR" "$INSTALL_BACKUP_TARGET" || true
+    else
+      rm -rf "$INSTALL_BACKUP_DIR"
+    fi
+  fi
+  if [ -n "$INSTALL_STAGE_DIR" ] && [ -d "$INSTALL_STAGE_DIR" ]; then
+    rm -rf "$INSTALL_STAGE_DIR"
+  fi
+}
+
+trap cleanup_install_staging EXIT
+
 copy_item() {
   local source_path="$1"
   local target_path="$2"
@@ -220,6 +279,11 @@ copy_item() {
   if [ "$DRY_RUN" -eq 1 ]; then
     printf '[dry-run] copy %s -> %s\n' "$source_path" "$target_path"
     return 0
+  fi
+
+  if [ "$(canonical_path "$source_path")" = "$(canonical_path "$target_path")" ]; then
+    err "拒绝用安装项覆盖其源文件：$source_path"
+    return 1
   fi
 
   rm -rf "$target_path"
@@ -324,18 +388,34 @@ install_graph_engine_runtime() {
 
 install_bundle() {
   local target_dir="$1"
-  local item source_path target_path
+  local target_parent item source_path target_path backup
+
+  target_dir="$(canonical_path "$target_dir")"
+  assert_safe_install_target "$target_dir"
+
+  if [ "$DRY_RUN" -eq 1 ]; then
+    for item in "${MANAGED_ITEMS[@]}"; do
+      source_path="$SCRIPT_DIR/$item"
+      [ -e "$source_path" ] || continue
+      printf '[dry-run] stage %s -> %s/%s\n' "$source_path" "$target_dir" "$item"
+    done
+    install_graph_engine_runtime "$target_dir"
+    return 0
+  fi
+
+  target_parent="$(dirname "$target_dir")"
+  mkdir -p "$target_parent"
+  INSTALL_STAGE_DIR="$(mktemp -d "$target_parent/.llm-wiki-stage.XXXXXX")"
+  if [ -d "$target_dir" ]; then
+    cp -R "$target_dir/." "$INSTALL_STAGE_DIR/"
+  fi
 
   for item in "${MANAGED_ITEMS[@]}"; do
     source_path="$SCRIPT_DIR/$item"
-    target_path="$target_dir/$item"
+    target_path="$INSTALL_STAGE_DIR/$item"
 
     if [ ! -e "$source_path" ]; then
       warn "$item：安装源文件缺失，跳过"
-      continue
-    fi
-
-    if [ "$source_path" = "$target_path" ] && [ -e "$target_path" ]; then
       continue
     fi
 
@@ -343,23 +423,36 @@ install_bundle() {
   done
 
   # Always materialize the path build-graph-html.sh expects.
-  install_graph_engine_runtime "$target_dir"
+  install_graph_engine_runtime "$INSTALL_STAGE_DIR"
 
   # 安装后校验：确保清单文件都已就位（Windows install.ps1 尤其重要）
-  if [ "$DRY_RUN" -ne 1 ]; then
-    for item in "${MANAGED_ITEMS[@]}"; do
-      source_path="$SCRIPT_DIR/$item"
-      target_path="$target_dir/$item"
-      if [ -e "$source_path" ] && [ ! -e "$target_path" ]; then
-        err "$item：已列入安装清单但未出现在目标目录，拷贝可能失败"
-        exit 1
-      fi
-    done
-    if [ ! -f "$target_dir/packages/graph-engine/dist/engine.iife.js" ]; then
-      warn "packages/graph-engine/dist/engine.iife.js 未就位：离线 knowledge-graph.html 生成可能失败"
+  for item in "${MANAGED_ITEMS[@]}"; do
+    source_path="$SCRIPT_DIR/$item"
+    target_path="$INSTALL_STAGE_DIR/$item"
+    if [ -e "$source_path" ] && [ ! -e "$target_path" ]; then
+      err "$item：已列入安装清单但未出现在暂存目录，拷贝可能失败"
+      exit 1
     fi
-    ok "已校验全部 ${#MANAGED_ITEMS[@]} 项安装清单文件"
+  done
+  if [ ! -f "$INSTALL_STAGE_DIR/packages/graph-engine/dist/engine.iife.js" ]; then
+    warn "packages/graph-engine/dist/engine.iife.js 未就位：离线 knowledge-graph.html 生成可能失败"
   fi
+
+  if [ -e "$target_dir" ]; then
+    backup="$(mktemp -d "$target_parent/.llm-wiki-backup.XXXXXX")"
+    rmdir "$backup"
+    INSTALL_BACKUP_DIR="$backup"
+    INSTALL_BACKUP_TARGET="$target_dir"
+    mv "$target_dir" "$INSTALL_BACKUP_DIR"
+  fi
+  mv "$INSTALL_STAGE_DIR" "$target_dir"
+  INSTALL_STAGE_DIR=""
+  if [ -n "$INSTALL_BACKUP_DIR" ]; then
+    rm -rf "$INSTALL_BACKUP_DIR"
+    INSTALL_BACKUP_DIR=""
+    INSTALL_BACKUP_TARGET=""
+  fi
+  ok "已校验并切换全部 ${#MANAGED_ITEMS[@]} 项安装清单文件"
 }
 
 install_node_deps() {
@@ -716,10 +809,16 @@ fi
 
 if [ -n "$TARGET_DIR" ]; then
   TARGET_SKILL_DIR="$TARGET_DIR"
-  SKILL_ROOT="$(dirname "$TARGET_SKILL_DIR")"
 else
   TARGET_SKILL_DIR="$SKILL_ROOT/$SKILL_NAME"
 fi
+
+TARGET_SKILL_DIR="$(canonical_path "$TARGET_SKILL_DIR")" || {
+  err "无法规范化安装目标：$TARGET_SKILL_DIR"
+  exit 1
+}
+SKILL_ROOT="$(dirname "$TARGET_SKILL_DIR")"
+assert_safe_install_target "$TARGET_SKILL_DIR" || exit 1
 
 if [ "$UNINSTALL_HOOKS" -eq 1 ]; then
   uninstall_claude_session_hook "$TARGET_SKILL_DIR"

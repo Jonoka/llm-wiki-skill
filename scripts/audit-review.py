@@ -20,69 +20,13 @@ audit-review.py — 列出并按 target 分组 audit 反馈（sdyckjq 路径约�
 from __future__ import annotations
 
 import json
-import re
 import sys
 from collections import defaultdict
 from pathlib import Path
 
-
-FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---\n", re.DOTALL)
-
-REQUIRED_FIELDS = (
-    "id",
-    "target",
-    "target_lines",
-    "anchor_before",
-    "anchor_text",
-    "anchor_after",
-    "severity",
-    "author",
-    "source",
-    "created",
-    "status",
-)
+from audit_contract import parse_frontmatter, resolve_vault_target, validate_frontmatter
 
 SEVERITY_ORDER = {"error": 0, "warn": 1, "suggest": 2, "info": 3}
-VALID_SEVERITIES = set(SEVERITY_ORDER)
-VALID_SOURCES = {"obsidian-plugin", "web-viewer", "manual", "agent"}
-VALID_STATUSES = {"open", "resolved"}
-
-
-def parse_frontmatter(text: str) -> dict | None:
-    m = FRONTMATTER_RE.match(text)
-    if not m:
-        return None
-    body = m.group(1)
-    result: dict = {}
-    for line in body.split("\n"):
-        if not line.strip() or line.lstrip().startswith("#"):
-            continue
-        if ":" not in line:
-            continue
-        key, _, rest = line.partition(":")
-        key = key.strip()
-        val = rest.strip()
-        if val.startswith("[") and val.endswith("]"):
-            inner = val[1:-1].strip()
-            items = []
-            for p in inner.split(","):
-                p = p.strip().strip('"').strip("'")
-                if not p:
-                    continue
-                try:
-                    items.append(int(p))
-                except ValueError:
-                    items.append(p)
-            result[key] = items
-        elif (val.startswith('"') and val.endswith('"')) or (
-            val.startswith("'") and val.endswith("'")
-        ):
-            result[key] = val[1:-1].replace("\\n", "\n").replace('\\"', '"')
-        else:
-            result[key] = val
-    return result
-
-
 def extract_comment_one_line(text: str) -> str:
     in_comment = False
     for line in text.splitlines():
@@ -98,55 +42,6 @@ def extract_comment_one_line(text: str) -> str:
             break
         return stripped[:120]
     return "(无正文)"
-
-
-def validate_shape(fm: dict) -> list[str]:
-    issues: list[str] = []
-    # anchor_before / anchor_after may be empty strings (selection at file edge)
-    empty_ok = {"anchor_before", "anchor_after"}
-    for field in REQUIRED_FIELDS:
-        if field not in fm:
-            issues.append(f"missing:{field}")
-            continue
-        if field in empty_ok:
-            continue
-        if fm[field] in ("", None, []):
-            issues.append(f"missing:{field}")
-    sev = fm.get("severity")
-    if sev and sev not in VALID_SEVERITIES:
-        issues.append(f"bad_severity:{sev}")
-    src = fm.get("source")
-    if src and src not in VALID_SOURCES:
-        issues.append(f"bad_source:{src}")
-    status = fm.get("status")
-    if status and status not in VALID_STATUSES:
-        issues.append(f"bad_status:{status}")
-    lines = fm.get("target_lines")
-    if lines is not None:
-        if not isinstance(lines, list) or len(lines) != 2:
-            issues.append("bad_target_lines")
-    return issues
-
-
-def resolve_target_path(root: Path, target: str) -> Path | None:
-    """Resolve target relative to wiki root. Accept wiki/... or bare paths."""
-    if not target:
-        return None
-    t = target.replace("\\", "/").lstrip("./")
-    candidates = [
-        root / t,
-        root / "wiki" / t,
-    ]
-    # bare filename: search under wiki/
-    if "/" not in t and not t.endswith(".md"):
-        candidates.append(root / "wiki" / f"{t}.md")
-    if "/" not in t and t.endswith(".md"):
-        for sub in ("entities", "topics", "sources", "comparisons", "synthesis", "queries"):
-            candidates.append(root / "wiki" / sub / t)
-    for c in candidates:
-        if c.is_file():
-            return c
-    return None
 
 
 def collect_files(audit_dir: Path, mode: str) -> list[Path]:
@@ -215,16 +110,15 @@ def main(argv: list[str]) -> int:
 
     for p in files:
         text = p.read_text(encoding="utf-8")
-        fm = parse_frontmatter(text)
+        fm, parse_issues = parse_frontmatter(text)
         if fm is None:
-            shape_errors.append({"path": str(p.relative_to(root)), "issues": ["missing_frontmatter"]})
+            shape_errors.append({"path": str(p.relative_to(root)), "issues": parse_issues})
             continue
-        issues = validate_shape(fm)
         rel = str(p.relative_to(root)).replace("\\", "/")
+        expect_status = "resolved" if p.parent.name == "resolved" else "open"
+        issues = validate_frontmatter(root, fm, parse_issues, expect_status=expect_status)
         target = str(fm.get("target", "(no-target)"))
-        target_path = resolve_target_path(root, target) if target != "(no-target)" else None
-        if target != "(no-target)" and target_path is None:
-            issues.append("target_missing")
+        target_path = resolve_vault_target(root, target) if target != "(no-target)" else None
 
         entry = {
             **fm,
@@ -270,7 +164,7 @@ def main(argv: list[str]) -> int:
             "shape_errors": shape_errors,
         }
         print(json.dumps(out, ensure_ascii=False, indent=2))
-        return 0
+        return 1 if shape_errors else 0
 
     print(f"{mode.upper()} audits: {total} across {len(grouped)} target file(s)\n")
 
@@ -300,7 +194,7 @@ def main(argv: list[str]) -> int:
         for err in shape_errors:
             print(f"  - {err['path']}: {', '.join(err['issues'])}")
 
-    return 0
+    return 1 if shape_errors else 0
 
 
 if __name__ == "__main__":

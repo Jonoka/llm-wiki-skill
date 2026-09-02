@@ -1,5 +1,5 @@
 import { spawn, spawnSync } from "node:child_process";
-import { readFileSync, rmSync } from "node:fs";
+import { existsSync, readFileSync, rmSync } from "node:fs";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { homedir, tmpdir } from "node:os";
 import path from "node:path";
@@ -20,6 +20,21 @@ const STOP_TIMEOUT_MS = 2_000;
 const PROCESS_SCAN_INTERVAL_MS = 100;
 const MAX_CAPTURE_BYTES = 8 * 1024 * 1024;
 
+function findBash() {
+	if (process.env.LLM_WIKI_BASH) return process.env.LLM_WIKI_BASH;
+	if (process.platform !== "win32") return "bash";
+	const candidates = [
+		"D:\\Git\\bin\\bash.exe",
+		process.env.ProgramFiles && path.join(process.env.ProgramFiles, "Git/bin/bash.exe"),
+		process.env.LOCALAPPDATA && path.join(process.env.LOCALAPPDATA, "Programs/Git/bin/bash.exe"),
+	];
+	const gitPaths = spawnSync("where.exe", ["git.exe"], { encoding: "utf8" }).stdout?.trim().split(/\r?\n/) ?? [];
+	for (const gitPath of gitPaths) candidates.unshift(path.resolve(path.dirname(gitPath), "../bin/bash.exe"));
+	return candidates.find((candidate) => candidate && existsSync(candidate)) || "bash";
+}
+
+const BASH = findBash();
+
 export const TOTAL_TIMEOUT_MS = 15 * 60_000;
 
 export function interruptedExitCode(signal) {
@@ -28,6 +43,7 @@ export function interruptedExitCode(signal) {
 
 const command = (args, cwd = REPO_ROOT) => ({ command: NODE, args, cwd });
 const nodeTest = (...files) => command(["--import", "tsx", "--test", ...files]);
+const bashTest = (file) => ({ command: BASH, args: [file], cwd: REPO_ROOT });
 
 export const QUALITY_STEPS = [
 	{
@@ -62,6 +78,17 @@ export const QUALITY_STEPS = [
 		commands: [
 			command(["--test", "workbench/scripts/check-skill-assets-graph-engine.test.mjs"]),
 			command(["workbench/scripts/check-skill-assets-graph-engine.mjs"]),
+		],
+	},
+	{
+		id: "audit-loop",
+		timeoutMs: SLOW_TEST_TIMEOUT_MS,
+		commands: [
+			command(["--test", "tests/js/audit-core.test.mjs", "tests/js/audit-entry.test.mjs"]),
+			bashTest("tests/audit-compat.regression-1.sh"),
+			bashTest("tests/audit-resolve.regression-1.sh"),
+			bashTest("tests/install-source-guard.regression-1.sh"),
+			bashTest("tests/graph-audit-panel.regression-1.sh"),
 		],
 	},
 	{
@@ -432,6 +459,17 @@ function signalProcess(pid, signal) {
 	}
 }
 
+function processExists(pid) {
+	try {
+		process.kill(pid, 0);
+		return true;
+	} catch (error) {
+		if (error?.code === "ESRCH") return false;
+		if (error?.code === "EPERM") return true;
+		throw error;
+	}
+}
+
 function trackProcessTree(rootPid, processRegistry, readProcesses) {
 	const trackedProcesses = new Map();
 	let stopped = false;
@@ -473,6 +511,9 @@ function trackProcessTree(rootPid, processRegistry, readProcesses) {
 	timer.unref();
 	const liveProcesses = () => {
 		if (monitorError) throw monitorError;
+		if (process.platform === "win32") {
+			return readRegisteredProcesses(processRegistry).filter(({ pid }) => processExists(pid));
+		}
 		const currentByPid = new Map(readProcesses().map((entry) => [entry.pid, entry]));
 		return [...trackedProcesses.values()].filter((identity) =>
 			currentByPid.get(identity.pid)?.startedAt === identity.startedAt

@@ -55,10 +55,25 @@ $OutputEncoding = [System.Text.Encoding]::UTF8
 # 4. Force Python subprocess stdout/stderr to UTF-8
 $env:PYTHONIOENCODING = 'utf-8'
 
-# 5. Detect bash
-$bashCmd = Get-Command bash -ErrorAction SilentlyContinue
-if (-not $bashCmd) {
-  Write-Host "[llm-wiki] Error: bash not found on PATH." -ForegroundColor Red
+# 5. Detect Git Bash before the Windows System32 WSL launcher
+$bashCandidates = New-Object System.Collections.Generic.List[string]
+$gitCmd = Get-Command git.exe -ErrorAction SilentlyContinue
+if ($gitCmd) {
+  $gitRoot = Split-Path -Parent (Split-Path -Parent $gitCmd.Source)
+  $bashCandidates.Add((Join-Path $gitRoot 'bin\bash.exe'))
+}
+$bashCandidates.Add('D:\Git\bin\bash.exe')
+if ($env:ProgramFiles) { $bashCandidates.Add((Join-Path $env:ProgramFiles 'Git\bin\bash.exe')) }
+if (${env:ProgramFiles(x86)}) { $bashCandidates.Add((Join-Path ${env:ProgramFiles(x86)} 'Git\bin\bash.exe')) }
+if ($env:LOCALAPPDATA) { $bashCandidates.Add((Join-Path $env:LOCALAPPDATA 'Programs\Git\bin\bash.exe')) }
+Get-Command bash.exe -All -ErrorAction SilentlyContinue | ForEach-Object {
+  if ($_.Source -and $_.Source -notlike "$env:WINDIR\System32\bash.exe") {
+    $bashCandidates.Add($_.Source)
+  }
+}
+$bashExe = $bashCandidates | Where-Object { Test-Path -LiteralPath $_ -PathType Leaf } | Select-Object -First 1
+if (-not $bashExe) {
+  Write-Host "[llm-wiki] Error: Git Bash not found." -ForegroundColor Red
   Write-Host "          Install Git for Windows first: https://git-scm.com/download/win" -ForegroundColor Red
   exit 1
 }
@@ -79,9 +94,9 @@ Write-Host "[llm-wiki] UTF-8 environment ready, launching install.sh..." -Foregr
 
 # Forward args
 if ($null -eq $RemainingArgs -or $RemainingArgs.Count -eq 0) {
-  & bash $installSh
+  & $bashExe $installSh
 } else {
-  & bash $installSh @RemainingArgs
+  & $bashExe $installSh @RemainingArgs
 }
 
 exit $LASTEXITCODE

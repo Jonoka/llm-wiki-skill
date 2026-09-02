@@ -242,13 +242,21 @@
       return "'" + String(s).replace(/'/g, "'\\''") + "'";
     }
 
+    function isAllowedWikiTarget(relPath) {
+      const path = String(relPath || "").replace(/\\/g, "/");
+      if (/^(?:\/|[A-Za-z]:\/)/.test(path)) return false;
+      if (path.split("/").some((part) => !part || part === "." || part === "..")) return false;
+      return path.startsWith("wiki/") && path.toLowerCase().endsWith(".md");
+    }
+
     function collect() {
-      const target = document.getElementById("target").value.trim();
+      const target = document.getElementById("target").value.trim().replace(/\\/g, "/");
       const anchorText = document.getElementById("anchorText").value;
       const comment = document.getElementById("comment").value.trim();
       const lineStart = parseInt(document.getElementById("lineStart").value, 10) || 1;
       const lineEnd = parseInt(document.getElementById("lineEnd").value, 10) || lineStart;
       if (!target) throw new Error("请填写 target");
+      if (!isAllowedWikiTarget(target)) throw new Error("target 必须是无 . 或 .. 段的 wiki/*.md 相对路径");
       if (!anchorText.trim()) throw new Error("请填写 anchor_text");
       if (!comment) throw new Error("请填写 Comment");
       return {
