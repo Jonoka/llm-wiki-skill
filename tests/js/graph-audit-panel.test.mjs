@@ -58,4 +58,13 @@ test("rejects non-wiki targets", () => {
     }).error,
     "target_not_wiki_page",
   );
+  for (const target of [
+    "wiki/../../../../SKILL.md",
+    "wiki/entities/../Foo.md",
+    "/wiki/entities/Foo.md",
+    "C:/wiki/entities/Foo.md",
+    "wiki//entities/Foo.md",
+  ]) {
+    assert.equal(api.isAllowedWikiTarget(target), false, target);
+  }
 });

@@ -21,6 +21,7 @@ const REQUIRED_STEPS = [
 	"build-contracts",
 	"build-graph",
 	"skill-assets-graph-engine",
+	"audit-loop",
 	"build-server",
 	"build-web",
 	"boundary-negative-controls",
@@ -79,6 +80,14 @@ test("quality entrypoint covers every required check in a stable sequence", () =
 	const skillAssetsArgs = skillAssetsStep.commands.flatMap((item) => item.args);
 	assert.ok(skillAssetsArgs.includes("workbench/scripts/check-skill-assets-graph-engine.test.mjs"));
 	assert.ok(skillAssetsArgs.includes("workbench/scripts/check-skill-assets-graph-engine.mjs"));
+	const auditStepArgs = QUALITY_STEPS.find((step) => step.id === "audit-loop").commands.flatMap((item) => item.args);
+	for (const required of [
+		"tests/audit-compat.regression-1.sh",
+		"tests/js/audit-core.test.mjs",
+		"tests/audit-resolve.regression-1.sh",
+		"tests/install-source-guard.regression-1.sh",
+		"tests/graph-audit-panel.regression-1.sh",
+	]) assert.ok(auditStepArgs.includes(required), required);
 	const graphTypeStep = QUALITY_STEPS.find((step) => step.id === "types-graph");
 	assert.equal(graphTypeStep.commands.length, 1);
 	const graphTypeArgs = graphTypeStep.commands.flatMap((item) => item.args);
@@ -113,7 +122,7 @@ test("quality children receive only the allowlisted environment", () => {
 	}, "/tmp/quality-home");
 
 	assert.equal(environment.HOME, "/tmp/quality-home");
-	assert.equal(environment.XDG_CONFIG_HOME, "/tmp/quality-home/.config");
+	assert.equal(environment.XDG_CONFIG_HOME, path.join("/tmp/quality-home", ".config"));
 	assert.equal(environment.PATH, "/bin");
 	assert.equal(environment.CI, "true");
 	assert.equal(environment.OPENAI_API_KEY, undefined);
